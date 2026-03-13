@@ -1,6 +1,6 @@
-# Solarwire
+# SolarWire
 
-**Solarwire** is a lightweight, Markdown‑style DSL for rapidly creating UI wireframes. It's designed with two goals in mind: **human readability** and **AI friendliness**, all while keeping everything in plain text for version control.
+**SolarWire** is a lightweight, Markdown‑style DSL for rapidly creating UI wireframes. It's designed with two goals in mind: **human readability** and **AI friendliness**, all while keeping everything in plain text for version control.
 
 - ✨ **Minimal syntax** – Express common UI elements with just a few characters.
 - 🤖 **AI‑native** – The syntax feels natural for language models; they can generate and modify wireframes directly.
@@ -8,11 +8,11 @@
 - 🎨 **Instant preview** *(coming soon)* – CLI, editor plugins, and an online playground to render your wireframes.
 
 > ⚠️ **Current status: Specification stage**  
-> Solarwire is currently a language specification (v0.1). The parser, renderer, and tooling are under active development. If you are interested in contributing or collaborating, please reach out via GitHub!
+> SolarWire is currently a language specification (v0.1). The parser, renderer, and tooling are under active development. If you are interested in contributing or collaborating, please reach out via GitHub!
 
 ---
 
-## Why Solarwire?
+## Why SolarWire?
 
 - **Simple** – Express common UI elements with just a few characters.
 - **AI‑native** – The syntax feels natural for language models; they can generate and modify wireframes directly.
@@ -168,7 +168,7 @@ All text has a default `line-height` of `22px`.
 
 ## Example
 
-```solarwire
+```SolarWire
 // Document‑level settings
 !device=phone
 !c=#333
@@ -214,11 +214,11 @@ All text has a default `line-height` of `22px`.
 
 ## Get involved
 
-Solarwire is in its early days. We are looking for:
+SolarWire is in its early days. We are looking for:
 
 - **Feedback** on the syntax and direction.
 - **Contributors** to help build the parser, renderers, editor plugins, and AI integrations.
-- **Partners** interested in using Solarwire in their projects or tools.
+- **Partners** interested in using SolarWire in their projects or tools.
 
 If you'd like to collaborate, please:
 
@@ -230,4 +230,4 @@ If you'd like to collaborate, please:
 
 ## License
 
-MIT © Solarwire contributors
+MIT © SolarWire contributors
