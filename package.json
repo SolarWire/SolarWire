@@ -1,0 +1,16 @@
+{
+  "name": "solarwire",
+  "version": "0.1.0",
+  "description": "A Markdown-style DSL for UI wireframes",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm test --workspaces"
+  },
+  "keywords": ["solarwire", "wireframe", "dsl"],
+  "author": "",
+  "license": "MIT"
+}
