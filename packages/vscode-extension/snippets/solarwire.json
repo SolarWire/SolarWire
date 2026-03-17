@@ -1,0 +1,105 @@
+{
+  "Rectangle": {
+    "prefix": "rect",
+    "body": [
+      "rect ${1:x} ${2:y} ${3:width} ${4:height} ${5:label}"
+    ],
+    "description": "Create a rectangle element"
+  },
+  "Circle": {
+    "prefix": "circle",
+    "body": [
+      "circle ${1:x} ${2:y} ${3:radius} ${4:label}"
+    ],
+    "description": "Create a circle element"
+  },
+  "Text": {
+    "prefix": "text",
+    "body": [
+      "text ${1:x} ${2:y} ${3:content}"
+    ],
+    "description": "Create a text element"
+  },
+  "Icon": {
+    "prefix": "icon",
+    "body": [
+      "icon ${1:x} ${2:y} ${3:name} ${4:size}"
+    ],
+    "description": "Create an icon element"
+  },
+  "Placeholder": {
+    "prefix": "placeholder",
+    "body": [
+      "placeholder ${1:x} ${2:y} ${3:width} ${4:height} ${5:label}"
+    ],
+    "description": "Create a placeholder element"
+  },
+  "Image": {
+    "prefix": "image",
+    "body": [
+      "image ${1:x} ${2:y} ${3:width} ${4:height} ${5:url}"
+    ],
+    "description": "Create an image element"
+  },
+  "Line": {
+    "prefix": "line",
+    "body": [
+      "line ${1:x1} ${2:y1} ${3:x2} ${4:y2}"
+    ],
+    "description": "Create a line element"
+  },
+  "Container": {
+    "prefix": "container",
+    "body": [
+      "container ${1:x} ${2:y} ${3:width} ${4:height} ${5:title}",
+      "  ${6:child_elements}"
+    ],
+    "description": "Create a container element"
+  },
+  "Table": {
+    "prefix": "table",
+    "body": [
+      "table ${1:x} ${2:y} ${3:width} ${4:height} ${5:cols} ${6:rows} ${7:title}",
+      "  ${8:cell_elements}"
+    ],
+    "description": "Create a table element"
+  },
+  "Note": {
+    "prefix": "note",
+    "body": [
+      "# ${1:note_content}"
+    ],
+    "description": "Add a note"
+  },
+  "Comment": {
+    "prefix": "comment",
+    "body": [
+      "// ${1:comment}"
+    ],
+    "description": "Add a comment"
+  },
+  "Document Declaration": {
+    "prefix": "decl",
+    "body": [
+      "!${1:key}=${2:value}"
+    ],
+    "description": "Add a document-level declaration"
+  },
+  "Full Example": {
+    "prefix": "example",
+    "body": [
+      "!title=My SolarWire Diagram",
+      "!width=800",
+      "!height=600",
+      "",
+      "rect 50 50 100 60 Button",
+      "circle 200 80 40 Avatar",
+      "text 50 150 Hello, SolarWire!",
+      "",
+      "container 50 200 300 150 Container",
+      "  rect 10 10 80 30 Item 1",
+      "  rect 100 10 80 30 Item 2"
+    ],
+    "description": "Insert a full example"
+  }
+}

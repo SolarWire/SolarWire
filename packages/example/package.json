@@ -1,0 +1,15 @@
+{
+  "name": "@solarwire/example",
+  "version": "1.0.0",
+  "description": "Examples for SolarWire DSL",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build step needed for examples'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@solarwire/parser": "1.0.0",
+    "@solarwire/renderer-svg": "1.0.0"
+  }
+}

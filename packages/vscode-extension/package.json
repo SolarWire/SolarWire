@@ -1,0 +1,73 @@
+{
+  "name": "solarwire",
+  "displayName": "SolarWire",
+  "description": "SolarWire language support and preview",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:solarwire",
+    "onCommand:solarwire.preview"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "solarwire.preview",
+        "title": "SolarWire: Open Preview"
+      },
+      {
+        "command": "solarwire.exportSvg",
+        "title": "SolarWire: Export SVG"
+      },
+      {
+        "command": "solarwire.exportPng",
+        "title": "SolarWire: Export PNG"
+      }
+    ],
+    "languages": [
+      {
+        "id": "solarwire",
+        "aliases": [
+          "SolarWire",
+          "solarwire"
+        ],
+        "extensions": [
+          ".solarwire"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "solarwire",
+        "scopeName": "source.solarwire",
+        "path": "./syntaxes/solarwire.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "solarwire",
+        "path": "./snippets/solarwire.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@solarwire/parser": "^1.0.0",
+    "@solarwire/renderer-svg": "^1.0.0"
+  }
+}

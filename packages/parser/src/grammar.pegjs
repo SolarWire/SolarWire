@@ -1,10 +1,16 @@
+{
+  function isContainer(type) {
+    return ['row', 'col', 'table', 'table-row'].indexOf(type) !== -1;
+  }
+}
+
 Document
-  = (Comment / _ / EOL)* items:((DocumentDeclaration / Element) (Comment / _ / EOL)*)*
+  = (Comment / _ / EOL)* items:DocumentItem*
   {
     var declarations = [];
     var elements = [];
     for (var i = 0; i < items.length; i++) {
-      var item = items[i][0];
+      var item = items[i];
       if (item) {
         if (item.key) {
           declarations.push(item);
@@ -19,17 +25,32 @@ Document
     };
   }
 
+DocumentItem
+  = decl:DocumentDeclaration (Comment / _ / EOL)*
+  { return decl; }
+  / elem:Element (Comment / _ / EOL)*
+  { return elem; }
+  / Comment / _ / EOL
+
 DocumentDeclaration
   = "!" key:Identifier "=" value:Value _* (Comment)? EOL
   {
     return { key: key, value: value };
   }
+  / "!" key:Identifier _* (Comment)? EOL
+  {
+    return { key: key, value: 'true' };
+  }
 
 Element
-  = _* e:(CircleElement / RectangleElement / RoundedRectangleElement / TextElement / IconElement / PlaceholderElement / ImageElement / LineElement / RowContainer / ColContainer / EmptyContainer / TableElement / TableRowElement) _* (Comment)?
-  {
-    return e;
-  }
+  = _* e:(ContainerElement / SimpleElement) _* (Comment)?
+  { return e; }
+
+ContainerElement
+  = RowContainer / ColContainer / EmptyContainer / TableElement / TableRowElement
+
+SimpleElement
+  = CircleElement / RectangleElement / RoundedRectangleElement / TextElement / IconElement / PlaceholderElement / ImageElement / LineElement
 
 RectangleElement
   = "[" text:QuotedString? "]" rest:ElementRest?
@@ -191,9 +212,13 @@ TableRowElement
   }
 
 ElementRest
-  = coords:Coordinates attrs:Attributes?
+  = coords:Coordinates attrs:Attributes
   {
-    return { coordinates: coords, attributes: attrs || {} };
+    return { coordinates: coords, attributes: attrs };
+  }
+  / coords:Coordinates
+  {
+    return { coordinates: coords, attributes: {} };
   }
   / attrs:Attributes
   {
@@ -210,14 +235,6 @@ Coordinate
   = n:Number
   {
     return { type: 'absolute', value: n };
-  }
-  / "+" n:Number
-  {
-    return { type: 'relative', value: n };
-  }
-  / "-" n:Number
-  {
-    return { type: 'relative', value: -n };
   }
   / d:Direction _* "+" _* n:Number
   {

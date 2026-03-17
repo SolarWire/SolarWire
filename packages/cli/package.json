@@ -1,0 +1,30 @@
+{
+  "name": "@solarwire/cli",
+  "version": "1.0.0",
+  "description": "SolarWire CLI - Command line interface for SolarWire diagrams",
+  "main": "dist/index.js",
+  "bin": {
+    "solarwire": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "solarwire",
+    "diagram",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@solarwire/parser": "^1.0.0",
+    "@solarwire/renderer-svg": "^1.0.0",
+    "@solarwire/renderer-html": "^1.0.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SolarWire</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; }
+.solarwire-container { position: relative; }
+.note-badge { position: absolute; width: 20px; height: 20px; background-color: #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; z-index: 100; }
+.notes-area { position: absolute; left: 0; right: 0; display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
+.note-card { flex: 0 0 calc(50% - 5px); background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 10px; position: relative; min-height: 50px; }
+.note-card-badge { position: absolute; top: 10px; left: 10px; width: 16px; height: 16px; background-color: #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: bold; }
+.note-card-content { margin-left: 26px; color: #333; font-size: 12px; line-height: 1.4; word-wrap: break-word; }
+</style>
+</head>
+<body>
+<div class="solarwire-canvas" style="position: relative; width: 940px; height: 3241.5px; overflow: hidden;">
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 30px; color: #333; font-size: 20px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Main title for this comprehensive SolarWire feature showcase">=== SolarWire Complete Feature Demo ===</div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 80px; color: #333; font-size: 16px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Section showcasing basic SolarWire elements">=== Basic Elements ===</div>
+<div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 110px; width: 120px; height: 50px; background-color: lightblue; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Basic rectangle element with custom colors"><span style="color: blue; font-size: 12px;">Rectangle</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 180px; top: 110px; width: 120px; height: 50px; background-color: #fff0c0; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 10px;" title="Rounded rectangle with custom border radius"><span style="color: #333; font-size: 12px;">Rounded</span></div>
+<div class="solarwire-circle" style="position: absolute; left: 310px; top: 125px; width: 40px; height: 40px; background-color: #90EE90; border: 1px solid #333333; border-radius: 50%; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Circle element for avatar or icon display"><span style="color: #333; font-size: 12px;">Circle</span></div>
+<div class="solarwire-icon" style="position: absolute; left: 370px; top: 120px; width: 24px; height: 24px;" title="Material Icons star icon"><polygon points="12,2.4000000000000004 20.4,9.120000000000001 16.32,21.6 7.68,21.6 3.5999999999999996,9.120000000000001" fill="#333"/></div>
+<div class="solarwire-icon" style="position: absolute; left: 410px; top: 120px; width: 24px; height: 24px;" title="Font Awesome home icon"><path d="M2.4000000000000004 9.600000000000001 L12 2.4000000000000004 L21.6 9.600000000000001 L21.6 21.6 L2.4000000000000004 21.6 Z" fill="#333"/></div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 190px; color: #333; font-size: 12px; line-height: 1.5px; text-align: left;" title="Basic standalone text element">Text Element</div>
+<div class="solarwire-text" style="position: absolute; left: 150px; top: 190px; color: #333; font-size: 12px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Text with bold styling">Bold Text</div>
+<div class="solarwire-text" style="position: absolute; left: 250px; top: 190px; color: #333; font-size: 12px; line-height: 1.5px; text-align: left; font-style: italic;" title="Text with italic styling">Italic Text</div>
+<div class="solarwire-text" style="position: absolute; left: 350px; top: 190px; color: #333; font-size: 12px; line-height: 1.5px; text-align: left; font-weight: bold; font-style: italic;" title="Text with both bold and italic">Both Styles</div>
+<div class="solarwire-placeholder" style="position: absolute; left: 50px; top: 230px; width: 200px; height: 80px; background-color: #ffffff; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Placeholder element for missing content"><span style="color: #333; font-size: 12px;">Placeholder</span></div>
+<img class="solarwire-image" src="https://example.com/hero.jpg" style="position: absolute; left: 270px; top: 230px; width: 200px; height: 80px; object-fit: contain;" title="Image element with URL - shows placeholder when not loaded" alt="Image">
+<div class="solarwire-line" style="position: absolute; left: 50px; top: 330px; width: 900px; height: 0px; pointer-events: none;" title="Horizontal divider line separating sections"><div style="position: absolute; left: 0; top: 0; width: 900px; height: 0; border-top: 1px solid gray; transform: rotate(0deg); transform-origin: 0 0;"></div></div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 360px; color: #333; font-size: 16px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Section demonstrating relative coordinates">=== Relative Positioning ===</div>
+<div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 390px; width: 150px; height: 50px; background-color: #e8f4fc; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Element with absolute coordinates"><span style="color: #333; font-size: 12px;">Absolute</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 210px; top: 390px; width: 150px; height: 50px; background-color: #fff3e0; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Element positioned at Right+10, Top+0 of previous"><span style="color: #333; font-size: 12px;">Right of Edge</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 210px; top: 450px; width: 150px; height: 50px; background-color: #e8f5e9; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Element positioned at Left+0, Bottom+10 of previous"><span style="color: #333; font-size: 12px;">Below Edge</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 520px; width: 200px; height: 60px; background-color: #fce4ec; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Element used as edge reference"><span style="color: #333; font-size: 12px;">Edge Reference</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 260px; top: 520px; width: 150px; height: 60px; background-color: #f3e5f5; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Element positioned at Right+10, Top+0 of previous"><span style="color: #333; font-size: 12px;">Right of Reference</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 260px; top: 590px; width: 150px; height: 60px; background-color: #e0f7fa; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Element positioned at Left+0, Bottom+10 of previous"><span style="color: #333; font-size: 12px;">Bottom of Reference</span></div>
+<div class="solarwire-line" style="position: absolute; left: 50px; top: 630px; width: 900px; height: 0px; pointer-events: none;" title="Divider after relative positioning section"><div style="position: absolute; left: 0; top: 0; width: 900px; height: 0; border-top: 1px solid gray; transform: rotate(0deg); transform-origin: 0 0;"></div></div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 660px; color: #333; font-size: 16px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Section demonstrating table with colspan and rowspan">=== Table with colspan/rowspan ===</div>
+<table class="solarwire-table" style="position: absolute; left: 50px; top: 690px; width: 600px; border-collapse: separate; border-spacing: 0px; border: 1px solid #333333;" title="Complete table demonstrating colspan and rowspan features"><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;" colspan="2"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1380px; width: 100px; height: 40px; background-color: #4CAF50; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Table header spanning 2 columns"><span style="color: white; font-size: 12px; font-weight: bold;">Header 1</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 300px; top: 1380px; width: 100px; height: 40px; background-color: #4CAF50; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular table header"><span style="color: white; font-size: 12px; font-weight: bold;">Header 2</span></div></td></tr><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;" rowspan="2"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1460px; width: 100px; height: 40px; background-color: #e8f5e9; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Table cell spanning 2 rows"><span style="color: #333; font-size: 12px;">Merged</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 200px; top: 1460px; width: 100px; height: 40px; background-color: #f5f5f5; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular table cell"><span style="color: #333; font-size: 12px;">Cell A1</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 300px; top: 1460px; width: 100px; height: 40px; background-color: #f5f5f5; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular table cell"><span style="color: #333; font-size: 12px;">Cell A2</span></div></td></tr><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1540px; width: 100px; height: 40px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular table cell - notice the merged cell above"><span style="color: #333; font-size: 12px;">Cell B1</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 200px; top: 1540px; width: 100px; height: 40px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular table cell"><span style="color: #333; font-size: 12px;">Cell B2</span></div></td></tr><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;" colspan="3"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1620px; width: 100px; height: 40px; background-color: #2196F3; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Table footer spanning all 3 columns"><span style="color: white; font-size: 12px; font-weight: bold;">Footer</span></div></td></tr></table>
+<table class="solarwire-table" style="position: absolute; left: 50px; top: 890px; width: 600px; border-collapse: separate; border-spacing: 0px; border: 1px solid #333333;" title="Advanced table with multiple colspan and rowspan combinations"><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;" colspan="4"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1780px; width: 100px; height: 40px; background-color: #9C27B0; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Header spanning all 4 columns"><span style="color: white; font-size: 12px; font-weight: bold;">Title</span></div></td></tr><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;" rowspan="3"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1860px; width: 100px; height: 40px; background-color: #FFC107; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Side menu spanning 3 rows"><span style="color: #333; font-size: 12px;">Menu</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 200px; top: 1860px; width: 100px; height: 40px; background-color: #FFF3E0; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular item"><span style="color: #333; font-size: 12px;">Item 1</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 300px; top: 1860px; width: 100px; height: 40px; background-color: #FFF3E0; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Regular item"><span style="color: #333; font-size: 12px;">Item 2</span></div></td><td style="padding: 0; margin: 0;" colspan="2"><div class="solarwire-rectangle" style="position: absolute; left: 400px; top: 1860px; width: 100px; height: 40px; background-color: #FFE0B2; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Item spanning 2 columns"><span style="color: #333; font-size: 12px;">Item 3</span></div></td></tr><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 1940px; width: 100px; height: 40px; background-color: #E3F2FD; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Detail cell A"><span style="color: #333; font-size: 12px;">Detail A</span></div></td><td style="padding: 0; margin: 0;"><div class="solarwire-rectangle" style="position: absolute; left: 200px; top: 1940px; width: 100px; height: 40px; background-color: #E3F2FD; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Detail cell B"><span style="color: #333; font-size: 12px;">Detail B</span></div></td></tr><tr class="solarwire-table-row" style="background-color: #ffffff;"><td style="padding: 0; margin: 0;" colspan="3"><div class="solarwire-rectangle" style="position: absolute; left: 100px; top: 2020px; width: 100px; height: 40px; background-color: #4CAF50; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Summary spanning 3 columns"><span style="color: white; font-size: 12px; font-weight: bold;">Summary</span></div></td></tr></table>
+<div class="solarwire-line" style="position: absolute; left: 50px; top: 1120px; width: 900px; height: 0px; pointer-events: none;" title="Another divider line"><div style="position: absolute; left: 0; top: 0; width: 900px; height: 0; border-top: 1px solid gray; transform: rotate(0deg); transform-origin: 0 0;"></div></div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 1150px; color: #333; font-size: 16px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Section demonstrating row and column containers">=== Containers and Layout ===</div>
+<div class="solarwire-container solarwire-row" style="position: absolute; left: 50px; top: 1180px; width: 900px; height: 100px; background-color: #ffffff; box-sizing: border-box; display: flex; flex-direction: row; gap: 10px;" title="Row container arranging elements horizontally with gap"><div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 1180px; width: 150px; height: 80px; background-color: #ffcccb; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="First element in row container - notice gap from left"><span style="color: #333; font-size: 12px;">Left</span></div><div class="solarwire-rectangle" style="position: absolute; left: 210px; top: 1180px; width: 150px; height: 80px; background-color: #ffffcc; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Second element in row container"><span style="color: #333; font-size: 12px;">Center</span></div><div class="solarwire-rectangle" style="position: absolute; left: 370px; top: 1180px; width: 150px; height: 80px; background-color: #ccffcc; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Third element in row container"><span style="color: #333; font-size: 12px;">Right</span></div></div>
+<div class="solarwire-container solarwire-col" style="position: absolute; left: 50px; top: 1300px; width: 300px; height: 150px; background-color: #ffffff; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px;" title="Column container arranging elements vertically with gap"><div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 1300px; width: 280px; height: 40px; background-color: #e8f4fc; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Top element in column container - notice gap from top"><span style="color: #333; font-size: 12px;">Top</span></div><div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 1350px; width: 280px; height: 40px; background-color: #fce4ec; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Middle element in column container"><span style="color: #333; font-size: 12px;">Middle</span></div><div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 1400px; width: 280px; height: 40px; background-color: #f3e5f5; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Bottom element in column container"><span style="color: #333; font-size: 12px;">Bottom</span></div></div>
+<div class="solarwire-container solarwire-row" style="position: absolute; left: 370px; top: 1300px; width: 580px; height: 150px; background-color: #ffffff; box-sizing: border-box; display: flex; flex-direction: row; gap: 10px;" title="Nested containers - row containing columns"><div class="solarwire-container solarwire-col" style="position: absolute; left: 370px; top: 1300px; width: 180px; height: 115px; background-color: #ffffff; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px;"><div class="solarwire-rectangle" style="position: absolute; left: 740px; top: 2600px; width: 180px; height: 35px; background-color: #fff3e0; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="First nested column"><span style="color: #333; font-size: 12px;">Nested 1</span></div><div class="solarwire-rectangle" style="position: absolute; left: 740px; top: 2640px; width: 180px; height: 35px; background-color: #e0f7fa; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Second nested column"><span style="color: #333; font-size: 12px;">Nested 2</span></div><div class="solarwire-rectangle" style="position: absolute; left: 740px; top: 2680px; width: 180px; height: 35px; background-color: #f1f8e9; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Third nested column"><span style="color: #333; font-size: 12px;">Nested 3</span></div></div><div class="solarwire-container solarwire-col" style="position: absolute; left: 560px; top: 1300px; width: 180px; height: 115px; background-color: #ffffff; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px;"><div class="solarwire-rectangle" style="position: absolute; left: 1120px; top: 2600px; width: 180px; height: 35px; background-color: #ffebee; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Fourth nested column"><span style="color: #333; font-size: 12px;">Nested A</span></div><div class="solarwire-rectangle" style="position: absolute; left: 1120px; top: 2640px; width: 180px; height: 35px; background-color: #f3e5f5; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Fifth nested column"><span style="color: #333; font-size: 12px;">Nested B</span></div><div class="solarwire-rectangle" style="position: absolute; left: 1120px; top: 2680px; width: 180px; height: 35px; background-color: #e8eaf6; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Sixth nested column"><span style="color: #333; font-size: 12px;">Nested C</span></div></div></div>
+<div class="solarwire-line" style="position: absolute; left: 50px; top: 1470px; width: 900px; height: 0px; pointer-events: none;" title="Final divider line"><div style="position: absolute; left: 0; top: 0; width: 900px; height: 0; border-top: 1px solid gray; transform: rotate(0deg); transform-origin: 0 0;"></div></div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 1500px; color: #333; font-size: 16px; line-height: 1.5px; text-align: left; font-weight: bold;" title="Section demonstrating complex note content with multiple notes">=== Complex Note Examples ===</div>
+<div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 1530px; width: 250px; height: 60px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="This is a multi-line note.
+It contains several lines of text
+to demonstrate how notes with
+longer content are displayed
+in the card area at the bottom."><span style="color: #333; font-size: 12px;">Multi-line Note</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 320px; top: 1530px; width: 250px; height: 60px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="- First list item
+- Second list item with more details
+- Third list item with even more information
+- Fourth item to complete the list"><span style="color: #333; font-size: 12px;">List Note</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 590px; top: 1530px; width: 250px; height: 60px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="1. First numbered item
+2. Second numbered item
+3. Third numbered item with description
+4. Fourth numbered item"><span style="color: #333; font-size: 12px;">Numbered Note</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 50px; top: 1610px; width: 380px; height: 60px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="Important Features:
+• Easy to learn syntax
+• Powerful layout capabilities
+• Flexible styling options
+Key Benefits:
+- Quick prototyping
+- Clean visual output
+- Export to SVG/PNG"><span style="color: #333; font-size: 12px;">Mixed Note</span></div>
+<div class="solarwire-rectangle" style="position: absolute; left: 450px; top: 1610px; width: 380px; height: 60px; background-color: #ffffff; border: 1px solid #333333; box-sizing: border-box; display: flex; align-items: center; justify-content: center;" title="This element demonstrates
+a very detailed note that
+contains multiple paragraphs
+and various types of content
+to show the flexibility of
+the note system in SolarWire."><span style="color: #333; font-size: 12px;">Detailed Note</span></div>
+<div class="solarwire-text" style="position: absolute; left: 50px; top: 1700px; color: #333; font-size: 14px; line-height: 1.5px; text-align: left;" title="Thank you for exploring SolarWire! Scroll down to see all note cards with their corresponding badges.">End of Demo - Check below for all notes!</div>
+<div class="note-badge" style="left: 508px; top: 20px;">1</div>
+<div class="note-badge" style="left: 251.2px; top: 70px;">2</div>
+<div class="note-badge" style="left: 160px; top: 100px;">3</div>
+<div class="note-badge" style="left: 290px; top: 100px;">4</div>
+<div class="note-badge" style="left: 340px; top: 115px;">5</div>
+<div class="note-badge" style="left: 384px; top: 110px;">6</div>
+<div class="note-badge" style="left: 424px; top: 110px;">7</div>
+<div class="note-badge" style="left: 126.39999999999998px; top: 180px;">8</div>
+<div class="note-badge" style="left: 204.8px; top: 180px;">9</div>
+<div class="note-badge" style="left: 319.2px; top: 180px;">10</div>
+<div class="note-badge" style="left: 419.2px; top: 180px;">11</div>
+<div class="note-badge" style="left: 240px; top: 220px;">12</div>
+<div class="note-badge" style="left: 460px; top: 220px;">13</div>
+<div class="note-badge" style="left: 940px; top: 320px;">14</div>
+<div class="note-badge" style="left: 308.8px; top: 350px;">15</div>
+<div class="note-badge" style="left: 190px; top: 380px;">16</div>
+<div class="note-badge" style="left: 350px; top: 380px;">17</div>
+<div class="note-badge" style="left: 350px; top: 440px;">18</div>
+<div class="note-badge" style="left: 240px; top: 510px;">19</div>
+<div class="note-badge" style="left: 400px; top: 510px;">20</div>
+<div class="note-badge" style="left: 400px; top: 580px;">21</div>
+<div class="note-badge" style="left: 940px; top: 620px;">22</div>
+<div class="note-badge" style="left: 366.4px; top: 650px;">23</div>
+<div class="note-badge" style="left: 640px; top: 680px;">24</div>
+<div class="note-badge" style="left: 640px; top: 880px;">25</div>
+<div class="note-badge" style="left: 940px; top: 1110px;">26</div>
+<div class="note-badge" style="left: 318.4px; top: 1140px;">27</div>
+<div class="note-badge" style="left: 940px; top: 1170px;">28</div>
+<div class="note-badge" style="left: 340px; top: 1290px;">29</div>
+<div class="note-badge" style="left: 940px; top: 1290px;">30</div>
+<div class="note-badge" style="left: 940px; top: 1460px;">31</div>
+<div class="note-badge" style="left: 318.4px; top: 1490px;">32</div>
+<div class="note-badge" style="left: 290px; top: 1520px;">33</div>
+<div class="note-badge" style="left: 560px; top: 1520px;">34</div>
+<div class="note-badge" style="left: 830px; top: 1520px;">35</div>
+<div class="note-badge" style="left: 420px; top: 1600px;">36</div>
+<div class="note-badge" style="left: 820px; top: 1600px;">37</div>
+<div class="note-badge" style="left: 376px; top: 1690px;">38</div>
+<div class="notes-area" style="top: 1721.5px;">
+<div class="note-card">
+  <div class="note-card-badge">1</div>
+  <div class="note-card-content">Main title for this comprehensive SolarWire feature showcase</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">2</div>
+  <div class="note-card-content">Section showcasing basic SolarWire elements</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">3</div>
+  <div class="note-card-content">Basic rectangle element with custom colors</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">4</div>
+  <div class="note-card-content">Rounded rectangle with custom border radius</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">5</div>
+  <div class="note-card-content">Circle element for avatar or icon display</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">6</div>
+  <div class="note-card-content">Material Icons star icon</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">7</div>
+  <div class="note-card-content">Font Awesome home icon</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">8</div>
+  <div class="note-card-content">Basic standalone text element</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">9</div>
+  <div class="note-card-content">Text with bold styling</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">10</div>
+  <div class="note-card-content">Text with italic styling</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">11</div>
+  <div class="note-card-content">Text with both bold and italic</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">12</div>
+  <div class="note-card-content">Placeholder element for missing content</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">13</div>
+  <div class="note-card-content">Image element with URL - shows placeholder when not loaded</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">14</div>
+  <div class="note-card-content">Horizontal divider line separating sections</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">15</div>
+  <div class="note-card-content">Section demonstrating relative coordinates</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">16</div>
+  <div class="note-card-content">Element with absolute coordinates</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">17</div>
+  <div class="note-card-content">Element positioned at Right+10, Top+0 of previous</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">18</div>
+  <div class="note-card-content">Element positioned at Left+0, Bottom+10 of previous</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">19</div>
+  <div class="note-card-content">Element used as edge reference</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">20</div>
+  <div class="note-card-content">Element positioned at Right+10, Top+0 of previous</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">21</div>
+  <div class="note-card-content">Element positioned at Left+0, Bottom+10 of previous</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">22</div>
+  <div class="note-card-content">Divider after relative positioning section</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">23</div>
+  <div class="note-card-content">Section demonstrating table with colspan and rowspan</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">24</div>
+  <div class="note-card-content">Complete table demonstrating colspan and rowspan features</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">25</div>
+  <div class="note-card-content">Advanced table with multiple colspan and rowspan combinations</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">26</div>
+  <div class="note-card-content">Another divider line</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">27</div>
+  <div class="note-card-content">Section demonstrating row and column containers</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">28</div>
+  <div class="note-card-content">Row container arranging elements horizontally with gap</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">29</div>
+  <div class="note-card-content">Column container arranging elements vertically with gap</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">30</div>
+  <div class="note-card-content">Nested containers - row containing columns</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">31</div>
+  <div class="note-card-content">Final divider line</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">32</div>
+  <div class="note-card-content">Section demonstrating complex note content with multiple notes</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">33</div>
+  <div class="note-card-content">This is a multi-line note.
+It contains several lines of text
+to demonstrate how notes with
+longer content are displayed
+in the card area at the bottom.</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">34</div>
+  <div class="note-card-content">- First list item
+- Second list item with more details
+- Third list item with even more information
+- Fourth item to complete the list</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">35</div>
+  <div class="note-card-content">1. First numbered item
+2. Second numbered item
+3. Third numbered item with description
+4. Fourth numbered item</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">36</div>
+  <div class="note-card-content">Important Features:
+• Easy to learn syntax
+• Powerful layout capabilities
+• Flexible styling options
+Key Benefits:
+- Quick prototyping
+- Clean visual output
+- Export to SVG/PNG</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">37</div>
+  <div class="note-card-content">This element demonstrates
+a very detailed note that
+contains multiple paragraphs
+and various types of content
+to show the flexibility of
+the note system in SolarWire.</div>
+</div>
+<div class="note-card">
+  <div class="note-card-badge">38</div>
+  <div class="note-card-content">Thank you for exploring SolarWire! Scroll down to see all note cards with their corresponding badges.</div>
+</div>
+</div>
+</div>
+</body>
+</html>

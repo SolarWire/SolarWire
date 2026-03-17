@@ -10,7 +10,8 @@ import type {
   RowContainer,
   ColContainer,
   TableElement,
-  TableRowElement
+  TableRowElement,
+  Element
 } from '../types';
 
 describe('SolarWire Parser', () => {

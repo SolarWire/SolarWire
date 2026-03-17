@@ -1,0 +1,168 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SolarWire",
+  "scopeName": "source.solarwire",
+  "fileTypes": ["solarwire"],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#elements"
+    },
+    {
+      "include": "#text"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "match": "//.*$",
+          "name": "comment.line.double-slash.solarwire"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "match": "^!([a-zA-Z0-9_-]+)(?:=([^\\s]+))?\\s*",
+          "captures": {
+            "1": { "name": "keyword.other.declaration.solarwire" },
+            "2": { "name": "string.other.value.solarwire" }
+          }
+        }
+      ]
+    },
+    "elements": {
+      "patterns": [
+        {
+          "match": "\\[\\?",
+          "name": "punctuation.definition.placeholder.begin.solarwire"
+        },
+        {
+          "match": "\\[",
+          "name": "punctuation.definition.rectangle.begin.solarwire"
+        },
+        {
+          "match": "\\]\\)?",
+          "name": "punctuation.definition.rectangle.end.solarwire"
+        },
+        {
+          "match": "\\(\\(",
+          "name": "punctuation.definition.circle.begin.solarwire"
+        },
+        {
+          "match": "\\)\\)",
+          "name": "punctuation.definition.circle.end.solarwire"
+        },
+        {
+          "match": "\\((?!\\()",
+          "name": "punctuation.definition.rounded.begin.solarwire"
+        },
+        {
+          "match": "\\)(?!\\))",
+          "name": "punctuation.definition.rounded.end.solarwire"
+        },
+        {
+          "match": "\\{row\\}",
+          "name": "punctuation.definition.container.row.solarwire"
+        },
+        {
+          "match": "\\{col\\}",
+          "name": "punctuation.definition.container.col.solarwire"
+        },
+        {
+          "match": "\\{\\}",
+          "name": "punctuation.definition.container.empty.solarwire"
+        },
+        {
+          "match": "\\{\\s*",
+          "name": "punctuation.definition.container.begin.solarwire"
+        },
+        {
+          "match": "\\}\\s*",
+          "name": "punctuation.definition.container.end.solarwire"
+        },
+        {
+          "match": "##",
+          "name": "punctuation.definition.table.solarwire"
+        },
+        {
+          "match": "#(?![#?])",
+          "name": "punctuation.definition.table-row.solarwire"
+        },
+        {
+          "match": "!icon\\b",
+          "name": "keyword.other.icon.solarwire"
+        },
+        {
+          "match": "--",
+          "name": "punctuation.definition.line.solarwire"
+        },
+        {
+          "match": "<[^>]+>",
+          "name": "string.other.image-url.solarwire"
+        },
+        {
+          "include": "#attributes"
+        },
+        {
+          "include": "#coordinates"
+        }
+      ]
+    },
+    "attributes": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z0-9_-]+)(?:=([^\\s\"]+|\"[^\"]*\"))?",
+          "captures": {
+            "1": { "name": "entity.other.attribute-name.solarwire" },
+            "2": { "name": "string.other.attribute-value.solarwire" }
+          }
+        }
+      ]
+    },
+    "coordinates": {
+      "patterns": [
+        {
+          "match": "@\\([^)]+\\)",
+          "name": "meta.coordinates.solarwire"
+        },
+        {
+          "match": "->\\([^)]+\\)",
+          "name": "meta.coordinates.end.solarwire"
+        }
+      ]
+    },
+    "text": {
+      "patterns": [
+        {
+          "begin": "\"\"\"",
+          "end": "\"\"\"",
+          "name": "string.quoted.triple.solarwire",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.solarwire"
+            }
+          ]
+        },
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.solarwire",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.solarwire"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
