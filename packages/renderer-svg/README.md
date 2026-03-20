@@ -11,25 +11,11 @@ cd SolarWire
 npm install
 ```
 
-### Install renderer-svg package dependencies
-
-```bash
-cd packages/renderer-svg
-npm install
-```
-
 ## Build
 
 ```bash
 cd packages/renderer-svg
 npm run build
-```
-
-## Run Tests
-
-```bash
-cd packages/renderer-svg
-npm test
 ```
 
 ## Usage
@@ -55,18 +41,11 @@ packages/renderer-svg/
 │   ├── index.ts              # Renderer entry point
 │   ├── context.ts            # Context management and coordinate calculation
 │   ├── renderer.ts           # Main rendering function
-│   ├── elements/
-│   │   ├── rectangle.ts      # Rectangle and rounded rectangle renderers
-│   │   ├── otherElements.ts  # Other element renderers (circle, text, icon, placeholder, image, table)
-│   │   └── lineAndContainer.ts  # Line and container renderers
-│   └── __tests__/
-│       ├── basic.test.ts     # Basic functionality tests
-│       ├── defaults.test.ts  # Default styles tests
-│       ├── generate-svg.test.ts  # Complete SVG generation test
-│       ├── edge-cases.test.ts  # Edge case tests
-│       └── performance.test.ts  # Performance and large file tests
+│   └── elements/
+│       ├── rectangle.ts      # Rectangle and rounded rectangle renderers
+│       ├── otherElements.ts  # Other element renderers (circle, text, placeholder, image, table)
+│       └── lineAndContainer.ts  # Line and container renderers
 ├── dist/                     # Compiled output
-├── complete-example.svg      # Generated example SVG
 ├── package.json
 ├── tsconfig.json
 └── jest.config.js
@@ -78,8 +57,7 @@ packages/renderer-svg/
 - Rounded rectangle (`type: 'rounded-rectangle'`)
 - Circle (`type: 'circle'`)
 - Plain text (`type: 'text'`)
-- Icon (`type: 'icon'`) - with Material Icons and Font Awesome support
-- Placeholder (`type: 'placeholder'`)
+- Placeholder (`type: 'placeholder'`) - with diagonal crosshairs
 - Image (`type: 'image'`) - with beautiful placeholder rendering (mountain + sun)
 - Line (`type: 'line'`) - with or without label
 - Container (`type: 'row'` / `'col'`)
@@ -97,22 +75,18 @@ packages/renderer-svg/
 
 ## Advanced Features
 
-- ✅ **Note System**: Visual badges with numbers + card display at the bottom
+- ✅ **Note System**: Visual badges (teardrop shaped) with numbers + card display at the bottom
 - ✅ **Image Placeholders**: Beautiful mountain + sun icon when images can't be loaded
-- ✅ **Icon Libraries**: Built-in Material Icons and Font Awesome
 - ✅ **Global Defaults**: Document-level declarations for consistent styling
 - ✅ **Multi-line Text**: Proper line wrapping with tspan elements
 - ✅ **Table Colspan/Rowspan**: Full support for merged cells
+- ✅ **Adaptive Sizing**: Canvas automatically fits to content - no manual width/height needed!
 
 ## Development Workflow
 
 1. Modify source code
 2. Run `npm run build` to compile TypeScript
-3. Run `npm test` to verify changes
 
-## Testing
+## License
 
-- 70+ comprehensive tests
-- Edge case testing (empty elements, special characters, large content)
-- Performance testing (100-500 elements, large tables)
-- All tests passing!
+MIT © SolarWire contributors

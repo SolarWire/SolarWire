@@ -1,12 +1,68 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { parse } from '@solarwire/parser';
-import { render as renderSvg } from '@solarwire/renderer-svg';
+import { parse } from '../lib/parser';
+import { render as renderSvg } from '../lib/renderer-svg';
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function solarwireMarkdownItPlugin(md: any) {
+  const defaultFenceRenderer = md.renderer.rules.fence;
+
+  md.renderer.rules.fence = function(
+    tokens: any[],
+    idx: number,
+    options: any,
+    env: any,
+    self: any
+  ) {
+    const token = tokens[idx];
+    const info = token.info ? md.utils.unescapeAll(token.info).trim() : '';
+
+    if (info.toLowerCase() === 'solarwire') {
+      const code = token.content.trim();
+
+      try {
+        const ast = parse(code);
+        const svg = renderSvg(ast);
+        return `
+          <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 4px; overflow: hidden;">
+            <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+              ${svg.replace(/<svg/, '<svg style="max-width: 100%; max-height: 100%; height: auto; width: auto;"')}
+            </div>
+          </div>
+        `;
+      } catch (error) {
+        const err = error as Error;
+        return `
+          <div style="border: 1px solid #dc3545; padding: 1rem; background: #fff5f5; border-radius: 4px; margin: 10px 0;">
+            <strong style="color: #dc3545;">Error rendering SolarWire:</strong>
+            <pre style="margin: 0.5rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; overflow-x: auto;">${escapeHtml(err.message)}</pre>
+            <details>
+              <summary>Code</summary>
+              <pre style="margin: 0.5rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; overflow-x: auto;">${escapeHtml(code)}</pre>
+            </details>
+          </div>
+        `;
+      }
+    }
+
+    return defaultFenceRenderer ? defaultFenceRenderer(tokens, idx, options, env, self) : '';
+  };
+}
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 
 export function activate(context: vscode.ExtensionContext) {
+  console.log('SolarWire extension is activating...');
+  vscode.window.showInformationMessage('SolarWire extension activated!');
   diagnosticCollection = vscode.languages.createDiagnosticCollection('solarwire');
   context.subscriptions.push(diagnosticCollection);
 
@@ -150,7 +206,6 @@ export function activate(context: vscode.ExtensionContext) {
           { label: '()', detail: 'Rounded Rectangle', insertText: '("${1:text}")' },
           { label: '(())', detail: 'Circle', insertText: '(("${1:text}"))' },
           { label: '""', detail: 'Text', insertText: '"${1:text}"' },
-          { label: '!icon', detail: 'Icon', insertText: '!icon "${1:name}"' },
           { label: '[?]', detail: 'Placeholder', insertText: '[?"${1:text}"]' },
           { label: '<>', detail: 'Image', insertText: '<${1:url}>' },
           { label: '--', detail: 'Line', insertText: '-- @(${1:x1},${2:y1})->(${3:x2},${4:y2})' },
@@ -174,7 +229,6 @@ export function activate(context: vscode.ExtensionContext) {
           { label: 'bold', detail: 'Bold Text' },
           { label: 'italic', detail: 'Italic Text' },
           { label: 'align', detail: 'Alignment (l/c/r)' },
-          { label: 'library', detail: 'Icon Library (material-icons/font-awesome)' },
           { label: 'note', detail: 'Note/Description (text)' },
           { label: 'colspan', detail: 'Column Span (number)' },
           { label: 'rowspan', detail: 'Row Span (number)' }
@@ -182,14 +236,11 @@ export function activate(context: vscode.ExtensionContext) {
 
         const declarationCompletions = [
           { label: '!title', detail: 'Document Title' },
-          { label: '!width', detail: 'Canvas Width (number)' },
-          { label: '!height', detail: 'Canvas Height (number)' },
           { label: '!c', detail: 'Default Color (hex/name)' },
           { label: '!bg', detail: 'Default Background (hex/name)' },
           { label: '!size', detail: 'Default Size (number)' },
           { label: '!line-height', detail: 'Default Line Height (number)' },
           { label: '!gap', detail: 'Default Gap (number)' },
-          { label: '!icon-library', detail: 'Default Icon Library' },
           { label: '!bold', detail: 'Default Bold' },
           { label: '!italic', detail: 'Default Italic' }
         ];
@@ -234,7 +285,6 @@ export function activate(context: vscode.ExtensionContext) {
           '()': 'Rounded rectangle element: ("text")',
           '(())': 'Circle element: (("text"))',
           '""': 'Text element: "text"',
-          '!icon': 'Icon element: !icon "name"',
           '[?]': 'Placeholder element: [?"text"]',
           '<>': 'Image element: <url>',
           '--': 'Line element: -- @(x1,y1)->(x2,y2)',
@@ -287,6 +337,12 @@ export function activate(context: vscode.ExtensionContext) {
     hoverProvider,
     textDocumentChange
   );
+
+  return {
+    extendMarkdownIt(md: any) {
+      return md.use(solarwireMarkdownItPlugin);
+    }
+  };
 }
 
 function updateDiagnostics(document: vscode.TextDocument, error: any) {
@@ -341,11 +397,27 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
     .toolbar button:hover {
       background: #005a9e;
     }
-    .preview-container {
+    .preview-wrapper {
       background: white;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      width: calc(100% - 40px);
+      max-width: calc(100% - 40px);
+      overflow: hidden;
+    }
+    .preview-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .preview-container svg {
+      max-width: 100%;
+      max-height: 100%;
+      height: auto;
+      width: auto;
     }
   </style>
 </head>
@@ -353,8 +425,10 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
   <div class="toolbar">
     <button onclick="downloadSvg()">Download SVG</button>
   </div>
-  <div class="preview-container" id="preview">
-    ${svg}
+  <div class="preview-wrapper">
+    <div class="preview-container" id="preview">
+      ${svg}
+    </div>
   </div>
   <script>
     function downloadSvg() {
@@ -368,6 +442,16 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    }
+    
+    const previewContainer = document.getElementById('preview');
+    const svgElement = previewContainer.querySelector('svg');
+    
+    if (svgElement) {
+      svgElement.style.maxWidth = '100%';
+      svgElement.style.maxHeight = '100%';
+      svgElement.style.height = 'auto';
+      svgElement.style.width = 'auto';
     }
   </script>
 </body>

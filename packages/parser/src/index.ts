@@ -9,7 +9,6 @@ export type {
   RoundedRectangleElement,
   CircleElement,
   TextElement,
-  IconElement,
   PlaceholderElement,
   ImageElement,
   LineElement,
@@ -89,9 +88,7 @@ function isCommentLine(line: string): boolean {
 
 function isDeclarationLine(line: string): boolean {
   const trimmed = line.trim();
-  if (!trimmed.startsWith('!')) return false;
-  if (trimmed.startsWith('!icon')) return false;
-  return true;
+  return trimmed.startsWith('!');
 }
 
 export function parse(input: string): Document {

@@ -21,7 +21,7 @@ VS Code extension for SolarWire DSL, providing syntax highlighting, snippets, re
 3. Run `npm run build` to compile all packages
 4. Open the `packages/vscode-extension` folder in VS Code
 5. Press `F5` to launch the Extension Development Host
-6. Open a `.solarwire` file to use the extension
+6. Open a `.solarwire` or `.md` file to use the extension
 
 ## Commands
 
@@ -31,7 +31,7 @@ VS Code extension for SolarWire DSL, providing syntax highlighting, snippets, re
 
 ## Usage
 
-1. Create a new file with the `.solarwire` extension
+1. Create a new file with the `.solarwire` extension, or use in `.md` files
 2. Start writing SolarWire code – syntax highlighting will work automatically
 3. Use `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) and select "SolarWire: Open Preview" to see the live preview
 4. The preview updates automatically as you type
@@ -47,7 +47,6 @@ The extension provides the following snippets:
 - `round` – Rounded rectangle: `("text")`
 - `circle` – Circle element: `(("text"))`
 - `text` – Text element: `"text"`
-- `icon` – Icon element: `!icon "name"`
 - `placeholder` – Placeholder element: `[?"text"]`
 - `image` – Image element: `<url>`
 - `line` – Line element: `-- @(x1,y1)->(x2,y2)`
@@ -92,10 +91,8 @@ The extension provides real-time error diagnostics:
 
 ## Example
 
-```SolarWire
+```solarwire
 !title="My Wireframe"
-!width=800
-!height=600
 
 ["Header"] @(50,50) w=700 h=80 bg=#4CAF50 c=white
 ["Content"] @(50,150) w=700 h=400
@@ -117,14 +114,19 @@ npm run build
 packages/vscode-extension/
 ├── src/
 │   └── extension.ts        # Main extension code
+├── lib/
+│   ├── parser/             # Parser library (compiled)
+│   └── renderer-svg/       # SVG renderer library (compiled)
 ├── syntaxes/
 │   └── solarwire.tmLanguage.json  # Syntax highlighting grammar
 ├── snippets/
 │   └── solarwire.json     # Code snippets
+├── media/
+│   └── solarwire-markdown.js  # Preview panel scripts
 ├── language-configuration.json  # Language configuration
 ├── package.json
 ├── tsconfig.json
-└── README.md
+└── readme.md
 ```
 
 ## License

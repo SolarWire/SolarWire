@@ -140,3 +140,17 @@ vite.config.ts.timestamp-*
 
 # Plan folder - for project planning and roadmap
 plan/
+
+# VSCode extension files
+packages/vscode-extension/lib/
+packages/vscode-extension/*.vsix
+packages/vscode-extension/test-render.js
+packages/vscode-extension/.vscode/
+
+# Compiled TypeScript output
+**/dist/
+**/*.js.map
+**/*.d.ts.map
+
+# Parser generated file
+packages/parser/src/parser.js

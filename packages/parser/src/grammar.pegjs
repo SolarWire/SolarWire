@@ -50,7 +50,7 @@ ContainerElement
   = RowContainer / ColContainer / EmptyContainer / TableElement / TableRowElement
 
 SimpleElement
-  = CircleElement / RectangleElement / RoundedRectangleElement / TextElement / IconElement / PlaceholderElement / ImageElement / LineElement
+  = CircleElement / RectangleElement / RoundedRectangleElement / TextElement / PlaceholderElement / ImageElement / LineElement
 
 RectangleElement
   = "[" text:QuotedString? "]" rest:ElementRest?
@@ -96,16 +96,7 @@ TextElement
     };
   }
 
-IconElement
-  = "!icon" _+ name:QuotedString rest:ElementRest?
-  {
-    return {
-      type: 'icon',
-      name: name,
-      attributes: rest ? rest.attributes || {} : {},
-      coordinates: rest ? rest.coordinates : null
-    };
-  }
+
 
 PlaceholderElement
   = "[?" text:QuotedString? "]" rest:ElementRest?

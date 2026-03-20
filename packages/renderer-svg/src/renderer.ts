@@ -1,12 +1,18 @@
 import { Document, Element } from '@solarwire/parser';
 import { createRenderContext, RenderContext, ElementBounds } from './context';
 import { renderRectangle, RenderResult } from './elements/rectangle';
-import { renderCircle, renderText, renderIcon, renderPlaceholder, renderImage, renderTable } from './elements/otherElements';
+import { renderCircle, renderText, renderPlaceholder, renderImage, renderTable } from './elements/otherElements';
 import { renderLine, renderContainer } from './elements/lineAndContainer';
 
 function wrapText(text: string, maxWidth: number, fontSize: number = 12): string[] {
   const lines: string[] = [];
-  const avgCharWidth = fontSize * 0.6;
+  const avgCharWidth = fontSize * 0.65;
+  const cjkCharWidth = fontSize * 1.0;
+  const isCJK = (char: string) => /[\u4e00-\u9fa5\u3400-\u4dbf\u3040-\u30ff\u31f0-\u31ff\uac00-\ud7af]/.test(char);
+  
+  const getCharWidth = (char: string): number => {
+    return isCJK(char) ? cjkCharWidth : avgCharWidth;
+  };
   
   text.split('\n').forEach(paragraph => {
     if (paragraph.trim() === '') {
@@ -14,22 +20,78 @@ function wrapText(text: string, maxWidth: number, fontSize: number = 12): string
       return;
     }
     
-    const words = paragraph.split(/(\s+)/);
     let currentLine = '';
     let currentWidth = 0;
+    let i = 0;
     
-    words.forEach(word => {
-      const wordWidth = word.length * avgCharWidth;
+    while (i < paragraph.length) {
+      const char = paragraph[i];
       
-      if (currentWidth + wordWidth <= maxWidth || currentLine === '') {
-        currentLine += word;
-        currentWidth += wordWidth;
-      } else {
-        lines.push(currentLine.trim());
-        currentLine = word.trim();
-        currentWidth = word.length * avgCharWidth;
+      if (char === ' ' || char === '\t') {
+        currentLine += char;
+        currentWidth += avgCharWidth;
+        i++;
+        continue;
       }
-    });
+      
+      let token = '';
+      let tokenWidth = 0;
+      
+      if (isCJK(char)) {
+        token = char;
+        tokenWidth = cjkCharWidth;
+        i++;
+      } else {
+        let j = i;
+        while (j < paragraph.length && !isCJK(paragraph[j]) && paragraph[j] !== ' ' && paragraph[j] !== '\t') {
+          token += paragraph[j];
+          tokenWidth += avgCharWidth;
+          j++;
+        }
+        i = j;
+      }
+      
+      if (currentWidth + tokenWidth <= maxWidth || currentLine === '') {
+        currentLine += token;
+        currentWidth += tokenWidth;
+      } else {
+        if (tokenWidth > maxWidth) {
+          if (currentLine.trim() !== '') {
+            lines.push(currentLine.trim());
+          }
+          
+          let remainingToken = token;
+          while (remainingToken.length > 0) {
+            let part = '';
+            let partWidth = 0;
+            let k = 0;
+            
+            while (k < remainingToken.length) {
+              const charWidth = getCharWidth(remainingToken[k]);
+              if (partWidth + charWidth > maxWidth && part.length > 0) {
+                break;
+              }
+              part += remainingToken[k];
+              partWidth += charWidth;
+              k++;
+            }
+            
+            if (k >= remainingToken.length) {
+              currentLine = part;
+              currentWidth = partWidth;
+              remainingToken = '';
+            } else {
+              lines.push(part);
+              remainingToken = remainingToken.substring(k);
+            }
+          }
+        } else {
+          lines.push(currentLine.trim());
+          currentLine = token;
+          currentWidth = tokenWidth;
+        }
+      }
+    }
     
     if (currentLine.trim()) {
       lines.push(currentLine.trim());
@@ -48,8 +110,6 @@ export function renderElement(element: Element, context: RenderContext): RenderR
       return renderCircle(element, context);
     case 'text':
       return renderText(element, context);
-    case 'icon':
-      return renderIcon(element, context);
     case 'placeholder':
       return renderPlaceholder(element, context);
     case 'image':
@@ -103,6 +163,11 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
     }
   });
   
+  const margin = 20;
+  const viewBoxX = minX - margin;
+  const viewBoxY = minY - margin;
+  const viewBoxWidth = maxX - minX + margin * 2;
+  
   let notesAreaHeight = 0;
   const extraNoteSpacing = 20;
   if (!disableNotes && notes.length > 0) {
@@ -110,9 +175,10 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
     const cardsPerRow = 2;
     const lineHeight = 22;
     const cardPadding = 12;
+    const cardWidth = (viewBoxWidth - margin * 2 - 10) / 2;
     
     const cardHeights = notes.map(note => {
-      const lines = note.note.split('\n');
+      const lines = wrapText(note.note, cardWidth - 28 - 12, 12);
       const contentHeight = lines.length * lineHeight;
       return Math.max(60, contentHeight + cardPadding * 2);
     });
@@ -124,14 +190,11 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
       rowMaxHeights[row] = Math.max(rowMaxHeights[row], cardHeights[index]);
     });
     
+    const totalRowHeight = rowMaxHeights.reduce((sum, height) => sum + height, 0);
     const rows = rowMaxHeights.length;
-    notesAreaHeight = rows * 80 + (rows + 1) * cardMargin + extraNoteSpacing;
+    notesAreaHeight = totalRowHeight + (rows + 1) * cardMargin + extraNoteSpacing;
   }
   
-  const margin = 20;
-  const viewBoxX = minX - margin;
-  const viewBoxY = minY - margin;
-  const viewBoxWidth = maxX - minX + margin * 2;
   const viewBoxHeight = maxY - minY + margin * 2 + notesAreaHeight;
   
   svgParts.push(`<?xml version="1.0" encoding="UTF-8"?>`);
@@ -139,11 +202,11 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
   svgParts.push(`<style>`);
   svgParts.push(`  text { font-family: Arial, sans-serif; }`);
   if (!disableNotes) {
-    svgParts.push(`  .note-badge { fill: #e74c3c; }`);
+    svgParts.push(`  .note-badge { fill: #70B603; }`);
     svgParts.push(`  .note-badge-text { fill: white; font-size: 12px; font-weight: bold; }`);
     svgParts.push(`  .note-card { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; }`);
     svgParts.push(`  .note-card-text { fill: #333; font-size: 12px; line-height: 22px; }`);
-    svgParts.push(`  .note-card-badge { fill: #e74c3c; }`);
+    svgParts.push(`  .note-card-badge { fill: #70B603; }`);
     svgParts.push(`  .note-card-badge-text { fill: white; font-size: 10px; font-weight: bold; }`);
   }
   svgParts.push(`</style>`);
@@ -158,8 +221,14 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
       const badgeY = note.bounds.y - 8;
       const badgeRadius = 10;
       
-      svgParts.push(`  <circle cx="${badgeX}" cy="${badgeY}" r="${badgeRadius}" class="note-badge"/>`);
-      svgParts.push(`  <text x="${badgeX}" y="${badgeY + 4}" text-anchor="middle" class="note-badge-text">${note.number}</text>`);
+      svgParts.push(`  <defs>`);
+      svgParts.push(`    <filter id="badge-shadow-${note.number}" x="-50%" y="-50%" width="200%" height="200%">`);
+      svgParts.push(`      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>`);
+      svgParts.push(`    </filter>`);
+      svgParts.push(`  </defs>`);
+      
+      svgParts.push(`  <path d="M${badgeX} ${badgeY - badgeRadius} C${badgeX + badgeRadius} ${badgeY - badgeRadius} ${badgeX + badgeRadius} ${badgeY + badgeRadius * 0.5} ${badgeX} ${badgeY + badgeRadius * 1.5} C${badgeX - badgeRadius} ${badgeY + badgeRadius * 0.5} ${badgeX - badgeRadius} ${badgeY - badgeRadius} ${badgeX} ${badgeY - badgeRadius} Z" fill="#70B603" stroke="white" stroke-width="1" filter="url(#badge-shadow-${note.number})"/>`);
+      svgParts.push(`  <text x="${badgeX}" y="${badgeY + 2}" text-anchor="middle" class="note-badge-text">${note.number}</text>`);
     });
     
     if (notes.length > 0) {
@@ -200,7 +269,14 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
         const badgeX = cardX + 12;
         const badgeY = cardY + 12;
         const badgeRadius = 8;
-        svgParts.push(`  <circle cx="${badgeX}" cy="${badgeY}" r="${badgeRadius}" class="note-card-badge"/>`);
+        
+        svgParts.push(`  <defs>`);
+        svgParts.push(`    <filter id="card-badge-shadow-${index}" x="-50%" y="-50%" width="200%" height="200%">`);
+        svgParts.push(`      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>`);
+        svgParts.push(`    </filter>`);
+        svgParts.push(`  </defs>`);
+        
+        svgParts.push(`  <circle cx="${badgeX}" cy="${badgeY}" r="${badgeRadius}" fill="#70B603" stroke="white" stroke-width="1" filter="url(#card-badge-shadow-${index})"/>`);
         svgParts.push(`  <text x="${badgeX}" y="${badgeY + 3}" text-anchor="middle" class="note-card-badge-text">${note.number}</text>`);
         
         const textX = cardX + 28;

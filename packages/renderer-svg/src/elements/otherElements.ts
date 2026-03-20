@@ -1,5 +1,4 @@
-import { CircleElement, TextElement, IconElement, PlaceholderElement, ImageElement, TableElement, TableRowElement, Element } from '@solarwire/parser';
-import { renderIcon as getIconSvg } from '@solarwire/icons';
+import { CircleElement, TextElement, PlaceholderElement, ImageElement, TableElement, TableRowElement, Element } from '@solarwire/parser';
 import { RenderContext, AbsolutePosition, ElementBounds, calculatePosition, getNumberAttribute, getColorAttribute, getBooleanAttribute, getAlignAttribute, updateLastElementBounds, createChildContext } from '../context';
 import { RenderResult } from './rectangle';
 
@@ -121,41 +120,7 @@ export function renderText(element: TextElement, context: RenderContext): Render
   };
 }
 
-export function renderIcon(element: IconElement, context: RenderContext): RenderResult {
-  let pos: AbsolutePosition;
-  if (element.coordinates) {
-    pos = calculatePosition(context, element.coordinates);
-  } else {
-    pos = { x: context.offsetX, y: context.offsetY };
-  }
-  
-  const size = getNumberAttribute(element.attributes, context.globalDefaults, 's', getNumberAttribute(element.attributes, context.globalDefaults, 'size', 24));
-  const c = getColorAttribute(element.attributes, context.globalDefaults, 'c', '#000000');
-  const library = element.attributes['library'] || context.globalDefaults['icon-library'] || 'material-icons';
-  const note = element.attributes['note'];
-  
-  const svgParts: string[] = [];
-  const iconSvg = getIconSvg(element.name, size, c, library);
-  svgParts.push(`<g transform="translate(${pos.x}, ${pos.y})">${iconSvg}</g>`);
-  
-  const bounds: ElementBounds = {
-    x: pos.x,
-    y: pos.y,
-    width: size,
-    height: size,
-  };
-  
-  updateLastElementBounds(context, bounds);
-  
-  if (note) {
-    svgParts.push(`<title>${note}</title>`);
-  }
-  
-  return {
-    svg: svgParts.join(''),
-    bounds,
-  };
-}
+
 
 export function renderPlaceholder(element: PlaceholderElement, context: RenderContext): RenderResult {
   let pos: AbsolutePosition;
@@ -168,12 +133,17 @@ export function renderPlaceholder(element: PlaceholderElement, context: RenderCo
   const w = getNumberAttribute(element.attributes, context.globalDefaults, 'w', 100);
   const h = getNumberAttribute(element.attributes, context.globalDefaults, 'h', 40);
   const bg = getColorAttribute(element.attributes, context.globalDefaults, 'bg', '#f0f0f0');
+  const b = getColorAttribute(element.attributes, context.globalDefaults, 'b', '#999999');
+  const s = getNumberAttribute(element.attributes, context.globalDefaults, 's', 1);
   const c = getColorAttribute(element.attributes, context.globalDefaults, 'c', '#999999');
   const fontSize = getNumberAttribute(element.attributes, context.globalDefaults, 'text-size', getNumberAttribute(element.attributes, context.globalDefaults, 'size', 12));
   const note = element.attributes['note'];
   
   const svgParts: string[] = [];
-  svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" fill="${bg}"/>`);
+  svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" fill="${bg}" stroke="${b}" stroke-width="${s}"/>`);
+  
+  svgParts.push(`<line x1="${pos.x}" y1="${pos.y}" x2="${pos.x + w}" y2="${pos.y + h}" stroke="${b}" stroke-width="${s}"/>`);
+  svgParts.push(`<line x1="${pos.x + w}" y1="${pos.y}" x2="${pos.x}" y2="${pos.y + h}" stroke="${b}" stroke-width="${s}"/>`);
   
   const text = element.text || 'Placeholder';
   svgParts.push(`<text x="${pos.x + w / 2}" y="${pos.y + h / 2}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="${fontSize}">${text}</text>`);

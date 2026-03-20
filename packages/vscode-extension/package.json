@@ -2,7 +2,8 @@
   "name": "solarwire",
   "displayName": "SolarWire",
   "description": "SolarWire language support and preview",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "publisher": "solarwire",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -10,11 +11,24 @@
     "Programming Languages"
   ],
   "activationEvents": [
+    "onLanguage:markdown",
     "onLanguage:solarwire",
-    "onCommand:solarwire.preview"
+    "onFileSystem:*.md",
+    "onFileSystem:*.solarwire",
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
+  "files": [
+    "dist/**",
+    "lib/**",
+    "syntaxes/**",
+    "snippets/**",
+    "language-configuration.json",
+    "readme.md",
+    "LICENSE"
+  ],
   "contributes": {
+    "markdown.markdownItPlugins": true,
     "commands": [
       {
         "command": "solarwire.preview",
@@ -57,7 +71,6 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
     "build": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
@@ -67,7 +80,5 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@solarwire/parser": "^1.0.0",
-    "@solarwire/renderer-svg": "^1.0.0"
   }
 }

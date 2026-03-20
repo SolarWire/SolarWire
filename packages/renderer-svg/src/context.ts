@@ -8,7 +8,6 @@ export interface GlobalDefaults {
   gap?: number;
   bg?: string;
   r?: number;
-  'icon-library'?: string;
   bold?: boolean;
   [key: string]: string | number | boolean | undefined;
 }

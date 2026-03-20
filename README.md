@@ -5,21 +5,23 @@
 - ✨ **Minimal syntax** – Express common UI elements with just a few characters.
 - 🤖 **AI-native** – The syntax feels natural for language models; they can generate and modify wireframes directly.
 - 📦 **Plain text** – Git-friendly, easily embeddable in technical documentation.
-- 🎨 **Complete implementation** – Parser, SVG/HTML renderers, and VS Code extension are all ready to use!
+- 🎨 **Complete implementation** – Parser, SVG renderer, and VS Code extension are all ready to use!
 
 ## 🚀 Features
 
 ### Core Language
 - ✅ Complete parser built with Peggy (PEG.js)
 - ✅ SVG renderer with full element support
-- ✅ HTML renderer for web display
 - ✅ Rich attribute system (colors, sizes, styling)
 - ✅ Flexible coordinate system (absolute, relative, edge-relative)
+- ✅ Automatic content sizing - no manual width/height needed!
+- ✅ **Improved text wrapping** - Smart line breaking for both English and Chinese text!
+- ✅ **Responsive preview** - SVG scales automatically to fit container width
+- ✅ **Better note cards** - Improved text fitting with safe margins
 
 ### UI Elements
 - ✅ Rectangles, rounded rectangles, circles
 - ✅ Text elements with bold/italic styling
-- ✅ Icons with Material Icons and Font Awesome support
 - ✅ Placeholders and images (with fallback rendering)
 - ✅ Lines with labels and styling
 - ✅ Row and column containers with gap control
@@ -28,8 +30,9 @@
 ### Advanced Features
 - ✅ **Note system** – Visual badges + card display at the bottom
 - ✅ Document-level declarations for global defaults
-- ✅ Multi-line text support (\\n and triple quotes)
+- ✅ Multi-line text support (\n and triple quotes)
 - ✅ Image placeholder rendering with mountain/sun icon
+- ✅ Adaptive sizing - canvas automatically fits to content
 
 ### VS Code Extension
 - ✅ Syntax highlighting
@@ -39,12 +42,6 @@
 - ✅ Auto-completion for elements, attributes, declarations
 - ✅ Hover information for documentation
 - ✅ Export to SVG and PNG
-
-### Testing
-- ✅ 70+ comprehensive tests
-- ✅ Edge case testing
-- ✅ Performance testing (supports large files)
-- ✅ All tests passing!
 
 ---
 
@@ -56,15 +53,12 @@ Place these at the top of your file (one per line) to set global defaults:
 
 ```
 !title="My Wireframe"    // Document title
-!width=1000              // Canvas width
-!height=800              // Canvas height
 !c=#333                   // Default text color
 !size=12                  // Default font size
 !line-height=22           // Default line height
 !gap=12                   // Default container gap
 !bg=#f8f8f8               // Default background for rectangles
 !r=6                      // Default corner radius for rounded rectangles
-!icon-library="material-icons"  // Default icon library
 !bold                     // Make all text bold by default
 ```
 
@@ -78,7 +72,6 @@ Any standard attribute can be used as a global default. Local attributes overrid
 | `()` | Rounded rectangle | `("Card")` |
 | `(())` | Circle | `((Avatar))` |
 | `"text"` | Plain text (no border) | `"Username"` |
-| `!icon` | Icon | `!icon "home"` |
 | `[?]` | Placeholder | `[?"Ad space"]` |
 | `--` | Line (no label) | `-- @(10,10)->(100,10)` |
 | `--"label"--` | Line with label | `--"connect"-- @(10,10)->(100,20)` |
@@ -133,10 +126,6 @@ Attributes follow the element/coordinates, space-separated. Use double quotes fo
 - `italic` – italic text
 - `align` – horizontal alignment (`l`/`c`/`r`)
 
-**Icons**:
-- `size` – icon size (default 24)
-- `library` – icon library name (overrides global `!icon-library`)
-
 **Containers** (`{row}`/`{col}`/`{}`):
 - `gap` – spacing between children
 - `align` – alignment (`start`/`center`/`end`/`stretch`)
@@ -154,7 +143,7 @@ Attributes follow the element/coordinates, space-separated. Use double quotes fo
 Two ways to write multi-line text:
 
 - Escape with `\n`: `"First line\nSecond line"`
-- Triple quotes `"""`:
+- Triple quotes `""""`:
   ```
   """
   First line
@@ -181,8 +170,7 @@ If no global or local attribute overrides them, these defaults apply:
 | Rounded rectangle `()` | same as rectangle, plus `r=6` |
 | Circle `(())` | transparent background, stroke `#333`, stroke width 1 |
 | Plain text `"text"` | black, font size 12 |
-| Icon `!icon` | size 24, color black |
-| Placeholder `[?]` | background `#f0f0f0`, text color `#999`, font size 12 |
+| Placeholder `[?]` | background `#f0f0f0`, text color `#999`, font size 12, with diagonal lines |
 | Line `--` | stroke `#333`, width 1, solid |
 | Line label | font size 12, color `#333` |
 | Image `<url>` | original dimensions (fallback 100×100, renders as placeholder) |
@@ -208,47 +196,27 @@ npm install
 
 ```bash
 cd packages/example
-node generate-example.js
+# Open example.solarwire in VSCode and use the preview feature
 ```
 
-This will generate `example.svg` and `example.html` from `example.solarwire`.
+This will show you the complete feature demo.
 
 ### Use the parser and renderer
 
 ```typescript
 import { parse } from '@solarwire/parser';
-import { render as renderSvg } from '@solarwire/renderer-svg';
-import { render as renderHtml } from '@solarwire/renderer-html';
+import { render } from '@solarwire/renderer-svg';
 
 const code = `
 !title="My Wireframe"
-!width=800
-!height=600
 
 ["Hello World"] @(50,50) w=200 h=60
 `;
 
 const ast = parse(code);
-const svg = renderSvg(ast);
-const html = renderHtml(ast);
+const svg = render(ast);
 
 console.log(svg);
-console.log(html);
-```
-
-### Run tests
-
-```bash
-# Run all tests
-npm test
-
-# Run parser tests
-cd packages/parser
-npm test
-
-# Run SVG renderer tests
-cd packages/renderer-svg
-npm test
 ```
 
 ---
@@ -257,18 +225,37 @@ npm test
 
 ```SolarWire
 !title="SolarWire Complete Feature Demo"
-!width=1000
-!height=1200
+!c=#333
+!bg=#ffffff
+!size=12
+!line-height=1.5
 
 "=== SolarWire Complete Feature Demo ===" @(50,30) size=20 bold
 
 ["Rectangle"] @(50,110) w=120 h=50 c=blue bg=lightblue
 ("Rounded") @(180,110) w=120 h=50 r=10 bg=#fff0c0
 (("Circle")) @(310,125) w=40 h=40 bg=#90EE90
-!icon "star" @(370,120) size=24
-!icon "home" @(410,120) size=24 library=font-awesome
+[?"Placeholder"] @(370,105) w=120 h=50 note="This is a placeholder element that shows a grey box with crosshairs"
 
-## @(50,390) w=600 border=1
+"Basic Text" @(50,180) bold size=16
+"Normal text with some words." @(50,210) w=200
+"Multi-line text\nusing \\n escapes." @(280,210) w=180
+"""
+Triple-quoted
+multi-line text.
+The renderer will
+line-break
+automatically!
+""" @(50,250) w=300
+
+"Text Styles" @(50,330) bold size=16
+"This is bold" @(50,360) bold
+"This is italic" @(180,360) italic
+"Align left (default)" @(50,400) w=150 align=l bg=#f5f5f5
+"Align center" @(220,400) w=150 align=c bg=#f5f5f5
+"Align right" @(390,400) w=150 align=r bg=#f5f5f5
+
+## @(50,470) w=600 border=1
 #
 ["Header 1"] colspan=2 bg=#4CAF50 c=white bold
 ["Header 2"] bg=#4CAF50 c=white bold
@@ -282,7 +269,34 @@ npm test
 #
 ["Footer"] colspan=3 bg=#2196F3 c=white bold
 
-["Multi-line Note"] @(50,980) w=250 h=60 note="This is a multi-line note.
+["Containers & Layout"] @(50,590) bold size=16
+{row} @(50,630) gap=10
+  ["Button 1"] w=100 h=40 bg=#4CAF50 c=white
+  ["Button 2"] w=100 h=40 bg=#2196F3 c=white
+  ["Button 3"] w=100 h=40 bg=#FF9800 c=white
+
+{col} @(380,630) gap=8
+  ["Item A"] w=150 h=30
+  ["Item B"] w=150 h=30
+  ["Item C"] w=150 h=30
+
+["Lines & Connections"] @(50,760) bold size=16
+["Start"] @(50,790) w=80 h=40 note="This is the starting point"
+--"line A"-- @(R+10, C+0)->(+100, 0)
+["Middle"] @(+, C-20) w=80 h=40
+--"line B"-- @(R+10, C+0)->(+100, 0)
+["End"] @(+, C-20) w=80 h=40
+
+["Images"] @(50,890) bold size=16
+<https://example.com/logo.png> @(50,920) w=100 h=80 note="Image with custom size"
+<invalid-url.jpg> @(180,920) w=100 h=80 note="Image fallback - shows placeholder"
+
+["Elements with Notes"] @(50,1050) bold size=16
+["Important Element"] @(50,1080) w=180 h=50 note="This element has a note that appears as a badge and is detailed in the card area below"
+("Another Note") @(260,1080) w=180 h=50 bg=#e3f2fd note="Notes help document your wireframe choices"
+(("Circle")) @(470,1095) w=40 h=40 bg=#f3e5f5 note="Circles can also have notes attached"
+
+["Multi-line Note"] @(50,1170) w=250 h=60 note="This is a multi-line note.
 It contains several lines of text
 to demonstrate how notes with
 longer content are displayed
@@ -298,32 +312,12 @@ SolarWire/
 ├── packages/
 │   ├── parser/              # Parser built with Peggy
 │   ├── renderer-svg/        # SVG renderer
-│   ├── renderer-html/       # HTML renderer
-│   ├── icons/               # Icon library system
-│   ├── markdown-it-plugin/  # Markdown plugin
-│   ├── cli/                 # Command-line interface
 │   ├── vscode-extension/    # VS Code extension
 │   └── example/             # Example files
 ├── package.json
 ├── package-lock.json
-└── README.md
+└── readme.md
 ```
-
----
-
-## Get involved
-
-SolarWire is actively developed! We are looking for:
-
-- **Feedback** on the syntax and direction.
-- **Contributors** to help improve the parser, renderers, editor plugins, and AI integrations.
-- **Partners** interested in using SolarWire in their projects or tools.
-
-If you'd like to collaborate, please:
-
-- ⭐ Star this repository to show interest.
-- 💬 Open an issue for questions or suggestions.
-- 🫂 Reach out via GitHub Discussions (once enabled).
 
 ---
 

@@ -54,10 +54,7 @@ export interface TextElement extends BaseElement {
   text: string;
 }
 
-export interface IconElement extends BaseElement {
-  type: 'icon';
-  name: string;
-}
+
 
 export interface PlaceholderElement extends BaseElement {
   type: 'placeholder';
@@ -101,7 +98,6 @@ export type Element =
   | RoundedRectangleElement
   | CircleElement
   | TextElement
-  | IconElement
   | PlaceholderElement
   | ImageElement
   | LineElement

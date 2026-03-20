@@ -1,6 +1,4 @@
 !title="SolarWire Complete Feature Demo"
-!width=1200
-!height=2000
 !c=#333
 !bg=#ffffff
 !size=12
@@ -13,8 +11,6 @@
 ["Rectangle"] @(50,110) w=120 h=50 c=blue bg=lightblue note="Basic rectangle element with custom colors"
 ("Rounded") @(180,110) w=120 h=50 r=10 bg=#fff0c0 note="Rounded rectangle with custom border radius"
 (("Circle")) @(310,125) w=40 h=40 bg=#90EE90 note="Circle element for avatar or icon display"
-!icon "star" @(370,120) size=24 note="Material Icons star icon"
-!icon "home" @(410,120) size=24 library=font-awesome note="Font Awesome home icon"
 
 "Text Element" @(50,190) note="Basic standalone text element"
 "Bold Text" @(150,190) bold note="Text with bold styling"

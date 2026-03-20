@@ -11,13 +11,6 @@ cd SolarWire
 npm install
 ```
 
-### Install parser package dependencies
-
-```bash
-cd packages/parser
-npm install
-```
-
 ## Build
 
 ```bash
@@ -29,13 +22,6 @@ This will:
 1. Generate parser.js from grammar.pegjs using Peggy
 2. Compile TypeScript source to dist directory
 
-## Run Tests
-
-```bash
-cd packages/parser
-npm test
-```
-
 ## Usage
 
 ```typescript
@@ -43,8 +29,6 @@ import { parse } from '@solarwire/parser';
 
 const ast = parse(`
 !title="My Wireframe"
-!width=800
-!height=600
 ["Login"] w=100 c=red
 `);
 
@@ -56,7 +40,6 @@ console.log(ast);
 1. Modify `src/grammar.pegjs` (grammar file)
 2. Run `npm run generate` to regenerate the parser
 3. Run `npm run build` to compile TypeScript
-4. Run `npm test` to verify changes
 
 ## Project Structure
 
@@ -67,11 +50,9 @@ packages/parser/
 │   ├── grammar.pegjs         # PEG.js grammar rules
 │   ├── index.ts              # Parser entry point
 │   ├── parser.js             # Auto-generated parser
-│   ├── preprocessor.js       # Preprocessor for SolarWire code
-│   └── __tests__/
-│       ├── basic.test.ts     # Basic functionality tests
-│       └── nested.test.ts    # Nested element tests
+│   └── preprocessor.js       # Preprocessor for SolarWire code
 ├── dist/                     # Compiled output
+├── generate-parser.js        # Parser generation script
 ├── package.json
 ├── tsconfig.json
 └── jest.config.js
@@ -84,16 +65,19 @@ packages/parser/
 - ✅ Support for document-level declarations
 - ✅ Flexible coordinate system parsing
 - ✅ Attribute parsing (colors, sizes, booleans)
-- ✅ Multi-line text support (\\n and triple quotes)
+- ✅ Multi-line text support (\n and triple quotes)
 - ✅ Table cell attributes (colspan, rowspan)
 - ✅ Note attribute support
-- ✅ 26 comprehensive tests
 
 ## Grammar Overview
 
 The parser supports:
-- **Elements**: Rectangles `[]`, rounded rectangles `()`, circles `(())`, text `""`, icons `!icon`, placeholders `[?]`, images `<url>`, lines `--`, containers `{row}/{col}`, tables `##`
+- **Elements**: Rectangles `[]`, rounded rectangles `()`, circles `(())`, text `""`, placeholders `[?]`, images `<url>`, lines `--`, containers `{row}/{col}`, tables `##`
 - **Coordinates**: Absolute `@(100,50)`, relative `@(0,+30)`, edge-relative `@(R+5,T+0)`
 - **Attributes**: Key-value pairs `w=100`, `c=red`, `bg=#ffffff`
-- **Declarations**: Document-level settings `!width=800`, `!c=#333`
+- **Declarations**: Document-level settings `!title="Title"`, `!c=#333`
 - **Comments**: Single line `// comment`
+
+## License
+
+MIT © SolarWire contributors
