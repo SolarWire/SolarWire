@@ -40,44 +40,81 @@
     "elements": {
       "patterns": [
         {
-          "match": "\\[\\?",
-          "name": "punctuation.definition.placeholder.begin.solarwire"
+          "name": "meta.element.rectangle.solarwire",
+          "begin": "\\[",
+          "end": "\\]",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.rectangle.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.rectangle.end.solarwire" }
+          },
+          "patterns": [
+            { "include": "#text" }
+          ]
         },
         {
-          "match": "\\[",
-          "name": "punctuation.definition.rectangle.begin.solarwire"
+          "name": "meta.element.placeholder.solarwire",
+          "begin": "\\[\\?",
+          "end": "\\]",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.placeholder.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.placeholder.end.solarwire" }
+          },
+          "patterns": [
+            { "include": "#text" }
+          ]
         },
         {
-          "match": "\\]\\)?",
-          "name": "punctuation.definition.rectangle.end.solarwire"
+          "name": "meta.element.circle.solarwire",
+          "begin": "\\(\\(",
+          "end": "\\)\\)",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.circle.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.circle.end.solarwire" }
+          },
+          "patterns": [
+            { "include": "#text" }
+          ]
         },
         {
-          "match": "\\(\\(",
-          "name": "punctuation.definition.circle.begin.solarwire"
+          "name": "meta.element.rounded.solarwire",
+          "begin": "\\((?!\\()",
+          "end": "\\)(?!\\))",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.rounded.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.rounded.end.solarwire" }
+          },
+          "patterns": [
+            { "include": "#text" }
+          ]
         },
         {
-          "match": "\\)\\)",
-          "name": "punctuation.definition.circle.end.solarwire"
-        },
-        {
-          "match": "\\((?!\\()",
-          "name": "punctuation.definition.rounded.begin.solarwire"
-        },
-        {
-          "match": "\\)(?!\\))",
-          "name": "punctuation.definition.rounded.end.solarwire"
-        },
-        {
+          "name": "meta.container.row.solarwire",
           "match": "\\{row\\}",
-          "name": "punctuation.definition.container.row.solarwire"
+          "captures": {
+            "0": { "name": "keyword.operator.container.row.solarwire" }
+          }
         },
         {
+          "name": "meta.container.col.solarwire",
           "match": "\\{col\\}",
-          "name": "punctuation.definition.container.col.solarwire"
+          "captures": {
+            "0": { "name": "keyword.operator.container.col.solarwire" }
+          }
         },
         {
+          "name": "meta.container.empty.solarwire",
           "match": "\\{\\}",
-          "name": "punctuation.definition.container.empty.solarwire"
+          "captures": {
+            "0": { "name": "keyword.operator.container.empty.solarwire" }
+          }
         },
         {
           "match": "\\{\\s*",
@@ -88,24 +125,42 @@
           "name": "punctuation.definition.container.end.solarwire"
         },
         {
+          "name": "meta.element.table.solarwire",
           "match": "##",
-          "name": "punctuation.definition.table.solarwire"
+          "captures": {
+            "0": { "name": "keyword.operator.table.solarwire" }
+          }
         },
         {
+          "name": "meta.element.table-row.solarwire",
           "match": "#(?![#?])",
-          "name": "punctuation.definition.table-row.solarwire"
+          "captures": {
+            "0": { "name": "keyword.operator.table-row.solarwire" }
+          }
         },
         {
-          "match": "!icon\\b",
-          "name": "keyword.other.icon.solarwire"
-        },
-        {
+          "name": "meta.element.line.solarwire",
           "match": "--",
-          "name": "punctuation.definition.line.solarwire"
+          "captures": {
+            "0": { "name": "keyword.operator.line.solarwire" }
+          }
         },
         {
-          "match": "<[^>]+>",
-          "name": "string.other.image-url.solarwire"
+          "name": "meta.element.image.solarwire",
+          "begin": "<",
+          "end": ">",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.image.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.image.end.solarwire" }
+          },
+          "patterns": [
+            {
+              "match": "[^>]+",
+              "name": "string.other.image-url.solarwire"
+            }
+          ]
         },
         {
           "include": "#attributes"
@@ -129,12 +184,58 @@
     "coordinates": {
       "patterns": [
         {
-          "match": "@\\([^)]+\\)",
-          "name": "meta.coordinates.solarwire"
+          "name": "meta.coordinates.solarwire",
+          "begin": "@\\(",
+          "end": "\\)",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.coordinates.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.coordinates.end.solarwire" }
+          },
+          "patterns": [
+            {
+              "match": "\\b([LRTBC])\\b",
+              "name": "constant.language.direction.solarwire"
+            },
+            {
+              "match": "\\b[0-9]+(\\.[0-9]+)?\\b",
+              "name": "constant.numeric.solarwire"
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.comma.solarwire"
+            }
+          ]
         },
         {
-          "match": "->\\([^)]+\\)",
-          "name": "meta.coordinates.end.solarwire"
+          "name": "meta.coordinates.end.solarwire",
+          "begin": "->\\(",
+          "end": "\\)",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.coordinates.end.begin.solarwire" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.coordinates.end.end.solarwire" }
+          },
+          "patterns": [
+            {
+              "match": "\\+",
+              "name": "keyword.operator.plus.solarwire"
+            },
+            {
+              "match": "\\b([LRTBC])\\b",
+              "name": "constant.language.direction.solarwire"
+            },
+            {
+              "match": "\\b[0-9]+(\\.[0-9]+)?\\b",
+              "name": "constant.numeric.solarwire"
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.comma.solarwire"
+            }
+          ]
         }
       ]
     },

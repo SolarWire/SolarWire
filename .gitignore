@@ -154,3 +154,6 @@ packages/vscode-extension/.vscode/
 
 # Parser generated file
 packages/parser/src/parser.js
+
+# Debug files - temporary files for debugging
+debug/

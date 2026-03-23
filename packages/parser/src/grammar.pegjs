@@ -282,13 +282,13 @@ QuotedString
   }
   / "\"" content:DoubleQuotedContent "\""
   {
-    return content.replace(/\\n/g, '\n').replace(/\\"/g, '"');
+    return content;
   }
 
 DoubleQuotedContent
-  = ([^"\\] / "\\\"" / "\\n")*
+  = (!"\"" .)*
   {
-    return text();
+    return text().replace(/\\n/g, '\n').replace(/\\"/g, '"');
   }
 
 TripleQuotedContent

@@ -351,7 +351,10 @@ function renderTableElement(
     const cellX = pos.x + data.col * colWidth;
     const cellY = pos.y + data.row * rowHeight;
     const cellWidth = colWidth * data.colspan;
-    const cellHeight = rowHeight * data.rowspan;
+    
+    const maxEndRow = data.row + data.rowspan;
+    const actualEndRow = Math.min(maxEndRow, numRows);
+    const cellHeight = (actualEndRow - data.row) * rowHeight;
     
     const cellBg = getColorAttribute(data.cell.attributes, context.globalDefaults, 'bg', '#ffffff');
     const cellBorder = getColorAttribute(data.cell.attributes, context.globalDefaults, 'b', '#333333');

@@ -41,12 +41,30 @@ function isContainer(type: string): boolean {
 function buildNestedStructure(elementsWithIndent: any[]): Element[] {
   const result: Element[] = [];
   const stack: any[] = [];
+  let lastTableRowIndent: number | null = null;
+  let lastTableIndent: number | null = null;
 
-  elementsWithIndent.forEach((item) => {
+  elementsWithIndent.forEach((item, index) => {
     const { element, indent } = item;
 
     while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
-      stack.pop();
+      const popped = stack.pop();
+      if (popped.element.type === 'table-row') {
+        lastTableRowIndent = null;
+      }
+      if (popped.element.type === 'table') {
+        lastTableIndent = null;
+      }
+    }
+
+    if (element.type === 'table-row') {
+      if (lastTableIndent === null || indent <= lastTableIndent) {
+        throw new Error(`Table-row element at position ${index + 1} must be indented more than the table element`);
+      }
+    }
+
+    if (lastTableRowIndent !== null && indent <= lastTableRowIndent) {
+      throw new Error(`Table cell element at position ${index + 1} must be indented more than the table-row element`);
     }
 
     if (stack.length === 0) {
@@ -63,6 +81,12 @@ function buildNestedStructure(elementsWithIndent: any[]): Element[] {
 
     if (isContainer(element.type)) {
       stack.push({ element, indent });
+      if (element.type === 'table-row') {
+        lastTableRowIndent = indent;
+      }
+      if (element.type === 'table') {
+        lastTableIndent = indent;
+      }
     }
   });
 
