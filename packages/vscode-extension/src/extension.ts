@@ -381,9 +381,13 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
       align-items: center;
       background: #1e1e1e;
       min-height: 100vh;
+      overflow: hidden;
     }
     .toolbar {
       margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
     .toolbar button {
       margin: 0 5px;
@@ -393,9 +397,19 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
       background: #007acc;
       color: white;
       cursor: pointer;
+      font-size: 14px;
     }
     .toolbar button:hover {
       background: #005a9e;
+    }
+    .zoom-level {
+      padding: 8px 12px;
+      background: #f0f0f0;
+      color: #333;
+      border-radius: 4px;
+      font-size: 12px;
+      min-width: 60px;
+      text-align: center;
     }
     .preview-wrapper {
       background: white;
@@ -404,7 +418,9 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       width: calc(100% - 40px);
       max-width: calc(100% - 40px);
+      height: calc(100vh - 160px);
       overflow: hidden;
+      position: relative;
     }
     .preview-container {
       width: 100%;
@@ -412,17 +428,28 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+      cursor: grab;
+      transform-origin: center center;
+    }
+    .preview-container:active {
+      cursor: grabbing;
     }
     .preview-container svg {
       max-width: 100%;
       max-height: 100%;
       height: auto;
       width: auto;
+      transition: transform 0.1s ease-out;
     }
   </style>
 </head>
 <body>
   <div class="toolbar">
+    <button onclick="zoomOut()">-</button>
+    <div class="zoom-level" id="zoomLevel">100%</div>
+    <button onclick="zoomIn()">+</button>
+    <button onclick="resetZoom()">Reset</button>
     <button onclick="downloadSvg()">Download SVG</button>
   </div>
   <div class="preview-wrapper">
@@ -431,6 +458,39 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
     </div>
   </div>
   <script>
+    let scale = 1;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let translateX = 0;
+    let translateY = 0;
+    
+    function updateTransform() {
+      const preview = document.getElementById('preview');
+      const svgElement = preview.querySelector('svg');
+      if (svgElement) {
+        svgElement.style.transform = \`scale(\${scale}) translate(\${translateX}px, \${translateY}px)\`;
+      }
+      document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+    }
+    
+    function zoomIn() {
+      scale = Math.min(scale + 0.1, 5);
+      updateTransform();
+    }
+    
+    function zoomOut() {
+      scale = Math.max(scale - 0.1, 0.1);
+      updateTransform();
+    }
+    
+    function resetZoom() {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      updateTransform();
+    }
+    
     function downloadSvg() {
       const svg = document.getElementById('preview').innerHTML;
       const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -445,14 +505,29 @@ function getWebviewContent(svg: string, document: vscode.TextDocument): string {
     }
     
     const previewContainer = document.getElementById('preview');
-    const svgElement = previewContainer.querySelector('svg');
     
-    if (svgElement) {
-      svgElement.style.maxWidth = '100%';
-      svgElement.style.maxHeight = '100%';
-      svgElement.style.height = 'auto';
-      svgElement.style.width = 'auto';
-    }
+    previewContainer.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      updateTransform();
+    });
+    
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+    
+    document.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+    
+    updateTransform();
   </script>
 </body>
 </html>`;

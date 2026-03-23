@@ -61,6 +61,12 @@
         "language": "solarwire",
         "scopeName": "source.solarwire",
         "path": "./syntaxes/solarwire.tmLanguage.json"
+      },
+      {
+        "language": "markdown",
+        "scopeName": "text.html.markdown",
+        "path": "./syntaxes/solarwire-markdown.tmLanguage.json",
+        "injectTo": ["text.html.markdown"]
       }
     ],
     "snippets": [

@@ -252,54 +252,30 @@ function renderTableElement(
   const svgParts: string[] = [];
   
   const rows = element.children || [];
-  const numRows = rows.length;
+  const declaredNumRows = rows.length;
   
   const tableWidth = getNumberAttribute(element.attributes, context.globalDefaults, 'w', 600);
-  const tableHeight = getNumberAttribute(element.attributes, context.globalDefaults, 'h', 200);
-  
-  const rowHeight = numRows > 0 ? (tableHeight - (numRows - 1) * cellspacing) / numRows : 40;
+  const defaultRowHeight = 40;
   
   let maxColCount = 0;
-  const tempGrid: number[][] = [];
-  
-  for (let r = 0; r < numRows; r++) {
-    tempGrid[r] = [];
-    for (let c = 0; c < 100; c++) {
-      tempGrid[r][c] = 0;
-    }
-  }
+  let maxRowSpan = 0;
   
   rows.forEach((row, rowIndex) => {
     const cells = (row as any).children || [];
-    let colIndex = 0;
-    
-    while (colIndex < 100 && tempGrid[rowIndex][colIndex] > 0) {
-      colIndex++;
-    }
-    
-    (cells as any[]).forEach((cell: any) => {
+    cells.forEach((cell: any) => {
       const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
       const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
-      
-      for (let r = rowIndex; r < rowIndex + rowspan && r < numRows; r++) {
-        for (let c = colIndex; c < colIndex + colspan && c < 100; c++) {
-          tempGrid[r][c] = 1;
-        }
-      }
-      
-      maxColCount = Math.max(maxColCount, colIndex + colspan);
-      
-      colIndex += colspan;
-      while (colIndex < 100 && tempGrid[rowIndex][colIndex] > 0) {
-        colIndex++;
-      }
+      maxColCount = Math.max(maxColCount, colspan);
+      maxRowSpan = Math.max(maxRowSpan, rowIndex + rowspan);
     });
   });
   
-  const colWidth = maxColCount > 0 ? tableWidth / maxColCount : 100;
+  const actualNumRows = Math.max(declaredNumRows, maxRowSpan);
+  const tableHeight = actualNumRows * defaultRowHeight + (actualNumRows - 1) * cellspacing;
+  const rowHeight = defaultRowHeight;
   
   const grid: boolean[][] = [];
-  for (let r = 0; r < numRows; r++) {
+  for (let r = 0; r < actualNumRows; r++) {
     grid[r] = [];
     for (let c = 0; c < maxColCount; c++) {
       grid[r][c] = false;
@@ -334,7 +310,7 @@ function renderTableElement(
         cell
       });
       
-      for (let r = rowIndex; r < rowIndex + rowspan && r < numRows; r++) {
+      for (let r = rowIndex; r < rowIndex + rowspan && r < actualNumRows; r++) {
         for (let c = colIndex; c < colIndex + colspan && c < maxColCount; c++) {
           grid[r][c] = true;
         }
@@ -347,14 +323,13 @@ function renderTableElement(
     });
   });
   
+  const colWidth = maxColCount > 0 ? tableWidth / maxColCount : 100;
+  
   cellData.forEach(data => {
     const cellX = pos.x + data.col * colWidth;
     const cellY = pos.y + data.row * rowHeight;
     const cellWidth = colWidth * data.colspan;
-    
-    const maxEndRow = data.row + data.rowspan;
-    const actualEndRow = Math.min(maxEndRow, numRows);
-    const cellHeight = (actualEndRow - data.row) * rowHeight;
+    const cellHeight = data.rowspan * rowHeight;
     
     const cellBg = getColorAttribute(data.cell.attributes, context.globalDefaults, 'bg', '#ffffff');
     const cellBorder = getColorAttribute(data.cell.attributes, context.globalDefaults, 'b', '#333333');
