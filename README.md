@@ -321,6 +321,36 @@ SolarWire/
 
 ---
 
+## Version History
+
+### v1.3.0 (2026-03-24)
+- ✅ **Fixed table rendering** - 完全重写表格渲染算法，使用双 pass 方式精确计算 colspan 和 rowspan 的组合
+- ✅ **Removed device support** - 移除 device 相关属性和功能
+- ✅ **Placeholder with diagonal lines** - Placeholder 元素现在显示与边框相同颜色和线宽的对角线
+- ✅ **Column count calculation** - 正确计算 rowspan 占用后续行列位置的情况
+- ✅ **Table height strict** - 严格按照用户声明的 h 属性计算表格高度，按最终行数平均分配
+- ✅ **Multiple colspan/rowspan combinations** - 支持任意复杂的 colspan 和 rowspan 组合场景
+- ✅ **Project cleanup** - 移除临时文件和过期文件，整理项目结构
+
+### v1.2.0 (2026-03-23)
+- ✅ **Syntax highlighting** - 完善的语法高亮支持（solarwire 格式和 markdown 格式中的代码块）
+- ✅ **Preview window enhancements** - 预览窗口支持缩放和拖动功能
+- ✅ **Table element indentation** - 表格单元格元素缩进检查和异常抛出
+- ✅ **Multi-line note parsing** - 支持多行 note 解析
+- ✅ **Temporary file management** - 创建 debug 文件夹管理临时调试文件
+- ✅ **Script folder reorganization** - 将 scripts 文件夹内容移动到 example 文件夹
+
+### v1.1.0
+- ✅ **Initial release** - 完整的 SolarWire DSL 解析器和渲染器
+- ✅ **SVG rendering** - 所有元素的 SVG 渲染支持
+- ✅ **VS Code extension** - 基础语法高亮、代码片段、预览功能
+- ✅ **Table support** - 基本表格支持，包括 colspan 和 rowspan
+- ✅ **Note system** - 元素注释系统（视觉标签 + 底部卡片）
+- ✅ **Multi-line text** - 多行文本支持（\n 和三引号）
+- ✅ **Document declarations** - 文档级别全局默认值声明
+
+---
+
 ## License
 
 MIT © SolarWire contributors

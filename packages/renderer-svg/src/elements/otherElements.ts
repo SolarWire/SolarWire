@@ -255,29 +255,82 @@ function renderTableElement(
   const declaredNumRows = rows.length;
   
   const tableWidth = getNumberAttribute(element.attributes, context.globalDefaults, 'w', 600);
+  const declaredTableHeight = getNumberAttribute(element.attributes, context.globalDefaults, 'h', 0);
+  
   const defaultRowHeight = 40;
   
-  let maxColCount = 0;
-  let maxRowSpan = 0;
+  let estimatedMaxColCount = 0;
+  let estimatedMaxRowSpan = 0;
   
   rows.forEach((row, rowIndex) => {
     const cells = (row as any).children || [];
     cells.forEach((cell: any) => {
       const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
       const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
-      maxColCount = Math.max(maxColCount, colspan);
-      maxRowSpan = Math.max(maxRowSpan, rowIndex + rowspan);
+      estimatedMaxColCount = Math.max(estimatedMaxColCount, colspan);
+      estimatedMaxRowSpan = Math.max(estimatedMaxRowSpan, rowIndex + rowspan);
     });
   });
   
-  const actualNumRows = Math.max(declaredNumRows, maxRowSpan);
-  const tableHeight = actualNumRows * defaultRowHeight + (actualNumRows - 1) * cellspacing;
-  const rowHeight = defaultRowHeight;
+  estimatedMaxColCount = Math.max(estimatedMaxColCount, 10);
+  
+  let tempGrid: boolean[][] = [];
+  for (let r = 0; r < estimatedMaxRowSpan + 10; r++) {
+    tempGrid[r] = [];
+    for (let c = 0; c < estimatedMaxColCount + 10; c++) {
+      tempGrid[r][c] = false;
+    }
+  }
+  
+  let actualMaxColCount = 0;
+  let actualMaxRowCount = 0;
+  
+  rows.forEach((row, rowIndex) => {
+    const cells = (row as any).children || [];
+    let colIndex = 0;
+    
+    while (colIndex < tempGrid[rowIndex].length && tempGrid[rowIndex][colIndex]) {
+      colIndex++;
+    }
+    
+    (cells as any[]).forEach((cell: any) => {
+      const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
+      const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
+      
+      actualMaxColCount = Math.max(actualMaxColCount, colIndex + colspan);
+      actualMaxRowCount = Math.max(actualMaxRowCount, rowIndex + rowspan);
+      
+      for (let r = rowIndex; r < rowIndex + rowspan; r++) {
+        for (let c = colIndex; c < colIndex + colspan; c++) {
+          tempGrid[r][c] = true;
+        }
+      }
+      
+      colIndex += colspan;
+      while (colIndex < tempGrid[rowIndex].length && tempGrid[rowIndex][colIndex]) {
+        colIndex++;
+      }
+    });
+  });
+  
+  const finalNumRows = Math.max(declaredNumRows, actualMaxRowCount);
+  const finalNumCols = actualMaxColCount;
+  
+  let tableHeight: number;
+  let rowHeight: number;
+  
+  if (declaredTableHeight > 0) {
+    tableHeight = declaredTableHeight;
+    rowHeight = tableHeight / finalNumRows;
+  } else {
+    tableHeight = finalNumRows * defaultRowHeight + (finalNumRows - 1) * cellspacing;
+    rowHeight = defaultRowHeight;
+  }
   
   const grid: boolean[][] = [];
-  for (let r = 0; r < actualNumRows; r++) {
+  for (let r = 0; r < finalNumRows; r++) {
     grid[r] = [];
-    for (let c = 0; c < maxColCount; c++) {
+    for (let c = 0; c < finalNumCols; c++) {
       grid[r][c] = false;
     }
   }
@@ -294,7 +347,7 @@ function renderTableElement(
     const cells = (row as any).children || [];
     let colIndex = 0;
     
-    while (colIndex < maxColCount && grid[rowIndex][colIndex]) {
+    while (colIndex < finalNumCols && grid[rowIndex][colIndex]) {
       colIndex++;
     }
     
@@ -302,28 +355,31 @@ function renderTableElement(
       const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
       const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
       
+      const actualColspan = Math.min(colspan, finalNumCols - colIndex);
+      const actualRowspan = Math.min(rowspan, finalNumRows - rowIndex);
+      
       cellData.push({
         row: rowIndex,
         col: colIndex,
-        colspan,
-        rowspan,
+        colspan: actualColspan,
+        rowspan: actualRowspan,
         cell
       });
       
-      for (let r = rowIndex; r < rowIndex + rowspan && r < actualNumRows; r++) {
-        for (let c = colIndex; c < colIndex + colspan && c < maxColCount; c++) {
+      for (let r = rowIndex; r < rowIndex + actualRowspan; r++) {
+        for (let c = colIndex; c < colIndex + actualColspan; c++) {
           grid[r][c] = true;
         }
       }
       
-      colIndex += colspan;
-      while (colIndex < maxColCount && grid[rowIndex][colIndex]) {
+      colIndex += actualColspan;
+      while (colIndex < finalNumCols && grid[rowIndex][colIndex]) {
         colIndex++;
       }
     });
   });
   
-  const colWidth = maxColCount > 0 ? tableWidth / maxColCount : 100;
+  const colWidth = finalNumCols > 0 ? tableWidth / finalNumCols : 100;
   
   cellData.forEach(data => {
     const cellX = pos.x + data.col * colWidth;

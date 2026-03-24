@@ -2,7 +2,7 @@
   "name": "solarwire",
   "displayName": "SolarWire",
   "description": "SolarWire language support and preview",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "solarwire",
   "engines": {
     "vscode": "^1.80.0"

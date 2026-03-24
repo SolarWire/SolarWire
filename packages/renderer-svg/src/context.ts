@@ -1,7 +1,6 @@
 import { Coordinate, CoordinateExpression, RelativeEndCoordinate, Element, DocumentDeclaration } from '@solarwire/parser';
 
 export interface GlobalDefaults {
-  device?: string;
   c?: string;
   size?: number;
   'line-height'?: number;
