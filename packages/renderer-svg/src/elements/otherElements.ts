@@ -265,6 +265,12 @@ function renderTableElement(
   rows.forEach((row, rowIndex) => {
     const cells = (row as any).children || [];
     cells.forEach((cell: any) => {
+      if ('w' in cell.attributes || 'h' in cell.attributes) {
+        throw new Error('Table cell elements cannot specify w or h attributes');
+      }
+      if (cell.type === 'line') {
+        throw new Error('Table cell elements cannot be lines');
+      }
       const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
       const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
       estimatedMaxColCount = Math.max(estimatedMaxColCount, colspan);
@@ -393,21 +399,14 @@ function renderTableElement(
     
     svgParts.push(`<rect x="${cellX}" y="${cellY}" width="${cellWidth}" height="${cellHeight}" fill="${cellBg}" stroke="${cellBorder}" stroke-width="${cellStrokeWidth}"/>`);
     
-    const c = getColorAttribute(data.cell.attributes, context.globalDefaults, 'c', '#000000');
-    const fontSize = getNumberAttribute(data.cell.attributes, context.globalDefaults, 'text-size', getNumberAttribute(data.cell.attributes, context.globalDefaults, 'size', 12));
-    const bold = getBooleanAttribute(data.cell.attributes, context.globalDefaults, 'bold');
-    const italic = getBooleanAttribute(data.cell.attributes, context.globalDefaults, 'italic');
+    const cellContext = createChildContext(context, cellX, cellY);
+    const modifiedCell = { ...data.cell };
+    modifiedCell.attributes = { ...modifiedCell.attributes };
+    modifiedCell.attributes['w'] = cellWidth.toString();
+    modifiedCell.attributes['h'] = cellHeight.toString();
     
-    let fontStyle = '';
-    if (bold) fontStyle += 'font-weight="bold" ';
-    if (italic) fontStyle += 'font-style="italic" ';
-    
-    const textX = cellX + cellWidth / 2;
-    const textY = cellY + cellHeight / 2;
-    
-    if ('text' in data.cell && data.cell.text) {
-      svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="${fontSize}" ${fontStyle}>${data.cell.text}</text>`);
-    }
+    const result = renderChild(modifiedCell as any, cellContext);
+    svgParts.push(result.svg);
   });
   
   if (border > 0) {

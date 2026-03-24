@@ -1,6 +1,6 @@
 {
   "name": "solarwire",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "description": "A Markdown-style DSL for UI wireframes",
   "private": true,
   "workspaces": [
