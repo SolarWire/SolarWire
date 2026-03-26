@@ -37,18 +37,14 @@ describe('Default Values', () => {
     expect(svg).toContain('fill="#000000"');
   });
 
-  it('should render container with white background by default', () => {
-    const ast = parse('{row}');
+  it('should render table with border by default', () => {
+    const ast = parse(`## @(0,0)
+  #
+    "Cell 1"
+    "Cell 2"`);
     const svg = render(ast);
     
-    expect(svg).toContain('fill="#ffffff"');
-  });
-
-  it('should render column container with white background by default', () => {
-    const ast = parse('{col}');
-    const svg = render(ast);
-    
-    expect(svg).toContain('fill="#ffffff"');
+    expect(svg).toContain('stroke-width="1"');
   });
 
   it('should override global defaults with local attributes', () => {

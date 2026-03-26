@@ -82,11 +82,11 @@ describe('SolarWire Performance Tests', () => {
     });
 
     it('should parse and render large table', () => {
-      let code = '## w=500\n';
+      let code = '## @(0,0) w=500\n';
       for (let row = 0; row < 20; row++) {
-        code += '#\n';
+        code += '  #\n';
         for (let col = 0; col < 5; col++) {
-          code += '["Cell ' + row + '-' + col + '"]\n';
+          code += '    "Cell ' + row + '-' + col + '"\n';
         }
       }
       

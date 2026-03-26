@@ -15,7 +15,7 @@ describe('SolarWire SVG Renderer', () => {
     });
 
     it('should render a rectangle with attributes', () => {
-      const ast = parse('["Submit"] w=120 h=50 c=blue bg=lightgray');
+      const ast = parse('["Submit"] @(10,20) w=120 h=50 c=blue bg=lightgray');
       const svg = render(ast);
       
       expect(svg).toContain('width="120"');
@@ -25,7 +25,7 @@ describe('SolarWire SVG Renderer', () => {
     });
 
     it('should render a rounded rectangle', () => {
-      const ast = parse('("Card") r=10');
+      const ast = parse('("Card") @(10,20) r=10');
       const svg = render(ast);
       
       expect(svg).toContain('rx="10"');
@@ -34,7 +34,7 @@ describe('SolarWire SVG Renderer', () => {
     });
 
     it('should render a circle', () => {
-      const ast = parse('(("Avatar")) w=30 h=30');
+      const ast = parse('(("Avatar")) @(10,20) w=30 h=30');
       const svg = render(ast);
       
       expect(svg).toContain('<circle');
@@ -44,7 +44,7 @@ describe('SolarWire SVG Renderer', () => {
     });
 
     it('should render text element', () => {
-      const ast = parse('"Hello, World!"');
+      const ast = parse('"Hello, World!" @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('<text');
@@ -53,27 +53,27 @@ describe('SolarWire SVG Renderer', () => {
     });
 
     it('should render multiline text', () => {
-      const ast = parse('"First line\\nSecond line"');
+      const ast = parse('"First line\\nSecond line" @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('First line');
       expect(svg).toContain('Second line');
     });
 
-    it('should render icon', () => {
-      const ast = parse('!icon "home"');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"');
-      expect(svg).toContain('<path');
-    });
-
     it('should render placeholder', () => {
-      const ast = parse('[?"Ad space"]');
+      const ast = parse('[?"Ad space"] @(10,20) w=100 h=50');
       const svg = render(ast);
       
       expect(svg).toContain('fill="#f0f0f0"');
       expect(svg).toContain('Ad space');
+    });
+
+    it('should render image placeholder', () => {
+      const ast = parse('<image.png> @(10,20) w=100 h=80');
+      const svg = render(ast);
+      
+      expect(svg).toContain('rect');
+      expect(svg).toContain('image.png');
     });
   });
 
@@ -133,46 +133,23 @@ describe('SolarWire SVG Renderer', () => {
     });
   });
 
-  describe('Containers', () => {
-    it('should render row container', () => {
-      const ast = parse('{row}');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns');
-    });
-
-    it('should render column container', () => {
-      const ast = parse('{col}');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns');
-    });
-
-    it('should render container with gap', () => {
-      const ast = parse('{row} gap=10');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns');
-    });
-  });
-
   describe('Attributes', () => {
     it('should render bold text', () => {
-      const ast = parse('"Bold" bold');
+      const ast = parse('"Bold" @(10,20) bold');
       const svg = render(ast);
       
       expect(svg).toContain('font-weight="bold"');
     });
 
     it('should render italic text', () => {
-      const ast = parse('"Italic" italic');
+      const ast = parse('"Italic" @(10,20) italic');
       const svg = render(ast);
       
       expect(svg).toContain('font-style="italic"');
     });
 
     it('should render centered alignment', () => {
-      const ast = parse('["Centered"] align=c');
+      const ast = parse('["Centered"] @(10,20) w=100 h=40 align=c');
       const svg = render(ast);
       
       expect(svg).toContain('text-anchor="middle"');
@@ -195,11 +172,27 @@ describe('SolarWire SVG Renderer', () => {
 
   describe('Table Elements', () => {
     it('should render table with border', () => {
-      const ast = parse('## border=1 w=300');
+      const ast = parse('## @(10,20) border=1 w=300');
       const svg = render(ast);
       
       expect(svg).toContain('stroke-width="1"');
       expect(svg).toContain('width="300"');
+    });
+
+    it('should render table with rows and cells', () => {
+      const ast = parse(`## @(10,20) w=300 border=1
+  # bg=#eee
+    "Header 1"
+    "Header 2"
+  #
+    "Cell 1"
+    "Cell 2"`);
+      const svg = render(ast);
+      
+      expect(svg).toContain('Header 1');
+      expect(svg).toContain('Header 2');
+      expect(svg).toContain('Cell 1');
+      expect(svg).toContain('Cell 2');
     });
   });
 
@@ -216,7 +209,7 @@ describe('SolarWire SVG Renderer', () => {
 
   describe('Global Defaults', () => {
     it('should apply document-level declarations', () => {
-      const ast = parse('!c=#ff0000\n!size=16\n["Button"]');
+      const ast = parse('!c=#ff0000\n!size=16\n["Button"] @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('fill="#ff0000"');
@@ -224,7 +217,7 @@ describe('SolarWire SVG Renderer', () => {
     });
 
     it('should override global defaults with local attributes', () => {
-      const ast = parse('!c=#ff0000\n!size=16\n["Button"] c=#0000ff size=20');
+      const ast = parse('!c=#ff0000\n!size=16\n["Button"] @(10,20) c=#0000ff size=20');
       const svg = render(ast);
       
       expect(svg).toContain('fill="#0000ff"');
@@ -234,16 +227,36 @@ describe('SolarWire SVG Renderer', () => {
 
   describe('Note Attributes', () => {
     it('should render note attribute as title', () => {
-      const ast = parse('["Button"] note="Click here to login"');
+      const ast = parse('["Button"] @(10,20) note="Click here to login"');
       const svg = render(ast);
       
       expect(svg).toContain('<title>Click here to login</title>');
+    });
+
+    it('should render note with badge and card', () => {
+      const ast = parse('["Button"] @(10,20) w=100 h=40 note="This is a note"');
+      const svg = render(ast, { disableNotes: false });
+      
+      expect(svg).toContain('note-badge');
+      expect(svg).toContain('note-card');
+      expect(svg).toContain('This is a note');
+    });
+
+    it('should render multiple notes with badges', () => {
+      const ast = parse('["First"] @(10,20) w=100 h=40 note="First note"\n["Second"] @(120,20) w=100 h=40 note="Second note"\n["Third"] @(230,20) w=100 h=40 note="Third note"');
+      const svg = render(ast);
+      
+      expect(svg).toContain('note-badge');
+      expect(svg).toContain('note-card');
+      expect(svg).toContain('First note');
+      expect(svg).toContain('Second note');
+      expect(svg).toContain('Third note');
     });
   });
 
   describe('Multi-line Text', () => {
     it('should render triple-quoted multi-line text', () => {
-      const ast = parse('"""Line 1\nLine 2\nLine 3"""');
+      const ast = parse('"""Line 1\nLine 2\nLine 3""" @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('Line 1');
@@ -254,28 +267,21 @@ describe('SolarWire SVG Renderer', () => {
   
   describe('Additional Features', () => {
     it('should render circle with note attribute', () => {
-      const ast = parse('(("User")) note="Profile avatar"');
+      const ast = parse('(("User")) @(10,20) w=40 h=40 note="Profile avatar"');
       const svg = render(ast);
       
       expect(svg).toContain('<title>Profile avatar</title>');
     });
     
     it('should render text element with note attribute', () => {
-      const ast = parse('"Username" note="Enter your username"');
+      const ast = parse('"Username" @(10,20) note="Enter your username"');
       const svg = render(ast);
       
       expect(svg).toContain('<title>Enter your username</title>');
     });
     
-    it('should render icon with note attribute', () => {
-      const ast = parse('!icon "home" note="Go to homepage"');
-      const svg = render(ast);
-      
-      expect(svg).toContain('<title>Go to homepage</title>');
-    });
-    
     it('should apply multiple global defaults', () => {
-      const ast = parse('!c=red\n!size=16\n["Test"]');
+      const ast = parse('!c=red\n!size=16\n["Test"] @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('fill="red"');

@@ -6,21 +6,30 @@
 
 ```
 skill/
-├── README.md                     # 本文件
-└── solarwire-wireframe-generator/  # 第一个 Skill：线框图生成器
-    ├── SKILL.md                  # Skill 主定义文件
-    ├── README.md                 # Skill 使用说明
-    └── prompts/                  # Prompt 文件目录
-        ├── common.md             # 公共逻辑
-        ├── mobile-app.md         # 移动端 App 场景
-        ├── web-client.md         # 客户端 Web 场景
-        └── web-admin.md          # 后台管理系统场景
+├── README.md                        # 本文件
+├── solarwire-wireframe-generator/   # 线框图生成器 Skill
+│   ├── SKILL.md                     # Skill 主定义文件
+│   ├── README.md                    # Skill 使用说明
+│   └── prompts/                     # Prompt 文件目录
+│       ├── mobile-app.md            # 移动端 App 场景
+│       ├── web-client.md            # 客户端 Web 场景
+│       └── web-admin.md             # 后台管理系统场景
+└── solarwire-prd/                   # PRD 生成器 Skill
+    ├── SKILL.md                     # Skill 主定义文件
+    ├── README.md                    # Skill 使用说明
+    └── prompts/                     # Prompt 文件目录
+        ├── mobile-app.md            # 移动端 App 场景
+        ├── web-client.md            # 客户端 Web 场景
+        └── web-admin.md             # 后台管理系统场景
 ```
 
 ## 现有 Skills
 
 ### 1. solarwire-wireframe-generator
 **线框图生成器** - 根据用户需求生成完整的 SolarWire 线框图，包含 PRD 内容、Mermaid 流程图/时序图和详细说明，支持移动端、Web 端、后台管理系统等多种场景。
+
+### 2. solarwire-prd
+**PRD 生成器** - 生成完整的产品需求文档（PRD），包含 Mermaid 流程图/时序图、SolarWire 线框图和 SVG 双版本输出，支持移动端、Web 端、后台管理系统等多种场景。
 
 ## 如何添加新 Skill
 

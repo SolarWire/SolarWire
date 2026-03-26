@@ -4,7 +4,10 @@ import { render } from '../index';
 describe('SolarWire SVG Renderer - Edge Cases', () => {
   describe('Table with colspan/rowspan', () => {
     it('should render table cell with colspan', () => {
-      const ast = parse('##\n#\n["Header"] colspan=2\n["Normal"]');
+      const ast = parse(`## @(10,20) w=300 border=1
+  # bg=#eee
+    ["Header"] colspan=2
+    ["Normal"]`);
       const svg = render(ast);
       
       expect(svg).toContain('Header');
@@ -12,14 +15,25 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     });
 
     it('should render table cell with rowspan', () => {
-      const ast = parse('##\n#\n["Header"] rowspan=2\n["Normal"]\n#\n["Other"]');
+      const ast = parse(`## @(10,20) w=300 border=1
+  # bg=#eee
+    ["Header"] rowspan=2
+    ["Normal"]
+  #
+    ["Other"]`);
       const svg = render(ast);
       
       expect(svg).toContain('Header');
     });
 
     it('should render table cell with both colspan and rowspan', () => {
-      const ast = parse('##\n#\n["Merged"] colspan=2 rowspan=2\n["A"]\n#\n["B"]\n["C"]');
+      const ast = parse(`## @(10,20) w=300 border=1
+  # bg=#eee
+    ["Merged"] colspan=2 rowspan=2
+    ["A"]
+  #
+    ["B"]
+    ["C"]`);
       const svg = render(ast);
       
       expect(svg).toContain('Merged');
@@ -28,7 +42,7 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
 
   describe('Complex Note Content', () => {
     it('should render note with multi-line text', () => {
-      const ast = parse('["Button"] note="First line\\nSecond line\\nThird line"');
+      const ast = parse('["Button"] @(10,20) note="First line\\nSecond line\\nThird line"');
       const svg = render(ast);
       
       expect(svg).toContain('First line');
@@ -37,7 +51,7 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     });
 
     it('should render note with list markers', () => {
-      const ast = parse('["List"] note="- Item 1\\n- Item 2\\n- Item 3"');
+      const ast = parse('["List"] @(10,20) note="- Item 1\\n- Item 2\\n- Item 3"');
       const svg = render(ast);
       
       expect(svg).toContain('- Item 1');
@@ -46,7 +60,7 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     });
 
     it('should render multiple notes with badges', () => {
-      const ast = parse('["First"] note="First note"\n["Second"] note="Second note"\n["Third"] note="Third note"');
+      const ast = parse('["First"] @(10,20) note="First note"\n["Second"] @(100,20) note="Second note"\n["Third"] @(190,20) note="Third note"');
       const svg = render(ast);
       
       expect(svg).toContain('note-badge');
@@ -59,7 +73,7 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
 
   describe('Image Element', () => {
     it('should render image placeholder', () => {
-      const ast = parse('<image.png> w=100 h=80');
+      const ast = parse('<image.png> @(10,20) w=100 h=80');
       const svg = render(ast);
       
       expect(svg).toContain('rect');
@@ -67,7 +81,7 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     });
 
     it('should render image with custom size', () => {
-      const ast = parse('<logo.jpg> w=200 h=150');
+      const ast = parse('<logo.jpg> @(10,20) w=200 h=150');
       const svg = render(ast);
       
       expect(svg).toContain('width="200"');
@@ -75,32 +89,9 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     });
   });
 
-  describe('Icon Library', () => {
-    it('should render material-icons icon', () => {
-      const ast = parse('!icon "star" library=material-icons');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"');
-    });
-
-    it('should render font-awesome icon', () => {
-      const ast = parse('!icon "home" library=font-awesome');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"');
-    });
-
-    it('should render default icon for unknown name', () => {
-      const ast = parse('!icon "unknown-icon"');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"');
-    });
-  });
-
   describe('Special Characters and Text', () => {
     it('should render text with special characters', () => {
-      const ast = parse('"Special chars"');
+      const ast = parse('"Special chars" @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('Special chars');
@@ -108,14 +99,14 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
 
     it('should render very long text', () => {
       const longText = 'A'.repeat(100);
-      const ast = parse(`"${longText}"`);
+      const ast = parse(`"${longText}" @(10,20)`);
       const svg = render(ast);
       
       expect(svg).toContain('A');
     });
 
     it('should render empty text', () => {
-      const ast = parse('""');
+      const ast = parse('"" @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('<text');
@@ -124,21 +115,14 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
 
   describe('Empty and Minimal Elements', () => {
     it('should render empty rectangle', () => {
-      const ast = parse('[]');
+      const ast = parse('[] @(10,20)');
       const svg = render(ast);
       
       expect(svg).toContain('<rect');
     });
 
-    it('should render minimal container', () => {
-      const ast = parse('{}');
-      const svg = render(ast);
-      
-      expect(svg).toContain('xmlns');
-    });
-
     it('should render element without text', () => {
-      const ast = parse('[""] w=50 h=30');
+      const ast = parse('[""] @(10,20) w=50 h=30');
       const svg = render(ast);
       
       expect(svg).toContain('width="50"');
@@ -146,43 +130,23 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     });
   });
 
-  describe('Nested Containers', () => {
-    it('should render deeply nested containers', () => {
-      const ast = parse('{row}\n  {col}\n    ["Level 1"]\n    {row}\n      ["Level 2"]\n      ["Level 2-2"]');
-      const svg = render(ast);
-      
-      expect(svg).toContain('Level 1');
-      expect(svg).toContain('Level 2');
-      expect(svg).toContain('Level 2-2');
-    });
-
-    it('should render mixed row and column containers', () => {
-      const ast = parse('{row}\n  ["Left"]\n  {col}\n    ["Top Right"]\n    ["Bottom Right"]');
-      const svg = render(ast);
-      
-      expect(svg).toContain('Left');
-      expect(svg).toContain('Top Right');
-      expect(svg).toContain('Bottom Right');
-    });
-  });
-
   describe('Border and Styling Edge Cases', () => {
     it('should render zero border width', () => {
-      const ast = parse('["No Border"] s=0');
+      const ast = parse('["No Border"] @(10,20) s=0');
       const svg = render(ast);
       
       expect(svg).toContain('stroke-width="0"');
     });
 
     it('should render very thick border', () => {
-      const ast = parse('["Thick Border"] s=10');
+      const ast = parse('["Thick Border"] @(10,20) s=10');
       const svg = render(ast);
       
       expect(svg).toContain('stroke-width="10"');
     });
 
     it('should render element with all attributes', () => {
-      const ast = parse('["Full"] w=200 h=100 c=red bg=blue b=green s=3 size=16 bold italic align=c note="Test note"');
+      const ast = parse('["Full"] @(10,20) w=200 h=100 c=red bg=blue b=green s=3 size=16 bold italic align=c note="Test note"');
       const svg = render(ast);
       
       expect(svg).toContain('width="200"');
@@ -214,7 +178,7 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
     it('should render document with many notes', () => {
       let code = '';
       for (let i = 0; i < 20; i++) {
-        code += `["Note ${i}"] note="This is note ${i}"\n`;
+        code += `["Note ${i}"] @(${i * 50},20) note="This is note ${i}"\n`;
       }
       const ast = parse(code);
       const svg = render(ast);
@@ -223,6 +187,35 @@ describe('SolarWire SVG Renderer - Edge Cases', () => {
       expect(svg).toContain('note-card');
       expect(svg).toContain('This is note 0');
       expect(svg).toContain('This is note 19');
+    });
+  });
+
+  describe('Table with Notes', () => {
+    it('should render table with note on table element', () => {
+      const ast = parse(`## @(10,20) w=300 border=1 note="Table description"
+  # bg=#eee
+    "Header 1"
+    "Header 2"
+  #
+    "Cell 1"
+    "Cell 2"`);
+      const svg = render(ast);
+      
+      expect(svg).toContain('Table description');
+    });
+
+    it('should render table cells with individual notes', () => {
+      const ast = parse(`## @(10,20) w=300 border=1
+  # bg=#eee
+    "ID" note="Unique identifier"
+    "Name" note="User name"
+  #
+    "1"
+    "John"`);
+      const svg = render(ast);
+      
+      expect(svg).toContain('Unique identifier');
+      expect(svg).toContain('User name');
     });
   });
 });

@@ -2,7 +2,6 @@
 !c=#333
 !bg=#ffffff
 !size=12
-!line-height=1.5
 
 "=== SolarWire Complete Feature Demo ===" @(50,30) size=20 bold note="Main title for this comprehensive SolarWire feature showcase"
 
@@ -37,88 +36,84 @@
 "=== Table with colspan/rowspan ===" @(50,660) size=16 bold note="Section demonstrating table with colspan and rowspan"
 
 ## @(50,690) w=600 border=1 note="Complete table demonstrating colspan and rowspan features"
+  # bg=#eee
+    "Header 1"
+    "Header 2"
+    "Header 3"
   #
-    ["Header 1"] colspan=2 bg=#4CAF50 c=white bold note="Table header spanning 2 columns"
-    ["Header 2"] bg=#4CAF50 c=white bold note="Regular table header"
+    "Merged" rowspan=2 bg=#e8f5e9
+    "Cell A1" bg=#f5f5f5
+    "Cell A2" bg=#f5f5f5
   #
-    ["Merged"] rowspan=2 bg=#e8f5e9 note="Table cell spanning 2 rows"
-    ["Cell A1"] bg=#f5f5f5 note="Regular table cell"
-    ["Cell A2"] bg=#f5f5f5 note="Regular table cell"
-  #
-    ["Cell B1"] bg=#ffffff note="Regular table cell - notice the merged cell above"
-    ["Cell B2"] bg=#ffffff note="Regular table cell"
-  #
-    ["Footer"] colspan=3 bg=#2196F3 c=white bold note="Table footer spanning all 3 columns"
+    "Cell B1" bg=#ffffff
+    "Cell B2" bg=#ffffff
+  # bg=#2196F3
+    "Footer" colspan=3 c=white bold
 
-## @(50,890) w=600 h=200 border=1 note="Advanced table with multiple colspan and rowspan combinations"
-  #
-    ["Title"] colspan=4 bg=#9C27B0 c=white bold note="Header spanning all 4 columns"
-  #
-    ["Menu"] rowspan=3 bg=#FFC107 note="Side menu spanning 3 rows"
-    ["Item 1"] bg=#FFF3E0 note="Regular item"
-    ["Item 2"] bg=#FFF3E0 note="Regular item"
-    ["Item 3"] colspan=2 bg=#FFE0B2 note="Item spanning 2 columns"
-  #
-    ["Detail A"] bg=#E3F2FD note="Detail cell A"
-    ["Detail B"] bg=#E3F2FD note="Detail cell B"
-  #
-    ["Summary"] colspan=3 bg=#4CAF50 c=white bold note="Summary spanning 3 columns"
+## @(50,890) w=600 border=1 note="Advanced table with multiple colspan and rowspan combinations"
+  # bg=#9C27B0 c=white bold
+    "Title" colspan=4
+  # bg=#FFC107
+    "Menu" rowspan=3
+    "Item 1" bg=#FFF3E0
+    "Item 2" bg=#FFF3E0
+    "Item 3" colspan=2 bg=#FFE0B2
+  # bg=#E3F2FD
+    "Detail A"
+    "Detail B"
+  # bg=#4CAF50 c=white bold
+    "Summary" colspan=3
 
--- @(50,1120)->(950,1120) c=gray note="Another divider line"
+-- @(50,1020)->(950,1020) c=gray note="Another divider line"
 
-"=== Containers and Layout ===" @(50,1150) size=16 bold note="Section demonstrating row and column containers"
+"=== Layout Examples ===" @(50,1050) size=16 bold note="Section demonstrating horizontal and vertical layouts"
 
-{row} @(50,1180) w=900 h=100 gap=10 note="Row container arranging elements horizontally with gap"
-  ["Left"] w=150 h=80 bg=#ffcccb note="First element in row container - notice gap from left"
-  ["Center"] w=150 h=80 bg=#ffffcc note="Second element in row container"
-  ["Right"] w=150 h=80 bg=#ccffcc note="Third element in row container"
+["Left"] @(50,1080) w=150 h=80 bg=#ffcccb note="First element in horizontal layout"
+["Center"] @(R+10,T+0) w=150 h=80 bg=#ffffcc note="Second element - positioned at Right+10 of previous"
+["Right"] @(R+10,T+0) w=150 h=80 bg=#ccffcc note="Third element - positioned at Right+10 of previous"
 
-{col} @(50,1300) w=300 h=150 gap=10 note="Column container arranging elements vertically with gap"
-  ["Top"] w=280 h=40 bg=#e8f4fc note="Top element in column container - notice gap from top"
-  ["Middle"] w=280 h=40 bg=#fce4ec note="Middle element in column container"
-  ["Bottom"] w=280 h=40 bg=#f3e5f5 note="Bottom element in column container"
+["Top"] @(50,1200) w=280 h=40 bg=#e8f4fc note="Top element in vertical layout"
+["Middle"] @(L+0,B+10) w=280 h=40 bg=#fce4ec note="Middle element - positioned at Bottom+10 of previous"
+["Bottom"] @(L+0,B+10) w=280 h=40 bg=#f3e5f5 note="Bottom element - positioned at Bottom+10 of previous"
 
-{row} @(370,1300) w=580 h=150 gap=10 note="Nested containers - row containing columns"
-  {col} gap=5
-    ["Nested 1"] w=180 h=35 bg=#fff3e0 note="First nested column"
-    ["Nested 2"] w=180 h=35 bg=#e0f7fa note="Second nested column"
-    ["Nested 3"] w=180 h=35 bg=#f1f8e9 note="Third nested column"
-  {col} gap=5
-    ["Nested A"] w=180 h=35 bg=#ffebee note="Fourth nested column"
-    ["Nested B"] w=180 h=35 bg=#f3e5f5 note="Fifth nested column"
-    ["Nested C"] w=180 h=35 bg=#e8eaf6 note="Sixth nested column"
+["Nested 1"] @(370,1200) w=180 h=35 bg=#fff3e0 note="First nested element"
+["Nested 2"] @(L+0,B+5) w=180 h=35 bg=#e0f7fa note="Second nested - positioned at Bottom+5"
+["Nested 3"] @(L+0,B+5) w=180 h=35 bg=#f1f8e9 note="Third nested - positioned at Bottom+5"
+["Nested A"] @(R+10,T-75) w=180 h=35 bg=#ffebee note="Fourth nested - positioned at Right+10 of first"
+["Nested B"] @(L+0,B+5) w=180 h=35 bg=#f3e5f5 note="Fifth nested - positioned at Bottom+5"
+["Nested C"] @(L+0,B+5) w=180 h=35 bg=#e8eaf6 note="Sixth nested - positioned at Bottom+5"
 
--- @(50,1470)->(950,1470) c=gray note="Final divider line"
+-- @(50,1350)->(950,1350) c=gray note="Final divider line"
 
-"=== Complex Note Examples ===" @(50,1500) size=16 bold note="Section demonstrating complex note content with multiple notes"
+"=== Complex Note Examples ===" @(50,1380) size=16 bold note="Section demonstrating complex note content with multiple notes"
 
-["Multi-line Note"] @(50,1530) w=250 h=60 note="This is a multi-line note.
+["Multi-line Note"] @(50,1410) w=250 h=60 note="This is a multi-line note.
 It contains several lines of text
 to demonstrate how notes with
 longer content are displayed
 in the card area at the bottom."
-["List Note"] @(320,1530) w=250 h=60 note="- First list item
+["List Note"] @(320,1410) w=250 h=60 note="- First list item
 - Second list item with more details
 - Third list item with even more information
 - Fourth item to complete the list"
-["Numbered Note"] @(590,1530) w=250 h=60 note="1. First numbered item
+["Numbered Note"] @(590,1410) w=250 h=60 note="1. First numbered item
 2. Second numbered item
 3. Third numbered item with description
 4. Fourth numbered item"
 
-["Mixed Note"] @(50,1610) w=380 h=60 note="Important Features:
-• Easy to learn syntax
-• Powerful layout capabilities
-• Flexible styling options
+["Mixed Note"] @(50,1490) w=380 h=60 note="Important Features:
+- Easy to learn syntax
+- Powerful layout capabilities
+- Flexible styling options
 Key Benefits:
 - Quick prototyping
 - Clean visual output
 - Export to SVG/PNG"
-["Detailed Note"] @(450,1610) w=380 h=60 note="This element demonstrates
+["Detailed Note"] @(450,1490) w=380 h=60 note="This element demonstrates
 a very detailed note that
 contains multiple paragraphs
 and various types of content
 to show the flexibility of
 the note system in SolarWire."
 
-"End of Demo - Check below for all notes!" @(50,1700) size=14 note="Thank you for exploring SolarWire! Scroll down to see all note cards with their corresponding badges."
+"End of Demo - Check below for all notes!" @(50,1580) size=14 note="Thank you for exploring SolarWire! Scroll down to see all note cards with their corresponding badges."

@@ -24,7 +24,6 @@
 - ✅ Text elements with bold/italic styling
 - ✅ Placeholders and images (with fallback rendering)
 - ✅ Lines with labels and styling
-- ✅ Row and column containers with gap control
 - ✅ Tables with colspan/rowspan support
 
 ### Advanced Features
@@ -76,9 +75,6 @@ Any standard attribute can be used as a global default. Local attributes overrid
 | `--` | Line (no label) | `-- @(10,10)->(100,10)` |
 | `--"label"--` | Line with label | `--"connect"-- @(10,10)->(100,20)` |
 | `<url>` | Image | `<logo.png> w=32` |
-| `{row}` | Horizontal container | `{row} gap=8` |
-| `{col}` | Vertical container | `{col} gap=12` |
-| `{}` | Empty container (default horizontal) | `{} gap=8` |
 | `##` | Table container | `## border=1` |
 | `#` | Table row (only inside tables) | `# bg=#eee` |
 
@@ -126,10 +122,6 @@ Attributes follow the element/coordinates, space-separated. Use double quotes fo
 - `italic` – italic text
 - `align` – horizontal alignment (`l`/`c`/`r`)
 
-**Containers** (`{row}`/`{col}`/`{}`):
-- `gap` – spacing between children
-- `align` – alignment (`start`/`center`/`end`/`stretch`)
-
 **Tables** (`##`):
 - `border` – border width
 - `cellspacing` – space between cells
@@ -174,7 +166,6 @@ If no global or local attribute overrides them, these defaults apply:
 | Line `--` | stroke `#333`, width 1, solid |
 | Line label | font size 12, color `#333` |
 | Image `<url>` | original dimensions (fallback 100×100, renders as placeholder) |
-| Container `{row}/{col}` | transparent background, no stroke |
 | Table `##` | border 1, cellspacing 0, cellpadding 4 |
 | Table row `#` | background inherited from parent or none |
 
@@ -256,29 +247,28 @@ automatically!
 "Align right" @(390,400) w=150 align=r bg=#f5f5f5
 
 ## @(50,470) w=600 border=1
-#
-["Header 1"] colspan=2 bg=#4CAF50 c=white bold
-["Header 2"] bg=#4CAF50 c=white bold
-#
-["Merged"] rowspan=2 bg=#e8f5e9
-["Cell A1"] bg=#f5f5f5
-["Cell A2"] bg=#f5f5f5
-#
-["Cell B1"] bg=#ffffff
-["Cell B2"] bg=#ffffff
-#
-["Footer"] colspan=3 bg=#2196F3 c=white bold
+  # bg=#4CAF50 c=white bold
+    "Header 1"
+    "Header 2"
+    "Header 3"
+  #
+    "Merged" rowspan=2 bg=#e8f5e9
+    "Cell A1" bg=#f5f5f5
+    "Cell A2" bg=#f5f5f5
+  #
+    "Cell B1" bg=#ffffff
+    "Cell B2" bg=#ffffff
+  # bg=#2196F3 c=white bold
+    "Footer" colspan=3
 
-["Containers & Layout"] @(50,590) bold size=16
-{row} @(50,630) gap=10
-  ["Button 1"] w=100 h=40 bg=#4CAF50 c=white
-  ["Button 2"] w=100 h=40 bg=#2196F3 c=white
-  ["Button 3"] w=100 h=40 bg=#FF9800 c=white
+["Layout Examples"] @(50,590) bold size=16
+["Button 1"] @(50,630) w=100 h=40 bg=#4CAF50 c=white
+["Button 2"] @(R+10,T+0) w=100 h=40 bg=#2196F3 c=white
+["Button 3"] @(R+10,T+0) w=100 h=40 bg=#FF9800 c=white
 
-{col} @(380,630) gap=8
-  ["Item A"] w=150 h=30
-  ["Item B"] w=150 h=30
-  ["Item C"] w=150 h=30
+["Item A"] @(380,630) w=150 h=30
+["Item B"] @(L+0,B+8) w=150 h=30
+["Item C"] @(L+0,B+8) w=150 h=30
 
 ["Lines & Connections"] @(50,760) bold size=16
 ["Start"] @(50,790) w=80 h=40 note="This is the starting point"
@@ -310,9 +300,9 @@ in the card area at the bottom."
 ```
 SolarWire/
 ├── packages/
-│   ├── parser/              # Parser built with Peggy
-│   ├── renderer-svg/        # SVG renderer
-│   ├── vscode-extension/    # VS Code extension
+│   ├── ai/                  # AI skills for PRD and wireframe generation
+│   ├── apps/                # Applications (VS Code extension, markdown-it plugin)
+│   ├── core/                # Core packages (parser, renderer-svg)
 │   └── example/             # Example files
 ├── package.json
 ├── package-lock.json
@@ -322,6 +312,16 @@ SolarWire/
 ---
 
 ## Version History
+
+### v1.5.0 (2026-03-26)
+- ✅ **Project restructuring** - 重新组织项目结构（packages/ai、packages/apps、packages/core、packages/example）
+- ✅ **Table syntax restored** - 恢复表格语法（## 和 #）
+- ✅ **Removed container syntax** - 移除 {row}、{col}、{} 容器语法
+- ✅ **Table cell notes** - 添加表格内元素 note 支持
+- ✅ **Improved error messages** - 修复错误提示，添加详细上下文信息
+- ✅ **Note minimum width** - 设置 note 最小宽度 400px
+- ✅ **Text wrapping** - 改进文字换行处理
+- ✅ **Note parsing fix** - 修复 note 中换行被错误识别的问题
 
 ### v1.3.0 (2026-03-24)
 - ✅ **Fixed table rendering** - 完全重写表格渲染算法，使用双 pass 方式精确计算 colspan 和 rowspan 的组合

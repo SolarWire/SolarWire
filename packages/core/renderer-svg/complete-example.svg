@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 475" width="400" height="475">
+<style>
+  text { font-family: Arial, sans-serif; }
+  .note-badge { fill: #70B603; }
+  .note-badge-text { fill: white; font-size: 12px; font-weight: bold; }
+  .note-card { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; }
+  .note-card-text { fill: #333; font-size: 12px; line-height: 22px; }
+  .note-card-badge { fill: #70B603; }
+  .note-card-badge-text { fill: white; font-size: 10px; font-weight: bold; }
+</style>
+<rect x="20" y="20" width="150" height="50" fill="lightgray" stroke="#333333" stroke-width="1"/><text x="95" y="49" text-anchor="middle" fill="blue" font-size="12" >矩形示例</text><title>这是一个矩形</title>
+<rect x="200" y="20" width="150" height="50" rx="10" ry="10" fill="#fff0c0" stroke="#333333" stroke-width="1"/><text x="275" y="49" text-anchor="middle" fill="#333" font-size="12" >圆角矩形</text><title>这是一个圆角矩形</title>
+<circle cx="50" cy="130" r="30" fill="#90EE90" stroke="#333333" stroke-width="1"/><text x="50" y="130" text-anchor="middle" dominant-baseline="middle" fill="#333" font-size="12" >圆形</text><title>圆形头像</title>
+<rect x="20" y="180" width="100" height="40" fill="#ffffff" stroke="#333333" stroke-width="1"/><text x="70" y="204" text-anchor="middle" fill="#333" font-size="12" font-weight="bold" >粗体</text>
+<rect x="100" y="180" width="100" height="40" fill="#ffffff" stroke="#333333" stroke-width="1"/><text x="150" y="204" text-anchor="middle" fill="#333" font-size="12" font-style="italic" >斜体</text>
+<rect x="180" y="180" width="100" height="40" fill="#ffffff" stroke="#333333" stroke-width="1"/><text x="230" y="204" text-anchor="middle" fill="#333" font-size="12" >居中</text>
+<rect x="260" y="180" width="100" height="40" fill="#ffffff" stroke="#333333" stroke-width="1"/><text x="310" y="204" text-anchor="middle" fill="#333" font-size="12" >右对齐</text>
+<rect x="20" y="250" width="80" height="35" fill="#4CAF50" stroke="#333333" stroke-width="1"/><text x="60" y="271.5" text-anchor="middle" fill="white" font-size="12" >按钮1</text>
+<rect x="110" y="250" width="80" height="35" fill="#2196F3" stroke="#333333" stroke-width="1"/><text x="150" y="271.5" text-anchor="middle" fill="white" font-size="12" >按钮2</text>
+  <defs>
+    <filter id="badge-shadow-1" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <path d="M162 2 C172 2 172 17 162 27 C152 17 152 2 162 2 Z" fill="#70B603" stroke="white" stroke-width="1" filter="url(#badge-shadow-1)"/>
+  <text x="162" y="14" text-anchor="middle" class="note-badge-text">1</text>
+  <defs>
+    <filter id="badge-shadow-2" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <path d="M342 2 C352 2 352 17 342 27 C332 17 332 2 342 2 Z" fill="#70B603" stroke="white" stroke-width="1" filter="url(#badge-shadow-2)"/>
+  <text x="342" y="14" text-anchor="middle" class="note-badge-text">2</text>
+  <defs>
+    <filter id="badge-shadow-3" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <path d="M72 82 C82 82 82 97 72 107 C62 97 62 82 72 82 Z" fill="#70B603" stroke="white" stroke-width="1" filter="url(#badge-shadow-3)"/>
+  <text x="72" y="94" text-anchor="middle" class="note-badge-text">3</text>
+  <rect x="20" y="335" width="175" height="60" rx="8" class="note-card"/>
+  <defs>
+    <filter id="card-badge-shadow-0" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <circle cx="32" cy="347" r="8" fill="#70B603" stroke="white" stroke-width="1" filter="url(#card-badge-shadow-0)"/>
+  <text x="32" y="350" text-anchor="middle" class="note-card-badge-text">1</text>
+  <text x="48" y="347" fill="#333" font-size="12" dominant-baseline="hanging">
+    <tspan x="48">这是一个矩形</tspan>
+  </text>
+  <rect x="205" y="335" width="175" height="60" rx="8" class="note-card"/>
+  <defs>
+    <filter id="card-badge-shadow-1" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <circle cx="217" cy="347" r="8" fill="#70B603" stroke="white" stroke-width="1" filter="url(#card-badge-shadow-1)"/>
+  <text x="217" y="350" text-anchor="middle" class="note-card-badge-text">2</text>
+  <text x="233" y="347" fill="#333" font-size="12" dominant-baseline="hanging">
+    <tspan x="233">这是一个圆角矩形</tspan>
+  </text>
+  <rect x="20" y="405" width="175" height="60" rx="8" class="note-card"/>
+  <defs>
+    <filter id="card-badge-shadow-2" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <circle cx="32" cy="417" r="8" fill="#70B603" stroke="white" stroke-width="1" filter="url(#card-badge-shadow-2)"/>
+  <text x="32" y="420" text-anchor="middle" class="note-card-badge-text">3</text>
+  <text x="48" y="417" fill="#333" font-size="12" dominant-baseline="hanging">
+    <tspan x="48">圆形头像</tspan>
+  </text>
+</svg>
