@@ -336,14 +336,14 @@ sequenceDiagram
 !r=8
 
 // Container Rectangle - Represents screen/device boundary, placed at the bottom
-[] @(0,0) w=375 h=812 bg=#fff hide
+[] @(0,0) w=375 h=812 bg=#fff
 
 // Page content...
 ```
 
 **Container Rectangle Specifications:**
 - Place at the beginning of the code block
-- Use `[]` rectangle + `hide` attribute (don't display text content)
+- Use `[]` rectangle (don't write text content)
 - `bg=#fff` white background
 - Dimensions by scenario:
   - Mobile: `w=375 h=812` (iPhone X) or `w=390 h=844` (iPhone 12+)
@@ -477,7 +477,6 @@ Each page needs to generate two SVG files:
 | `r` | Border radius | `r=8` |
 | `size` | Font size | `size=16` |
 | `bold` | Bold text | `bold` |
-| `hide` | Hide content (show background only) | `hide` |
 | `note` | Functional description | `note="Click to submit form"` |
 
 ---

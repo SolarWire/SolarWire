@@ -1,230 +1,230 @@
 # SolarWire PRD - Web Admin
 
-这是后台管理系统场景的特定配置。
+This is the specific configuration for admin dashboard scenarios.
 
-## 一、场景特点
+## 1. Scenario Characteristics
 
-后台管理系统通常具有以下特点：
-- 很宽的画布（1440-1920px）
-- 左侧固定侧边栏
-- 顶部导航/面包屑
-- 数据密集（表格、图表、统计卡片）
-- 多列布局
-- 功能操作按钮多（新增、编辑、删除、导出等）
+Admin dashboards typically have the following characteristics:
+- Very wide canvas (1440-1920px)
+- Fixed left sidebar
+- Top navigation/breadcrumb
+- Data-intensive (tables, charts, statistics cards)
+- Multi-column layout
+- Many action buttons (Add, Edit, Delete, Export, etc.)
 
-## 二、尺寸规范
+## 2. Size Specifications
 
-### 画布尺寸
-- 推荐宽度：1440-1920px
-- 高度根据内容自动调整
+### Canvas Size
+- Recommended width: 1440-1920px
+- Height adjusts automatically based on content
 
-### 元素尺寸
-- 按钮高度：32-40px
-- 按钮宽度：根据内容，最小 64px
-- 输入框高度：32-36px
-- 输入框宽度：160-320px（根据用途）
-- 表格行高：40-48px
-- 侧边栏宽度：200-280px
-- 文本字号：12-14px
-- 标题字号：16-20px
+### Element Sizes
+- Button height: 32-40px
+- Button width: Based on content, minimum 64px
+- Input field height: 32-36px
+- Input field width: 160-320px (depending on usage)
+- Table row height: 40-48px
+- Sidebar width: 200-280px
+- Text size: 12-14px
+- Title text size: 16-20px
 
-### 间距规范
-- 元素间距：16-32px
-- 页面边距：24-32px
-- 表格单元格 padding：8-12px
+### Spacing Specifications
+- Element spacing: 16-32px
+- Page margins: 24-32px
+- Table cell padding: 8-12px
 
-## 三、布局最佳实践
+## 3. Layout Best Practices
 
-### 1. 常见布局结构
+### 1. Common Layout Structure
 
 ```solarwire
 !title="Admin Web"
 !size=13
 !gap=16
 
-// 容器矩形 - 后台管理系统
-[?] @(0,0) w=1920 h=1080 bg=#fff hide
+// Container Rectangle - Admin Dashboard
+[] @(0,0) w=1920 h=1080 bg=#fff hide
 
-// 左侧侧边栏
-["Logo"] @(0,0) w=240 h=60 bg=#f5f5f5 note="【图标】点击返回首页"
-["仪表盘"] @(0,60) w=240 h=44 note="【链接】切换到仪表盘页面"
-["用户管理"] @(0,104) w=240 h=44 bg=#e0e0e0 note="【链接】当前选中菜单，点击刷新用户列表"
-["订单管理"] @(0,148) w=240 h=44 note="【链接】切换到订单管理页面"
-["系统设置"] @(0,192) w=240 h=44 note="【链接】切换到系统设置页面"
+// Left sidebar
+["Logo"] @(0,0) w=240 h=60 bg=#f5f5f5 note="[Icon] Click to return to homepage"
+["Dashboard"] @(0,60) w=240 h=44 note="[Link] Switch to dashboard page"
+["User Management"] @(0,104) w=240 h=44 bg=#e0e0e0 note="[Link] Currently selected menu, click to refresh user list"
+["Order Management"] @(0,148) w=240 h=44 note="[Link] Switch to order management page"
+["System Settings"] @(0,192) w=240 h=44 note="[Link] Switch to system settings page"
 
-// 顶部栏
-"面包屑 / 用户管理 / 列表" @(264,24) note="面包屑导航"
-["通知"] @(1600,12) w=80 h=36 note="【图标】点击打开通知列表"
-["用户"] @(1690,12) w=80 h=36 note="【图标】当前登录用户信息。点击打开用户菜单"
+// Top bar
+"Breadcrumb / User Management / List" @(264,24) note="Breadcrumb navigation"
+["Notifications"] @(1600,12) w=80 h=36 note="[Icon] Click to open notification list"
+["User"] @(1690,12) w=80 h=36 note="[Icon] Current logged-in user info. Click to open user menu"
 
-// 统计卡片
-("用户总数") @(264,100) w=280 h=120 note="【卡片】显示系统总用户数"
-("今日新增") @(560,100) w=280 h=120 note="【卡片】显示今日新增用户数"
-("活跃用户") @(856,100) w=280 h=120 note="【卡片】显示活跃用户数"
-("留存率") @(1152,100) w=280 h=120 note="【卡片】显示用户留存率"
+// Statistics cards
+("Total Users") @(264,100) w=280 h=120 note="[Card] Display total system users"
+("New Today") @(560,100) w=280 h=120 note="[Card] Display new users today"
+("Active Users") @(856,100) w=280 h=120 note="[Card] Display active users"
+("Retention Rate") @(1152,100) w=280 h=120 note="[Card] Display user retention rate"
 
-// 搜索和操作栏
-["搜索用户"] @(264,252) w=240 h=36 note="【输入框】按关键词搜索用户。
-- 输入后回车或点击搜索按钮触发
-- 支持搜索用户姓名、邮箱、手机号
-- 最多50个字符"
-["状态筛选"] @(520,252) w=120 h=36 note="【下拉框】按用户状态筛选。
-- 下拉选择：全部/启用/禁用
-- 选择后自动刷新列表"
-["导出"] @(660,252) w=80 h=36 note="【次按钮】导出用户列表。
-- 导出当前筛选结果
-- 下载Excel格式文件"
-["新增用户"] @(1576,252) w=120 h=36 bg=#4CAF50 c=white note="【主按钮】打开新增用户弹窗。
-- 点击触发新增用户弹窗
-- 弹窗中填写用户信息后保存"
+// Search and action bar
+["Search Users"] @(264,252) w=240 h=36 note="[Input Field] Search users by keyword.
+- Press Enter or click search button to trigger
+- Supports searching by name, email, phone number
+- Max 50 characters"
+["Status Filter"] @(520,252) w=120 h=36 note="[Dropdown] Filter by user status.
+- Dropdown options: All/Active/Inactive
+- Auto-refresh list on selection"
+["Export"] @(660,252) w=80 h=36 note="[Secondary Button] Export user list.
+- Export current filtered results
+- Download as Excel file"
+["Add User"] @(1576,252) w=120 h=36 bg=#4CAF50 c=white note="[Primary Button] Open add user modal.
+- Click to trigger add user modal
+- Fill in user info and save in modal"
 
-// 数据表格
-## @(264,316) w=1632 h=400 border=1 note="【表格】用户列表表格。
-- 数据来源：用户管理模块，按创建时间倒序排列
-- 默认每页20条，支持分页
-- 支持按姓名、邮箱、手机号搜索
-- 支持按状态筛选（全部/启用/禁用）"
+// Data table
+## @(264,316) w=1632 h=400 border=1 note="[Table] User list table.
+- Data source: User management module, sorted by creation time descending
+- Default 20 items per page, supports pagination
+- Supports search by name, email, phone number
+- Supports filter by status (All/Active/Inactive)"
   # bg=#eee
-    "ID" @(0,0) w=80 note="用户唯一标识"
-    "用户姓名" @(80,0) w=200 note="显示用户全名"
-    "邮箱" @(280,0) w=300 note="用户邮箱地址"
-    "手机号" @(580,0) w=150 note="用户手机号"
-    "角色" @(730,0) w=120 note="用户角色类型"
-    "状态" @(850,0) w=100 note="用户状态"
-    "创建时间" @(950,0) w=200 note="账号创建时间"
-    "操作" @(1150,0) w=200 note="操作按钮"
+    "ID" @(0,0) w=80 note="User unique identifier"
+    "Name" @(80,0) w=200 note="Display user full name"
+    "Email" @(280,0) w=300 note="User email address"
+    "Phone" @(580,0) w=150 note="User phone number"
+    "Role" @(730,0) w=120 note="User role type"
+    "Status" @(850,0) w=100 note="User status"
+    "Created" @(950,0) w=200 note="Account creation time"
+    "Actions" @(1150,0) w=200 note="Action buttons"
   #
     "1" @(0,0) w=80
-    "张三" @(80,0) w=200
-    "zhangsan@example.com" @(280,0) w=300
+    "John Doe" @(80,0) w=200
+    "john@example.com" @(280,0) w=300
     "13800138001" @(580,0) w=150
-    "管理员" @(730,0) w=120
-    "启用" @(850,0) w=100 c=#4CAF50
+    "Admin" @(730,0) w=120
+    "Active" @(850,0) w=100 c=#4CAF50
     "2024-01-15" @(950,0) w=200
-    ["编辑"] @(1150,0) w=60 h=32 note="【次按钮】打开编辑用户弹窗。回填当前用户信息"
-    ["删除"] @(1220,0) w=60 h=32 bg=#f44336 c=white note="【次按钮】删除该用户。
-- 弹出确认对话框
-- 确认后删除用户"
+    ["Edit"] @(1150,0) w=60 h=32 note="[Secondary Button] Open edit user modal. Pre-fill current user info"
+    ["Delete"] @(1220,0) w=60 h=32 bg=#f44336 c=white note="[Secondary Button] Delete this user.
+- Show confirmation dialog
+- Delete user after confirmation"
 ```
 
-### 2. 侧边栏
-- 固定在页面左侧 `@(0,0)`
-- Logo 在顶部，菜单项垂直排列
-- 宽度：200-280px
-- 菜单项高度：40-48px
+### 2. Sidebar
+- Fixed on the left side of the page `@(0,0)`
+- Logo at the top, menu items vertically arranged
+- Width: 200-280px
+- Menu item height: 40-48px
 
-### 3. 顶部栏
-- 固定在内容区顶部
-- 面包屑在左侧，操作按钮在右侧
-- 高度：56-64px
+### 3. Top Bar
+- Fixed at the top of the content area
+- Breadcrumb on the left, action buttons on the right
+- Height: 56-64px
 
-### 4. 统计卡片
-- 使用圆角矩形 `()`
-- 水平排列，用绝对坐标
-- 包含标题和数字
-- 尺寸：200-300px 宽，100-140px 高
+### 4. Statistics Cards
+- Use rounded rectangle `()`
+- Horizontally arranged, using absolute coordinates
+- Contains title and number
+- Size: 200-300px wide, 100-140px high
 
-### 5. 数据表格
-- 是后台管理系统的核心
-- 宽度占满可用空间
-- 表头背景色区分
-- 操作列在最右侧
-- 行高：40-48px
+### 5. Data Table
+- Core of admin dashboard
+- Width fills available space
+- Header with background color distinction
+- Actions column on the rightmost
+- Row height: 40-48px
 
-### 6. 表单布局
-- 两列或三列布局，用绝对坐标
-- 标签 + 输入框组合
-- 重要字段在左上
-- 按钮放在底部，右对齐
+### 6. Form Layout
+- Two or three column layout, using absolute coordinates
+- Label + input field combination
+- Important fields in the top left
+- Buttons placed at the bottom, right-aligned
 
-## 四、常见模式
+## 4. Common Patterns
 
-### 用户列表页面
-- 顶部搜索/筛选栏
-- 批量操作按钮
-- 数据表格（多选、操作列）
-- 分页控件
+### User List Page
+- Top search/filter bar
+- Batch action buttons
+- Data table (multi-select, actions column)
+- Pagination controls
 
-### 数据统计页面
-- 多个统计卡片
-- 图表占位符
-- 时间范围选择器
+### Data Statistics Page
+- Multiple statistics cards
+- Chart placeholders
+- Time range selector
 
-### 表单编辑页面
-- 面包屑导航
-- 表单（多列布局）
-- 保存/取消按钮
+### Form Edit Page
+- Breadcrumb navigation
+- Form (multi-column layout)
+- Save/Cancel buttons
 
-### 设置页面
-- 分组的设置项
-- 开关、下拉框、输入框组合
-- 保存按钮
+### Settings Page
+- Grouped settings items
+- Switch, dropdown, input field combinations
+- Save button
 
-## 五、页面组织规则
+## 5. Page Organization Rules
 
-**每个 SolarWire 代码块只处理一个独立视图：**
+**Each SolarWire code block handles only one independent view:**
 
-| 情况 | 处理方式 |
-|------|---------|
-| 弹窗/对话框 | 单独一个 SolarWire 片段 |
-| 页面不同状态 | 每个状态单独一个片段 |
-| 标签页切换 | 每个标签页单独一个片段 |
+| Situation | Handling Method |
+|-----------|-----------------|
+| Modals/Dialogs | Separate SolarWire fragment |
+| Different Page States | Separate fragment for each state |
+| Tab Switching | Separate fragment for each tab |
 
-## 六、Note 写作规范
+## 6. Note Writing Guidelines
 
-**核心原则：所有元素说明整合到线框图 note 中，实现"所见即所读"**
+**Core Principle: All element descriptions integrated into wireframe notes for "what you see is what you read"**
 
-### 元素级 Note
+### Element-level Note
 
-每个 UI 元素都应该有详细的 note 说明，使用【】标签标识元素类型：
+Every UI element should have detailed note description, use 【】 tags to identify element types:
 
-- 【主按钮】【次按钮】：操作按钮
-- 【输入框】【下拉框】：输入类元素
-- 【链接】：文字链接
-- 【图标】：图标按钮
-- 【卡片】：卡片容器
-- 【表格】：数据表格
+- [Primary Button], [Secondary Button]: Action buttons
+- [Input Field], [Dropdown]: Input elements
+- [Link]: Text links
+- [Icon]: Icon buttons
+- [Card]: Card containers
+- [Table]: Data tables
 
-### 禁止在 Note 中写的内容
+### Content Forbidden in Notes
 
-- ❌ 视觉细节：颜色、字体、圆角、阴影、动画效果
-- ❌ 技术实现: 接口名、数据库字段、加密方式
-- ❌ 尺寸数值: 宽度、高度、间距
+- ❌ Visual details: Colors, fonts, border-radius, shadows, animation effects
+- ❌ Technical implementation: API names, database fields, encryption methods
+- ❌ Size values: Width, height, spacing
 
-## 七、PRD 特定要求
+## 7. PRD Specific Requirements
 
-### 后台管理特有字段定义
+### Admin-specific Field Definitions
 
 ```markdown
-### 后台管理字段
+### Admin Dashboard Fields
 
-| 字段名 | 类型 | 说明 |
-|-------|------|------|
-| operatorId | string | 操作人ID |
-| operateTime | datetime | 操作时间 |
-| operateType | string | 操作类型：新增/编辑/删除/导出 |
-| ipAddress | string | 操作IP地址 |
+| Field Name | Type | Description |
+|------------|------|-------------|
+| operatorId | string | Operator ID |
+| operateTime | datetime | Operation time |
+| operateType | string | Operation type: Add/Edit/Delete/Export |
+| ipAddress | string | Operation IP address |
 ```
 
-### 后台管理特有业务规则
+### Admin-specific Business Rules
 
 ```markdown
-### 后台管理业务规则
+### Admin Dashboard Business Rules
 
-1. **权限规则**
-   - 超级管理员：全部权限
-   - 管理员：可查看、编辑，不可删除
-   - 运营：只能查看和导出
-   - 操作日志：所有操作记录日志
+1. **Permission Rules**
+   - Super Admin: Full permissions
+   - Admin: Can view and edit, cannot delete
+   - Operator: Can only view and export
+   - Operation Log: All operations are logged
 
-2. **数据规则**
-   - 分页：默认20条/页
-   - 排序：默认按创建时间倒序
-   - 筛选：支持多条件组合筛选
-   - 导出：单次最多导出10000条
+2. **Data Rules**
+   - Pagination: Default 20 items per page
+   - Sorting: Default by creation time descending
+   - Filtering: Supports multi-condition combined filtering
+   - Export: Maximum 10000 items per export
 
-3. **安全规则**
-   - 敏感操作需二次确认
-   - 批量删除需输入验证码
-   - 登录超时：30分钟无操作自动退出
+3. **Security Rules**
+   - Sensitive operations require secondary confirmation
+   - Batch deletion requires verification code
+   - Login timeout: Auto logout after 30 minutes of inactivity
 ```
