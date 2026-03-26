@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SolarWire in Markdown",
+  "scopeName": "text.html.markdown",
+  "injectionSelector": "L:text.html.markdown fenced_code_block",
+  "patterns": [
+    {
+      "match": "```solarwire\\b.*?```",
+      "name": "meta.embedded.block.solarwire"
+    }
+  ]
+}

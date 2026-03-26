@@ -1,0 +1,127 @@
+{
+  "Rectangle": {
+    "prefix": "rect",
+    "body": [
+      "[\"${1:text}\"] @(${2:x},${3:y}) w=${4:width} h=${5:height}"
+    ],
+    "description": "Create a rectangle element"
+  },
+  "Rectangle Without Text": {
+    "prefix": "rectn",
+    "body": [
+      "[] @(${1:x},${2:y}) w=${3:width} h=${4:height}"
+    ],
+    "description": "Create a rectangle element without text"
+  },
+  "Rounded Rectangle": {
+    "prefix": "rrect",
+    "body": [
+      "(\"${1:text}\") @(${2:x},${3:y}) w=${4:width} h=${5:height} r=${6:radius}"
+    ],
+    "description": "Create a rounded rectangle element"
+  },
+  "Circle": {
+    "prefix": "circle",
+    "body": [
+      "((\"${1:text}\")) @(${2:x},${3:y}) w=${4:width} h=${5:height}"
+    ],
+    "description": "Create a circle element"
+  },
+  "Text": {
+    "prefix": "text",
+    "body": [
+      "\"${1:content}\" @(${2:x},${3:y})"
+    ],
+    "description": "Create a text element"
+  },
+  "Placeholder": {
+    "prefix": "placeholder",
+    "body": [
+      "[?\"${1:text}\"] @(${2:x},${3:y}) w=${4:width} h=${5:height}"
+    ],
+    "description": "Create a placeholder element"
+  },
+  "Image": {
+    "prefix": "image",
+    "body": [
+      "<${1:url}> @(${2:x},${3:y}) w=${4:width} h=${5:height}"
+    ],
+    "description": "Create an image element"
+  },
+  "Line": {
+    "prefix": "line",
+    "body": [
+      "-- @(${1:x1},${2:y1})->(${3:x2},${4:y2})"
+    ],
+    "description": "Create a line element"
+  },
+  "Line with Label": {
+    "prefix": "linel",
+    "body": [
+      "--\"${1:label}\"-- @(${2:x1},${3:y1})->(${4:x2},${5:y2})"
+    ],
+    "description": "Create a line element with label"
+  },
+  "Row Container": {
+    "prefix": "row",
+    "body": [
+      "{row} @(${1:x},${2:y}) w=${3:width} h=${4:height} gap=${5:10}"
+    ],
+    "description": "Create a row container"
+  },
+  "Column Container": {
+    "prefix": "col",
+    "body": [
+      "{col} @(${1:x},${2:y}) w=${3:width} h=${4:height} gap=${5:10}"
+    ],
+    "description": "Create a column container"
+  },
+  "Table": {
+    "prefix": "table",
+    "body": [
+      "## @(${1:x},${2:y}) w=${3:width} border=${4:1}"
+    ],
+    "description": "Create a table element"
+  },
+  "Table Row": {
+    "prefix": "row",
+    "body": [
+      "#"
+    ],
+    "description": "Create a table row (inside table)"
+  },
+  "Document Header": {
+    "prefix": "header",
+    "body": [
+      "!title=\"${1:Title}\"",
+      "!width=${2:1000}",
+      "!height=${3:800}",
+      "!c=${4:#333}",
+      "!bg=${5:#ffffff}",
+      "!size=${6:12}",
+      ""
+    ],
+    "description": "Add document header declarations"
+  },
+  "Comment": {
+    "prefix": "comment",
+    "body": [
+      "// ${1:comment}"
+    ],
+    "description": "Add a comment"
+  },
+  "Simple Example": {
+    "prefix": "example",
+    "body": [
+      "!title=\"My SolarWire Diagram\"",
+      "!width=800",
+      "!height=600",
+      "",
+      "[\"Button\"] @(50,50) w=120 h=50 bg=#4CAF50 c=white bold",
+      "(\"Card\") @(50,120) w=200 h=100 r=8 bg=#f0f0f0",
+      "((\"Avatar\")) @(300,75) w=60 h=60 bg=#90EE90",
+      "\"Welcome!\" @(50,250) size=18 bold"
+    ],
+    "description": "Insert a simple example"
+  }
+}
