@@ -75,7 +75,8 @@
         "command": "solarwire.exportPng",
         "title": "SolarWire: Export to PNG"
       }
-    ]
+    ],
+    "markdown.markdownItPlugins": true
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
