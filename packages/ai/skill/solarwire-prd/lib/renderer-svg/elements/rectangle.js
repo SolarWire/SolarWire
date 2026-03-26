@@ -23,12 +23,14 @@ function renderRectangle(element, context) {
     const bold = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'bold');
     const italic = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'italic');
     const note = element.attributes['note'];
+    const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
     let svgParts = [];
+    const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
     if (isRounded) {
-        svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" rx="${r}" ry="${r}" fill="${bg}" stroke="${b}" stroke-width="${s}"/>`);
+        svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" rx="${r}" ry="${r}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
     }
     else {
-        svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" fill="${bg}" stroke="${b}" stroke-width="${s}"/>`);
+        svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
     }
     if (element.text) {
         const lines = element.text.split('\n');

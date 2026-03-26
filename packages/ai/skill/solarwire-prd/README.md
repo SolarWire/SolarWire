@@ -49,22 +49,28 @@ Use the skill with your AI assistant to generate PRD documents.
 After generating the PRD markdown file, run the SVG generation script:
 
 ```bash
-node generate-svg.js path/to/[requirement-name]/solarwire-prd.md
+node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
 ```
 
 **Output Structure:**
 ```
-[requirement-name]/
-├── solarwire-prd.md                    # PRD document
-├── [page-name]-with-notes.svg          # Wireframe with note annotations
-├── [page-name]-without-notes.svg       # Clean wireframe without notes
-├── [tab-name]-with-notes.svg           # Tab wireframe with notes
-├── [tab-name]-without-notes.svg        # Tab wireframe without notes
-└── ...                                 # More SVGs for each page/tab/modal
+.solarwire/                                 # Root directory for all PRD outputs
+├── [requirement-name-1]/                   # Folder for requirement 1
+│   ├── solarwire-prd.md                    # PRD document
+│   ├── [page-name]-with-notes.svg          # Wireframe with note annotations
+│   ├── [page-name]-without-notes.svg       # Clean wireframe without notes
+│   └── ...                                 # More SVGs for this requirement
+│
+├── [requirement-name-2]/                   # Folder for requirement 2
+│   ├── solarwire-prd.md
+│   └── ...
+│
+└── ...                                     # More requirement folders
 ```
 
 **Naming Convention:**
-- Folder name: Based on the requirement/project name
+- Root directory: `.solarwire` (at project root)
+- Requirement folder: Based on the requirement/project name
 - PRD file: Always named `solarwire-prd.md`
 - SVG files: Based on the `!title` attribute in each solarwire code block
 

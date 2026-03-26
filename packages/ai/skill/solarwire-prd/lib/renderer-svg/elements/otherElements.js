@@ -27,8 +27,10 @@ function renderCircle(element, context) {
     const bold = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'bold');
     const italic = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'italic');
     const note = element.attributes['note'];
+    const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
+    const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
     let svgParts = [];
-    svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}" stroke="${b}" stroke-width="${s}"/>`);
+    svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
     if (element.text) {
         let fontStyle = '';
         if (bold)
@@ -69,6 +71,7 @@ function renderText(element, context) {
     const bold = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'bold');
     const italic = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'italic');
     const note = element.attributes['note'];
+    const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
     let fontStyle = '';
     if (bold)
         fontStyle += 'font-weight="bold" ';
@@ -83,8 +86,9 @@ function renderText(element, context) {
         textX = pos.x + (w || 100);
     }
     const textY = pos.y + fontSize;
+    const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
     let svgParts = [];
-    svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="${textAnchor}" fill="${c}" font-size="${fontSize}" ${fontStyle}>`);
+    svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="${textAnchor}" fill="${c}" font-size="${fontSize}" ${fontStyle}${opacityAttr}>`);
     lines.forEach((line, i) => {
         if (i === 0) {
             svgParts.push(line);
@@ -219,12 +223,23 @@ function renderTableElement(element, context, pos, renderChild) {
     let estimatedMaxRowSpan = 0;
     rows.forEach((row, rowIndex) => {
         const cells = row.children || [];
-        cells.forEach((cell) => {
+        cells.forEach((cell, cellIndex) => {
             if ('w' in cell.attributes || 'h' in cell.attributes) {
-                throw new Error('Table cell elements cannot specify w or h attributes');
+                const attrName = 'w' in cell.attributes ? 'w' : 'h';
+                const attrValue = cell.attributes[attrName];
+                throw new Error(`Table cell element cannot specify "${attrName}" attribute.\n` +
+                    `Cell content: "${cell.content || ''}"\n` +
+                    `Row: ${rowIndex + 1}, Cell: ${cellIndex + 1}\n` +
+                    `Found: ${attrName}=${attrValue}\n` +
+                    `Reason: Table cell dimensions are automatically calculated based on table width and row height.\n` +
+                    `Solution: Remove the "${attrName}" attribute from this cell element.`);
             }
             if (cell.type === 'line') {
-                throw new Error('Table cell elements cannot be lines');
+                throw new Error(`Table cell element cannot be a line element.\n` +
+                    `Row: ${rowIndex + 1}, Cell: ${cellIndex + 1}\n` +
+                    `Found: line element\n` +
+                    `Reason: Lines are not supported inside table cells.\n` +
+                    `Solution: Use text ("..."), rectangle ([...]), rounded rectangle ((...)), circle (((...))), or placeholder ([?...]) elements instead.`);
             }
             const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
             const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
@@ -352,14 +367,29 @@ function renderTableElement(element, context, pos, renderChild) {
 function renderTableRow(element, context, pos, renderChild) {
     const bg = (0, context_1.getColorAttribute)(element.attributes, context.globalDefaults, 'bg', 'transparent');
     const note = element.attributes['note'];
+    if (note) {
+        throw new Error(`Table row element does not support "note" attribute.\n` +
+            `Reason: Notes are only supported on individual cell elements, not on row elements.\n` +
+            `Solution: Remove the "note" attribute from the row element and add notes to individual cells if needed.`);
+    }
+    const rowAttributes = element.attributes;
+    const rowDefaults = {};
+    const inheritableAttrs = ['c', 'bg', 'b', 's', 'size', 'bold', 'italic', 'align'];
+    inheritableAttrs.forEach(attr => {
+        if (rowAttributes[attr] !== undefined) {
+            rowDefaults[attr] = rowAttributes[attr];
+        }
+    });
     const svgParts = [];
     let currentX = pos.x;
     let maxHeight = 0;
     const cellResults = [];
     const cells = element.children || [];
     cells.forEach(cell => {
+        const mergedAttributes = { ...rowDefaults, ...cell.attributes };
+        const modifiedCell = { ...cell, attributes: mergedAttributes };
         const cellContext = (0, context_1.createChildContext)(context, currentX, pos.y);
-        const result = renderChild(cell, cellContext);
+        const result = renderChild(modifiedCell, cellContext);
         cellResults.push(result);
         maxHeight = Math.max(maxHeight, result.bounds.height);
         let cellWidth = result.bounds.width;
@@ -403,9 +433,6 @@ function renderTableRow(element, context, pos, renderChild) {
         height: rowHeight,
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
-    if (note) {
-        svgParts.push(`<title>${note}</title>`);
-    }
     return {
         svg: svgParts.join(''),
         bounds,

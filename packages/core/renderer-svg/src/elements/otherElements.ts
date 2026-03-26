@@ -23,9 +23,12 @@ export function renderCircle(element: CircleElement, context: RenderContext): Re
   const bold = getBooleanAttribute(element.attributes, context.globalDefaults, 'bold');
   const italic = getBooleanAttribute(element.attributes, context.globalDefaults, 'italic');
   const note = element.attributes['note'];
+  const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
+  
+  const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
   
   let svgParts: string[] = [];
-  svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}" stroke="${b}" stroke-width="${s}"/>`);
+  svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
   
   if (element.text) {
     let fontStyle = '';
@@ -70,6 +73,7 @@ export function renderText(element: TextElement, context: RenderContext): Render
   const bold = getBooleanAttribute(element.attributes, context.globalDefaults, 'bold');
   const italic = getBooleanAttribute(element.attributes, context.globalDefaults, 'italic');
   const note = element.attributes['note'];
+  const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
   
   let fontStyle = '';
   if (bold) fontStyle += 'font-weight="bold" ';
@@ -85,8 +89,10 @@ export function renderText(element: TextElement, context: RenderContext): Render
   
   const textY = pos.y + fontSize;
   
+  const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+  
   let svgParts: string[] = [];
-  svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="${textAnchor}" fill="${c}" font-size="${fontSize}" ${fontStyle}>`);
+  svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="${textAnchor}" fill="${c}" font-size="${fontSize}" ${fontStyle}${opacityAttr}>`);
   
   lines.forEach((line, i) => {
     if (i === 0) {

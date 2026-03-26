@@ -386,6 +386,7 @@ description: "根据用户需求生成完整的 PRD，包含 PRD 内容、Mermai
 | `r` | 圆角 | `r=8` |
 | `size` | 字体大小 | `size=16` |
 | `bold` | 加粗 | `bold` |
+| `opacity` | 元素透明度（0-1） | `opacity=0.5` 表示 50% 透明度 |
 | `note` | 功能说明 | `note="点击提交表单"` |
 
 ### 表格行属性

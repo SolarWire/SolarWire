@@ -110,6 +110,7 @@ Attributes follow the element/coordinates, space-separated. Use double quotes fo
 - `b` – stroke color
 - `s` – stroke width
 - `r` – corner radius
+- `opacity` – element opacity (0-1, e.g., `opacity=0.5` for 50% transparency)
 
 **Element notes**:
 - `note` – add explanatory text that will be rendered visually as a badge + card at the bottom
@@ -327,6 +328,7 @@ SolarWire/
 - ✅ **Table cell notes** - 添加表格内元素 note 支持
 - ✅ **Table row attribute inheritance** - 表格行属性继承功能，行级属性可作为单元格默认值，单元格可覆盖
 - ✅ **Removed row note support** - 移除表格行的 note 支持，添加错误提示
+- ✅ **Opacity attribute** - 添加 opacity 属性支持，控制元素透明度（0-1）
 - ✅ **Improved error messages** - 修复错误提示，添加详细上下文信息
 - ✅ **Note minimum width** - 设置 note 最小宽度 400px
 - ✅ **Text wrapping** - 改进文字换行处理

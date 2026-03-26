@@ -83,22 +83,26 @@ After confirming requirements, generate documents with the following structure:
 
 ## Output File Structure
 
-**Each requirement has its own folder containing all related files:**
+**All requirements are organized under the `.solarwire` directory, each in its own folder:**
 
 ```
-[requirement-name]/                      # Folder named after the requirement
-├── solarwire-prd.md                     # PRD document (fixed name)
-├── [page-name]-with-notes.svg           # Wireframe with notes
-├── [page-name]-without-notes.svg        # Wireframe without notes
-├── [tab-name]-with-notes.svg            # Tab wireframe with notes
-├── [tab-name]-without-notes.svg         # Tab wireframe without notes
-├── [modal-name]-with-notes.svg          # Modal wireframe with notes
-├── [modal-name]-without-notes.svg       # Modal wireframe without notes
-└── ...                                  # More SVGs for each page/tab/modal
+.solarwire/                              # Root directory for all PRD outputs
+├── [requirement-name-1]/                # Folder for requirement 1
+│   ├── solarwire-prd.md                 # PRD document (fixed name)
+│   ├── [page-name]-with-notes.svg       # Wireframe with notes
+│   ├── [page-name]-without-notes.svg    # Wireframe without notes
+│   └── ...                              # More SVGs for this requirement
+│
+├── [requirement-name-2]/                # Folder for requirement 2
+│   ├── solarwire-prd.md
+│   └── ...
+│
+└── ...                                  # More requirement folders
 ```
 
 **Naming Convention:**
-- Folder name: Based on the requirement/project name (e.g., `user-login-system/`, `order-management/`)
+- Root directory: `.solarwire` (at project root)
+- Requirement folder: Based on the requirement/project name (e.g., `user-login-system/`, `order-management/`)
 - PRD file: Always named `solarwire-prd.md`
 - SVG files: Based on the `!title` attribute in each solarwire code block
   - Format: `[title-value]-with-notes.svg` and `[title-value]-without-notes.svg`
@@ -113,7 +117,7 @@ This skill is **fully portable**. All dependencies are bundled in the `lib` dire
 After generating the PRD markdown file, run the SVG generation script:
 
 ```bash
-node generate-svg.js path/to/[requirement-name]/solarwire-prd.md
+node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
 ```
 
 **The script will:**
@@ -463,7 +467,6 @@ sequenceDiagram
 **❌ Bad Notes (Just element type labels - AVOID THESE):**
 ```solarwire
 ## @(260,460) w=1600 border=1 note="[Table]"              // ❌ Just says "Table" - no useful info
-# bg=#fafafa note="[Header Row]"                          // ❌ Just says "Header Row" - no useful info
 "Column Title" @(280,470) w=180 note="[Column Title]"     // ❌ Just says "Column Title" - no useful info
 ["Button"] @(100,50) note="[Primary Button]"              // ❌ Just says "Primary Button" - no behavior info
 ```
@@ -490,7 +493,7 @@ sequenceDiagram
 **✅ No Note Needed (No functional behavior to describe):**
 ```solarwire
 ## @(260,460) w=1600 border=1           // Table - no note needed if no special behavior
-  # bg=#fafafa                          // Header row - no note needed
+  # bg=#fafafa                          // Header row - note NOT supported on rows
     "Time"                              // Column title - no note needed
     "Operator"
     "Action"
@@ -664,7 +667,7 @@ Each page/tab/modal needs to generate two SVG files:
 **Tables use strict indentation:**
 
 ```solarwire
-## @(x,y) w=width border=1
+## @(x,y) w=width border=1 note="[Table] Description of the table..."
   # bg=#eee                    // Header row (indented 2 spaces)
     "Column 1"                 // Cell (indented 4 spaces)
     "Column 2"
@@ -684,6 +687,11 @@ Each page/tab/modal needs to generate two SVG files:
 - Row `#` - 2 spaces indentation
 - Cell content - 4 spaces indentation
 
+**⚠️ Table Note Rules:**
+- **Table-level note**: Add `note` attribute to the table element `##` for overall table description
+- **Row-level note**: `note` attribute is **NOT supported** on table rows `#`
+- If you need to describe the table, put all information in the table-level note
+
 ### Common Attributes
 
 | Attribute | Description | Example |
@@ -695,6 +703,7 @@ Each page/tab/modal needs to generate two SVG files:
 | `r` | Border radius | `r=8` |
 | `size` | Font size | `size=16` |
 | `bold` | Bold text | `bold` |
+| `opacity` | Element opacity (0-1) | `opacity=0.5` for 50% transparency |
 | `note` | Functional description | `note="Click to submit form"` |
 
 ### Table Row Attributes
@@ -703,14 +712,15 @@ Each page/tab/modal needs to generate two SVG files:
 - `bg` – Background color for the entire row
 - `c`, `size`, `bold`, `italic`, `align` – Text style defaults for all cells in the row
 
-**Important:**
-- `note` attribute is **NOT supported** on table rows
+**⚠️ Important Rules:**
+- `note` attribute is **NOT supported** on table rows `#`
+- To describe a table, add `note` to the table element `##` instead
 - Row-level attributes serve as defaults for all cells in that row
 - Individual cells can override row-level attributes with their own values
 
 **Example:**
 ```solarwire
-## @(100,50) w=500 border=1
+## @(100,50) w=500 border=1 note="[Table] User list with actions"
   # bg=#4CAF50 c=white bold      // Header row: green bg, white bold text
     "ID"
     "Name"
