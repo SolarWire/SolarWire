@@ -110,7 +110,6 @@ Attributes follow the element/coordinates, space-separated. Use double quotes fo
 - `b` – stroke color
 - `s` – stroke width
 - `r` – corner radius
-- `hide` – hide the element
 
 **Element notes**:
 - `note` – add explanatory text that will be rendered visually as a badge + card at the bottom
@@ -127,8 +126,16 @@ Attributes follow the element/coordinates, space-separated. Use double quotes fo
 - `cellspacing` – space between cells
 - `cellpadding` – padding inside cells
 
+**Table rows** (`#`):
+- `bg` – background color for the entire row
+- `c`, `size`, `bold`, `italic`, `align` – text style defaults for all cells in the row
+- Note: `note` attribute is **not supported** on table rows
+- Child elements can override row-level attributes with their own values
+
 **Cells** (any element inside a table row):
 - `colspan`, `rowspan`
+- All text-related attributes (`c`, `bg`, `size`, `bold`, `italic`, `align`)
+- `note` – functional description for the cell
 
 ### Multi-line text
 
@@ -318,10 +325,12 @@ SolarWire/
 - ✅ **Table syntax restored** - 恢复表格语法（## 和 #）
 - ✅ **Removed container syntax** - 移除 {row}、{col}、{} 容器语法
 - ✅ **Table cell notes** - 添加表格内元素 note 支持
+- ✅ **Table row attribute inheritance** - 表格行属性继承功能，行级属性可作为单元格默认值，单元格可覆盖
+- ✅ **Removed row note support** - 移除表格行的 note 支持，添加错误提示
 - ✅ **Improved error messages** - 修复错误提示，添加详细上下文信息
 - ✅ **Note minimum width** - 设置 note 最小宽度 400px
 - ✅ **Text wrapping** - 改进文字换行处理
-- ✅ **Note parsing fix** - 修复 note 中换行被错误识别的问题
+- ✅ **Note parsing fix** - 修复 note 中换行被错误识别的问题，支持双引号字符串中的实际换行符
 
 ### v1.3.0 (2026-03-24)
 - ✅ **Fixed table rendering** - 完全重写表格渲染算法，使用双 pass 方式精确计算 colspan 和 rowspan 的组合

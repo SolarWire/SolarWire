@@ -253,10 +253,17 @@ QuotedString
   }
 
 DoubleQuotedContent
-  = (!"\"" .)*
+  = chars:DoubleQuotedChar*
   {
-    return text().replace(/\\n/g, '\n').replace(/\\"/g, '"');
+    return chars.join('').replace(/\\n/g, '\n').replace(/\\"/g, '"');
   }
+
+DoubleQuotedChar
+  = '\\"' { return '"'; }
+  / '\\n' { return '\n'; }
+  / '\\\\' { return '\\'; }
+  / '\n' { return '\n'; }
+  / !'"' . { return text(); }
 
 TripleQuotedContent
   = (!"\"\"\"" .)*

@@ -83,14 +83,26 @@ After confirming requirements, generate documents with the following structure:
 
 ## Output File Structure
 
+**Each requirement has its own folder containing all related files:**
+
 ```
-{{outputDir}}/
-├── prd-[project-name].md           # Main PRD document
-└── assets/
-    └── [page-name]/
-        ├── [page-name]-with-notes.svg    # Wireframe with notes
-        └── [page-name]-without-notes.svg # Wireframe without notes
+[requirement-name]/                      # Folder named after the requirement
+├── solarwire-prd.md                     # PRD document (fixed name)
+├── [page-name]-with-notes.svg           # Wireframe with notes
+├── [page-name]-without-notes.svg        # Wireframe without notes
+├── [tab-name]-with-notes.svg            # Tab wireframe with notes
+├── [tab-name]-without-notes.svg         # Tab wireframe without notes
+├── [modal-name]-with-notes.svg          # Modal wireframe with notes
+├── [modal-name]-without-notes.svg       # Modal wireframe without notes
+└── ...                                  # More SVGs for each page/tab/modal
 ```
+
+**Naming Convention:**
+- Folder name: Based on the requirement/project name (e.g., `user-login-system/`, `order-management/`)
+- PRD file: Always named `solarwire-prd.md`
+- SVG files: Based on the `!title` attribute in each solarwire code block
+  - Format: `[title-value]-with-notes.svg` and `[title-value]-without-notes.svg`
+  - Title is converted to lowercase kebab-case (e.g., `!title="User Login"` → `user-login-with-notes.svg`)
 
 ---
 
@@ -101,7 +113,7 @@ This skill is **fully portable**. All dependencies are bundled in the `lib` dire
 After generating the PRD markdown file, run the SVG generation script:
 
 ```bash
-node generate-svg.js path/to/prd-[project-name].md
+node generate-svg.js path/to/[requirement-name]/solarwire-prd.md
 ```
 
 **The script will:**
@@ -109,7 +121,7 @@ node generate-svg.js path/to/prd-[project-name].md
 - Generate two SVG files for each block:
   - `[page-name]-with-notes.svg` - Includes note annotations
   - `[page-name]-without-notes.svg` - Clean wireframe only
-- Save files to `.solarwire/assets/` directory
+- Save files to the same directory as the markdown file (the requirement folder)
 
 **Updating Dependencies:**
 
@@ -307,7 +319,7 @@ sequenceDiagram
 ```
 1. All elements must have coordinates @(x,y)
 2. Write attributes directly without brackets: w=100 h=40 (not [w=100 h=40])
-3. Text content must use double quotes: "Login" (not Login)
+3. Text content MUST use double quotes: "Login" (not Login)
 4. Attribute order: Content → Coordinates → Size → Other attributes → note
 ```
 
@@ -315,6 +327,7 @@ sequenceDiagram
 ```solarwire
 ["Login"] @(100,50) w=100 h=40 bg=#3498db c=white note="Submit login form"
 "Username" @(100,100)
+(("Avatar")) @(100,150) w=40  // Circle with text - MUST use double quotes
 ```
 
 **Incorrect Example:**
@@ -322,23 +335,57 @@ sequenceDiagram
 ["Login"]                    // ❌ No coordinates
 ["Login"] [w=100 h=40]       // ❌ Attributes in brackets
 ["Login"] @(100,50) w=100    // ❌ Missing height
+((Avatar)) @(100,50) w=40    // ❌ Text without double quotes - WRONG!
+(("Avatar")) @(100,50) w=40  // ✅ Correct - text in double quotes
 ```
+
+**⚠️ IMPORTANT: All text content MUST be wrapped in double quotes `""`**
+
+| Element | Correct | Incorrect |
+|---------|---------|-----------|
+| Rectangle | `["Button"]` | `[Button]` |
+| Circle | `(("Avatar"))` | `((Avatar))` |
+| Rounded | `("Card")` | `(Card)` |
+| Plain Text | `"Label"` | `Label` |
 
 #### 2. Element Selection Principles
 
 **Goal: Wireframes should be clean, clear, and close to actual page display**
 
+**Key Principles for Clean Wireframes:**
+1. **Use appropriate element types** - Match element shape to its real-world counterpart
+2. **Include realistic content** - Use actual placeholder text, not generic labels
+3. **Proper spacing** - Elements should have appropriate gaps (8-16px typical)
+4. **Visual hierarchy** - Important elements should be larger/prominent
+5. **Consistent styling** - Use consistent colors and sizes throughout
+
 | Scenario | Recommended Element | Example |
 |----------|---------------------|---------|
-| Button Actions | Rectangle `[]` | `["Login"] @(100,50) w=100 h=40 bg=#3498db c=white` |
+| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#3498db c=white` |
+| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#fff b=#ddd` |
 | Cards/Containers | Rounded Rectangle `()` | `("User Info Card") @(100,50) w=300 h=200` |
-| Avatars/Icon Buttons | Circle `(())` | `((Avatar)) @(100,50) w=40` |
+| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#ddd c=#666` |
+| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#f5f5f5` |
 | Labels/Text | Plain Text `""` | `"Username" @(100,50)` |
-| Input Fields | Rectangle + Placeholder Text | `["Enter username"] @(100,50) w=280 h=40 bg=#fff b=#ddd` |
-| Icons (no real image) | Placeholder `[?]` | `[?"Search"] @(100,50) w=32 h=32` |
-| Real Images | Image `<url>` | `<https://example.com/logo.png> @(100,50) w=40` |
+| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#fff b=#ddd c=#999` |
 | Dividers | Line `--` | `-- @(0,100)->(400,100) b=#eee` |
 | Data Tables | Table `##` | `## @(100,50) w=500 border=1` |
+
+**⚠️ CRITICAL: Text Content Syntax**
+
+| Element | Correct Syntax | Wrong Syntax |
+|---------|---------------|--------------|
+| Rectangle | `["Button Text"]` | `[Button Text]` ❌ |
+| Rounded | `("Card Title")` | `(Card Title)` ❌ |
+| Circle | `(("Avatar"))` | `((Avatar))` ❌ |
+| Plain Text | `"Label"` | `Label` ❌ |
+
+**Common Mistakes to Avoid:**
+- ❌ `((用户头像))` - Text without double quotes
+- ❌ `[Login]` - Text without double quotes
+- ❌ Using placeholder `[?]` for buttons (use `["Button Text"]` instead)
+- ❌ Using rectangle `[]` for plain labels (use `"Label"` instead)
+- ❌ Overcrowding elements - leave proper spacing
 
 **Do Not Abuse:**
 - ❌ Don't use placeholder `[?]` for buttons or text (use rectangle or plain text)
@@ -389,64 +436,166 @@ sequenceDiagram
 
 #### 5. Note Writing Guidelines
 
-**Core Principle: All element descriptions are integrated into SolarWire wireframe notes for "what you see is what you read"**
+**Core Principle: Notes describe functional behavior, not visual details**
 
 ---
 
-##### 1. Element-level Note
+##### 1. When to Write Notes
 
-**Every UI element should have detailed note description:**
+**Write notes for elements with functional behavior:**
+- Buttons (click actions, form submission)
+- Input fields (validation, constraints, error handling)
+- Links (navigation)
+- Checkboxes/Switches (state changes)
+- Dropdowns (selection behavior)
+- Interactive elements (hover, click, drag)
+
+**Skip notes for purely visual elements:**
+- Divider lines (`--`)
+- Container rectangles (background only)
+- Static labels without interaction
+- Decorative icons
+- Table headers (unless they have sorting/filtering behavior)
+- Column titles (unless they have special behavior)
+
+**⚠️ IMPORTANT: Notes must contain FUNCTIONAL information, not just element type labels**
+
+**❌ Bad Notes (Just element type labels - AVOID THESE):**
+```solarwire
+## @(260,460) w=1600 border=1 note="[Table]"              // ❌ Just says "Table" - no useful info
+# bg=#fafafa note="[Header Row]"                          // ❌ Just says "Header Row" - no useful info
+"Column Title" @(280,470) w=180 note="[Column Title]"     // ❌ Just says "Column Title" - no useful info
+["Button"] @(100,50) note="[Primary Button]"              // ❌ Just says "Primary Button" - no behavior info
+```
+
+**✅ Good Notes (Contain functional information):**
+```solarwire
+## @(260,460) w=1600 border=1 note="[Table] Operation logs.
+- Data source: System audit log
+- Default 20 items per page
+- Supports filtering by date range and operation type
+- Columns: Time, Operator, Action, Details"
+
+["Submit"] @(100,50) w=100 h=40 note="[Primary Button]
+- Validates form data on click
+- Success: Save data and close modal
+- Failure: Display validation errors"
+
+["Username"] @(100,100) w=280 h=40 note="[Input Field]
+- Required field
+- Format: email or phone number
+- Max length: 50 characters"
+```
+
+**✅ No Note Needed (No functional behavior to describe):**
+```solarwire
+## @(260,460) w=1600 border=1           // Table - no note needed if no special behavior
+  # bg=#fafafa                          // Header row - no note needed
+    "Time"                              // Column title - no note needed
+    "Operator"
+    "Action"
+  #
+    "2024-01-15 10:30"
+    "John Doe"
+    "Login"
+```
+- Spacing elements
+
+---
+
+##### 2. What to Write in Notes
+
+**Focus on functional behavior:**
 
 ```solarwire
 ["Login"] @(100,50) w=100 h=40 note="[Primary Button]
 - Validates username and password on click
-- Success: Redirect to homepage, save login state
-- Failure: Display 'Invalid username or password', clear password field
-- Disabled when: username or password is empty
-- Debounce: Button disabled for 3 seconds after click, or until request returns"
+- Success: Redirect to homepage
+- Failure: Display error message, clear password field
+- Disabled when: username or password is empty"
 
 ["Username"] @(100,100) w=280 h=40 note="[Input Field]
-- Supports phone number or email login
-- Automatically trims leading/trailing spaces
-- Format validation: 11-digit phone number or email format
-- Error message: Input field turns red on format error, display 'Please enter a valid phone number or email' below
-- Max length: 50 characters"
+- Supports phone number or email
+- Format validation: 11-digit phone or email format
+- Max length: 50 characters
+- Error: Display 'Invalid format' below on validation failure"
 ```
 
-**Element-level Note Must Include (as needed):**
+**Element-level Note Should Include (as needed):**
 1. **Element Type**: [Button], [Input Field], [Link], [Checkbox], etc.
 2. **Functional Behavior**: What happens on click/operation
 3. **Success/Failure Scenarios**: Handling of different results
 4. **Input Constraints**: Format, length, required, etc.
-5. **Boundary Conditions**: Empty, too long, special characters, etc.
-6. **State Changes**: Disabled conditions, loading states, etc.
-7. **Error Messages**: What messages to display in what situations
-
----
-
-##### 2. Note Category Tags
-
-**Use 【】 tags to identify element types:**
-
-| Tag | Usage | Example |
-|-----|-------|---------|
-| 【Primary Button】 | Primary action button | `note="[Primary Button]..."` |
-| 【Secondary Button】 | Secondary action button | `note="[Secondary Button]..."` |
-| 【Input Field】 | Text input field | `note="[Input Field]..."` |
-| 【Dropdown】 | Dropdown select | `note="[Dropdown]..."` |
-| 【Checkbox】 | Checkbox | `note="[Checkbox]..."` |
-| 【Link】 | Text link | `note="[Link]..."` |
-| 【Icon】 | Icon button | `note="[Icon]..."` |
-| 【Card】 | Card container | `note="[Card]..."` |
-| 【Table】 | Data table | `note="[Table]..."` |
+5. **State Changes**: Disabled conditions, loading states, etc.
+6. **Error Messages**: What messages to display
 
 ---
 
 ##### 3. ❌ Content Forbidden in Notes
 
-- ❌ Visual details: Colors, fonts, border-radius, shadows, animation effects
-- ❌ Technical implementation: API names, database fields, encryption methods, framework names
-- ❌ Size values: Width, height, spacing (wireframe already shows these)
+**NEVER include these in notes:**
+
+| Forbidden | Example (Don't Write) |
+|-----------|----------------------|
+| Colors | "Button is blue", "Text color #333" |
+| Fonts | "Font size 14px", "Bold text" |
+| Sizes | "Width 100px", "Height 40px" |
+| Spacing | "Margin 16px", "Padding 8px" |
+| Border | "Border radius 8px", "1px solid #ddd" |
+| Shadows | "Box shadow 0 2px 4px" |
+| Animations | "Fade in 0.3s", "Slide from left" |
+| Technical | "API: /api/login", "Database field: user_id" |
+
+**Why?** These are visual/design decisions that:
+- The wireframe already shows visually
+- Will be decided by designers later
+- May change during implementation
+
+---
+
+##### 4. Note Category Tags
+
+**Use 【】 tags to identify element types:**
+
+| Tag | Usage | Needs Note? |
+|-----|-------|-------------|
+| 【Primary Button】 | Primary action button | Yes |
+| 【Secondary Button】 | Secondary action button | Yes |
+| 【Input Field】 | Text input field | Yes |
+| 【Dropdown】 | Dropdown select | Yes |
+| 【Checkbox】 | Checkbox | Yes |
+| 【Link】 | Text link | Yes |
+| 【Icon】 | Icon button | If interactive |
+| 【Card】 | Card container | If has behavior |
+| 【Table】 | Data table | Yes |
+
+---
+
+##### 5. Examples: Good vs Bad Notes
+
+**❌ Bad Note (Too much visual detail):**
+```solarwire
+["Login"] @(100,50) w=100 h=40 bg=#3498db c=white r=8 note="[Primary Button]
+- Blue background (#3498db), white text
+- Border radius 8px, height 40px
+- Font size 16px, bold
+- API: POST /api/auth/login
+- On click: validate and submit"
+```
+
+**✅ Good Note (Functional behavior only):**
+```solarwire
+["Login"] @(100,50) w=100 h=40 bg=#3498db c=white note="[Primary Button]
+- Validates username and password on click
+- Success: Redirect to homepage, save login state
+- Failure: Display 'Invalid credentials' error
+- Disabled when: username or password is empty"
+```
+
+**✅ No Note Needed (Visual element):**
+```solarwire
+-- @(0,100)->(400,100) b=#eee
+```
 
 ---
 
@@ -454,7 +603,7 @@ sequenceDiagram
 
 ### Generation Requirements
 
-Each page needs to generate two SVG files:
+Each page/tab/modal needs to generate two SVG files:
 
 1. **With Notes Version** (`[page-name]-with-notes.svg`)
    - Contains note descriptions for all elements
@@ -469,7 +618,7 @@ Each page needs to generate two SVG files:
 - Use SolarWire renderer to convert solarwire code blocks in `.md` to SVG
 - Ensure all elements use syntax supported by existing rules
 - SVG dimensions match container rectangle dimensions
-- Output path: `{{outputDir}}/assets/[page-name]/`
+- Output path: Same directory as the `solarwire-prd.md` file (the requirement folder)
 
 ---
 
@@ -491,13 +640,49 @@ Each page needs to generate two SVG files:
 |--------|-------|---------|
 | `[]` | Button, input field, container | `["Confirm"] @(100,50) w=80 h=36` |
 | `()` | Card, rounded container | `("Tip Card") @(100,50) w=200 h=100` |
-| `(())` | Avatar, circular icon | `((Avatar)) @(100,50) w=40` |
+| `(())` | Avatar, circular icon | `(("Avatar")) @(100,50) w=40` |
 | `""` | Plain text, label | `"Username" @(100,50)` |
 | `[?]` | Icon placeholder | `[?"Search"] @(100,50) w=32 h=32` |
 | `<url>` | Real image | `<https://example.com/logo.png> @(100,50) w=40` |
 | `--` | Divider line | `-- @(0,100)->(400,100)` |
 | `##` | Table container | `## @(100,50) w=500 border=1` |
-| `#` | Table row | `# bg=#eee` |
+| `#` | Table row (indented) | `  # bg=#eee` |
+
+### ⚠️ CRITICAL: Text Content MUST Use Double Quotes
+
+**All text content inside elements MUST be wrapped in double quotes `""`:**
+
+| Element | ✅ Correct | ❌ Wrong |
+|---------|-----------|----------|
+| Rectangle | `["Login"]` | `[Login]` |
+| Rounded | `("Card")` | `(Card)` |
+| Circle | `(("Avatar"))` | `((Avatar))` |
+| Plain Text | `"Label"` | `Label` |
+
+### Table Syntax (Indentation Required)
+
+**Tables use strict indentation:**
+
+```solarwire
+## @(x,y) w=width border=1
+  # bg=#eee                    // Header row (indented 2 spaces)
+    "Column 1"                 // Cell (indented 4 spaces)
+    "Column 2"
+    "Column 3"
+  #                            // Data row (indented 2 spaces)
+    "Data 1"                   // Cell (indented 4 spaces)
+    "Data 2"
+    "Data 3"
+  # bg=#f9f9f9                 // Alternating row color
+    "Data 4"
+    "Data 5"
+    ["Edit"] ["Delete"]        // Action buttons in cell
+```
+
+**⚠️ Indentation Rules:**
+- Table `##` - No indentation
+- Row `#` - 2 spaces indentation
+- Cell content - 4 spaces indentation
 
 ### Common Attributes
 
@@ -512,26 +697,230 @@ Each page needs to generate two SVG files:
 | `bold` | Bold text | `bold` |
 | `note` | Functional description | `note="Click to submit form"` |
 
+### Table Row Attributes
+
+**Table rows (`#`) support the following attributes:**
+- `bg` – Background color for the entire row
+- `c`, `size`, `bold`, `italic`, `align` – Text style defaults for all cells in the row
+
+**Important:**
+- `note` attribute is **NOT supported** on table rows
+- Row-level attributes serve as defaults for all cells in that row
+- Individual cells can override row-level attributes with their own values
+
+**Example:**
+```solarwire
+## @(100,50) w=500 border=1
+  # bg=#4CAF50 c=white bold      // Header row: green bg, white bold text
+    "ID"
+    "Name"
+    "Actions"
+  # bg=#f5f5f5                    // Data row: light gray bg
+    "1"
+    "John Doe" c=#333             // Override: darker text
+    ["Edit"] ["Delete"]
+```
+
+---
+
+## Creating Clean, Realistic Wireframes
+
+**Goal: Wireframes should look like actual UI, clean and professional**
+
+### Key Principles
+
+1. **Use Realistic Placeholder Content**
+   - Use actual placeholder text, not generic labels
+   - Example: `["Enter your email..."]` instead of `["Input"]`
+   - Example: `["Login"]` instead of `["Button"]`
+
+2. **Proper Visual Hierarchy**
+   - Primary buttons: Colored background (`bg=#3498db c=white`)
+   - Secondary buttons: Border only (`bg=#fff b=#ddd`)
+   - Important elements should be larger/prominent
+
+3. **Appropriate Element Types**
+   - Buttons → Rectangle `[]` with text
+   - Cards → Rounded rectangle `()`
+   - Avatars → Circle with letter `(("A"))`
+   - Labels → Plain text `""`
+   - Inputs → Rectangle with placeholder
+
+4. **Consistent Spacing**
+   - Leave proper gaps between elements (8-16px typical)
+   - Group related elements together
+   - Use consistent margins throughout
+
+5. **Clean Layout**
+   - Don't overcrowd elements
+   - Use dividers `--` to separate sections
+   - Container rectangle should contain all elements
+
+### Example: Clean Login Form
+
+```solarwire
+!title="Login"
+!size=14
+!bg=#f5f7fa
+
+// Container
+[] @(0,0) w=400 h=600 bg=#fff
+
+// Header
+"Welcome Back" @(100,80) size=24 bold
+"Please sign in to continue" @(100,115) c=#666
+
+// Form
+"Email" @(50,180)
+["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd c=#999
+
+"Password" @(50,280)
+["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd c=#999
+
+["Remember me"] @(50,370) w=16 h=16 note="[Checkbox] Stay logged in for 7 days"
+"Remember me" @(74,372)
+
+["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16 note="[Primary Button] Submit login form"
+
+"Don't have an account?" @(115,500) c=#666
+"Sign up" @(270,500) c=#3498db note="[Link] Navigate to registration page"
+```
+
+### Common Mistakes to Avoid
+
+| Mistake | Wrong | Correct |
+|---------|-------|---------|
+| Generic labels | `["Button"]` | `["Sign In"]` |
+| Missing placeholder | `[""]` | `["Enter email..."]` |
+| Wrong element type | `"Submit"` (text) | `["Submit"]` (button) |
+| Text without quotes | `((Avatar))` | `(("Avatar"))` |
+| Overcrowding | Elements too close | Proper spacing |
+
+---
+
+## Scenario Specifications
+
+### Mobile App
+
+**Characteristics:**
+- Narrow canvas (375-430px)
+- Vertical layout, bottom navigation
+- Touch-friendly large buttons (min 44x44px)
+
+**Container Size:** `w=375 h=812` (iPhone X) or `w=390 h=844` (iPhone 12+)
+
+**Element Sizes:**
+- Button height: 44-56px
+- Input field height: 44-52px
+- Text size: 14px (min), 18-22px (titles)
+- Element spacing: 8-16px, Page margins: 16-24px
+
+**Common Patterns:**
+- Login: Logo + Title + Form + Button (full width)
+- List: Search bar + List items + Pull to refresh
+- Detail: Back button + Title + Content + Bottom action
+
+**Mobile-specific Fields:**
+| Field | Type | Description |
+|-------|------|-------------|
+| deviceToken | string | Device push token |
+| deviceId | string | Device unique identifier |
+| osType | string | iOS/Android |
+| appVersion | string | App version |
+
+**Mobile-specific Rules:**
+- Support one-tap login, third-party login (WeChat, Apple ID)
+- Token validity: 7 days
+- Push notifications can be disabled
+
+---
+
+### Web Client
+
+**Characteristics:**
+- Wide canvas (1200-1440px)
+- Horizontal layout, top navigation
+- Moderate button/input sizes
+
+**Container Size:** `w=1440 h=900`
+
+**Element Sizes:**
+- Button height: 36-48px, width: min 80px
+- Input field height: 36-44px, width: 200-400px
+- Text size: 12-16px, titles: 18-24px
+- Element spacing: 12-24px, Page margins: 24-48px
+
+**Common Patterns:**
+- Login: Centered layout, Logo + Form + Button
+- List: Search/filter bar + Data table + Pagination
+- Detail: Breadcrumb + Title + Content cards + Actions
+
+**Web-specific Fields:**
+| Field | Type | Description |
+|-------|------|-------------|
+| sessionId | string | Session ID |
+| userAgent | string | Browser info |
+| referrer | string | Source page |
+
+**Web-specific Rules:**
+- Support password, QR code, third-party login
+- Session validity: 30 min inactivity auto-expire
+- Browsers: Chrome 90+, Safari 14+, Firefox 88+, Edge 90+
+
+---
+
+### Admin Dashboard
+
+**Characteristics:**
+- Very wide canvas (1440-1920px)
+- Fixed left sidebar (200-280px)
+- Data-intensive (tables, charts, cards)
+- Many action buttons
+
+**Container Size:** `w=1920 h=1080`
+
+**Element Sizes:**
+- Button height: 32-40px
+- Input field height: 32-36px
+- Table row height: 40-48px
+- Sidebar width: 200-280px
+- Text size: 12-14px, titles: 16-20px
+- Element spacing: 16-32px, Page margins: 24-32px
+
+**Common Patterns:**
+- List: Search/filter + Batch actions + Table + Pagination
+- Statistics: Multiple stat cards + Charts + Time selector
+- Form: Breadcrumb + Multi-column form + Save/Cancel
+
+**Admin-specific Fields:**
+| Field | Type | Description |
+|-------|------|-------------|
+| operatorId | string | Operator ID |
+| operateTime | datetime | Operation time |
+| operateType | string | Add/Edit/Delete/Export |
+| ipAddress | string | Operation IP |
+
+**Admin-specific Rules:**
+- Super Admin: Full permissions
+- Admin: View/Edit, no Delete
+- Operator: View/Export only
+- Pagination: 20 items/page, max 10000 export
+- Sensitive operations require confirmation
+- Login timeout: 30 min inactivity
+
 ---
 
 ## Important Reminders
 
 1. **Confirm Requirements Step by Step** - Don't rush to generate, fully understand requirements first
-2. **What You See Is What You Read** - All element descriptions integrated into wireframe notes for intuitive reading
-3. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
-4. **No Brackets for Attributes** - Write directly `w=100 h=40`
-5. **Note Category Tags** - Use 【】 tags to identify element types ([Primary Button], [Input Field], [Link], etc.)
-6. **Notes Should Be Detailed But Exclude Visual/Technical Details** - Functional behavior, success/failure scenarios, input constraints, error messages
-7. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
-8. **Layout Close to Reality** - Wireframes should reflect actual page structure
-9. **Separate Modals/States/Tabs** - Each independent view in separate code block
-10. **Container Rectangle Required** - First element of each page is white background container
-11. **Generate Dual SVG Versions** - With notes and without notes versions
-
----
-
-## Reference Files
-
-- `prompts/mobile-app.md` - Mobile app scenario supplement
-- `prompts/web-client.md` - Web client scenario supplement
-- `prompts/web-admin.md` - Admin dashboard scenario supplement
+2. **Notes Describe Function, Not Visuals** - Focus on behavior, avoid colors/sizes/fonts in notes
+3. **Not Every Element Needs a Note** - Skip notes for dividers, containers, static labels, decorative elements, table headers, column titles
+4. **Notes Must Contain Functional Information** - Never write notes that just say "[Button]", "[Table]", "[Header Row]" - these contain no useful information
+5. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
+6. **No Brackets for Attributes** - Write directly `w=100 h=40`
+7. **Note Category Tags** - Use 【】 tags to identify element types ([Primary Button], [Input Field], [Link], etc.)
+8. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
+9. **Layout Close to Reality** - Wireframes should reflect actual page structure
+10. **Separate Modals/States/Tabs** - Each independent view in separate code block
+11. **Container Rectangle Required** - First element of each page is white background container
+12. **Generate Dual SVG Versions** - With notes and without notes versions

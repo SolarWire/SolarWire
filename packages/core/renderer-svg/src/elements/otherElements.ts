@@ -456,6 +456,24 @@ function renderTableRow(
   const bg = getColorAttribute(element.attributes, context.globalDefaults, 'bg', 'transparent');
   const note = element.attributes['note'];
   
+  if (note) {
+    throw new Error(
+      `Table row element does not support "note" attribute.\n` +
+      `Reason: Notes are only supported on individual cell elements, not on row elements.\n` +
+      `Solution: Remove the "note" attribute from the row element and add notes to individual cells if needed.`
+    );
+  }
+  
+  const rowAttributes = element.attributes;
+  const rowDefaults: Record<string, string> = {};
+  
+  const inheritableAttrs = ['c', 'bg', 'b', 's', 'size', 'bold', 'italic', 'align'];
+  inheritableAttrs.forEach(attr => {
+    if (rowAttributes[attr] !== undefined) {
+      rowDefaults[attr] = rowAttributes[attr];
+    }
+  });
+  
   const svgParts: string[] = [];
   let currentX = pos.x;
   let maxHeight = 0;
@@ -463,8 +481,11 @@ function renderTableRow(
   
   const cells = element.children || [];
   cells.forEach(cell => {
+    const mergedAttributes = { ...rowDefaults, ...cell.attributes };
+    const modifiedCell = { ...cell, attributes: mergedAttributes };
+    
     const cellContext = createChildContext(context, currentX, pos.y);
-    const result = renderChild(cell as any, cellContext);
+    const result = renderChild(modifiedCell as any, cellContext);
     cellResults.push(result);
     maxHeight = Math.max(maxHeight, result.bounds.height);
     
@@ -523,10 +544,6 @@ function renderTableRow(
   };
   
   updateLastElementBounds(context, bounds);
-  
-  if (note) {
-    svgParts.push(`<title>${note}</title>`);
-  }
   
   return {
     svg: svgParts.join(''),

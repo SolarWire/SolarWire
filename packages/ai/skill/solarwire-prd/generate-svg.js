@@ -119,20 +119,24 @@ function generateSVGs(mdFilePath, outputDir) {
 
 /**
  * Process a PRD markdown file and generate SVGs
+ * 
+ * Output structure:
+ * [requirement-name]/
+ * ├── solarwire-prd.md
+ * ├── page-1-with-notes.svg
+ * ├── page-1-without-notes.svg
+ * └── ...
  */
 function processPRDFile(mdFilePath) {
   const mdDir = path.dirname(mdFilePath);
-  const mdFileName = path.basename(mdFilePath, '.md');
   
-  // Output directory: .solarwire/assets/
-  const outputBaseDir = path.join(mdDir, '.solarwire', 'assets');
+  // Output directory: Same as the markdown file directory
+  // The markdown file should be in a requirement-named folder
+  const outputDir = mdDir;
   
-  // Ensure output directory exists
-  if (!fs.existsSync(outputBaseDir)) {
-    fs.mkdirSync(outputBaseDir, { recursive: true });
-  }
+  console.log(`Output directory: ${outputDir}`);
   
-  generateSVGs(mdFilePath, outputBaseDir);
+  generateSVGs(mdFilePath, outputDir);
 }
 
 /**
@@ -147,11 +151,17 @@ function main() {
     console.log('Usage: node generate-svg.js <path-to-md-file>');
     console.log('');
     console.log('Example:');
-    console.log('  node generate-svg.js ./prd-my-project.md');
-    console.log('  node generate-svg.js ../.solarwire/prd-my-project.md');
+    console.log('  node generate-svg.js ./user-login-system/solarwire-prd.md');
+    console.log('  node generate-svg.js ./order-management/solarwire-prd.md');
     console.log('');
     console.log('Output:');
-    console.log('  SVG files will be saved to .solarwire/assets/ directory');
+    console.log('  SVG files will be saved to the same directory as the markdown file');
+    console.log('');
+    console.log('Expected file structure:');
+    console.log('  [requirement-name]/');
+    console.log('  ├── solarwire-prd.md');
+    console.log('  ├── page-name-with-notes.svg');
+    console.log('  └── page-name-without-notes.svg');
     process.exit(0);
   }
   
