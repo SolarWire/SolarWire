@@ -2,12 +2,25 @@
 
 This is a complete, ready-to-use SolarWire PRD Generator Skill package.
 
+## Portability
+
+**This skill is fully self-contained and portable.** You can copy the entire `solarwire-prd` folder to any AI tool or project and it will work immediately.
+
+All dependencies are bundled in the `lib` directory:
+- `lib/parser/` - SolarWire parser (from @solarwire/parser)
+- `lib/renderer-svg/` - SVG renderer (from @solarwire/renderer-svg)
+
 ## Directory Structure
 
 ```
 solarwire-prd/
 ├── SKILL.md             # Main skill definition file
 ├── README.md            # Documentation (this file)
+├── package.json         # Package metadata
+├── generate-svg.js      # SVG generation script (portable)
+├── lib/                 # Bundled dependencies (portable)
+│   ├── parser/          # SolarWire parser
+│   └── renderer-svg/    # SVG renderer
 └── prompts/             # Prompt files directory
     ├── mobile-app.md    # Mobile app scenario
     ├── web-client.md    # Web client scenario
@@ -22,73 +35,44 @@ solarwire-prd/
 - **SolarWire Wireframes**: Each page includes complete information and element descriptions
 - **What You See Is What You Read**: All element descriptions integrated into wireframe notes for intuitive reading
 - **Dual SVG Output**: With notes and without notes versions
-- **Supports Three Scenarios**: Mobile App, Web Client, Admin Dashboard
+- **Fully Portable**: Copy the folder anywhere and it works
 
-## Output File Structure
+## Usage
 
+### 1. Copy to Your AI Tool
+
+Simply copy the entire `solarwire-prd` folder to your AI tool's skill directory.
+
+### 2. Generate PRD
+
+Use the skill with your AI assistant to generate PRD documents.
+
+### 3. Generate SVG Files
+
+After generating the PRD markdown file, run the SVG generation script:
+
+```bash
+node generate-svg.js path/to/prd-[project-name].md
 ```
-.solarwire/
-├── prd-[project-name].md           # Main PRD document
-└── assets/
-    └── [page-name]/
-        ├── [page-name]-with-notes.svg    # Wireframe with notes
-        └── [page-name]-without-notes.svg # Wireframe without notes
+
+**Output:**
+- `[page-name]-with-notes.svg` - Wireframe with note annotations
+- `[page-name]-without-notes.svg` - Clean wireframe without notes
+- Files are saved to `.solarwire/assets/` directory
+
+## Updating Dependencies
+
+If you need to update the bundled dependencies:
+
+```bash
+# Build the latest parser and renderer
+cd SolarWire/packages/core/parser && npm run build
+cd SolarWire/packages/core/renderer-svg && npm run build
+
+# Copy to skill lib directory
+cp -r SolarWire/packages/core/parser/dist/* solarwire-prd/lib/parser/
+cp -r SolarWire/packages/core/renderer-svg/dist/* solarwire-prd/lib/renderer-svg/
 ```
-
-## Workflow
-
-1. **Requirements Collection**: Confirm product type (Mobile/Web/Admin)
-2. **Feature Confirmation**: Confirm core features and pages
-3. **Detailed Requirements**: Confirm special requirements and details
-4. **Generate Output**: Generate complete PRD document and wireframes
-
-## PRD Document Structure
-
-The generated PRD document includes the following sections:
-
-1. **Product Overview**: Background, target users, core value
-2. **Feature Scope**: Feature list, feature boundary
-3. **Business Flow**: Mermaid flowcharts and sequence diagrams
-4. **Page Design**: Page list
-5. **Page Details**: Complete description of each page
-   - **Page Overview**: One sentence describing the core functionality
-   - **SolarWire Wireframe**: Contains all descriptions
-     - Element notes: Detailed functional description for each UI element
-6. **Non-functional Requirements**: Performance, security, compatibility
-7. **Appendix**: Glossary, references
-
-## Core Specifications
-
-1. **Confirm Requirements Step by Step**: Don't rush to generate, fully understand requirements first
-2. **What You See Is What You Read**: All element descriptions integrated into wireframe notes
-3. **Note Category Tags**: Use 【】 tags to identify element types ([Primary Button], [Input Field], [Link], etc.)
-4. **Syntax Rules**: All elements must have coordinates, attributes without brackets
-5. **Element Selection**: Buttons use rectangles, labels use text, only icons use placeholders
-6. **Page Organization**: Modals/states/tabs must use separate SolarWire fragments
-7. **Container Rectangle**: Every page must have a container rectangle
-8. **Dual SVG Versions**: Generate with notes and without notes versions
-
-## Supported Scenarios
-
-### Mobile App (mobile-app.md)
-- Canvas width: 375-430px
-- Vertical layout
-- Touch-friendly large buttons
-- Bottom navigation bar
-
-### Web Client (web-client.md)
-- Canvas width: 1200-1440px
-- Horizontal layout
-- Top navigation bar
-
-### Admin Dashboard (web-admin.md)
-- Canvas width: 1440-1920px
-- Left sidebar
-- Data tables, statistics cards
-
-## Preview Method
-
-Use VSCode SolarWire extension to preview solarwire code blocks in `.md` files in real-time.
 
 ## File Naming Convention
 

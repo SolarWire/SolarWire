@@ -1,0 +1,37 @@
+{
+  "name": "solarwire-prd-skill",
+  "version": "1.0.0",
+  "description": "SolarWire PRD Generator Skill - Generate complete PRD documents with wireframes and SVG exports",
+  "main": "generate-svg.js",
+  "bin": {
+    "solarwire-prd-svg": "./generate-svg.js"
+  },
+  "scripts": {
+    "svg": "node generate-svg.js"
+  },
+  "keywords": [
+    "solarwire",
+    "prd",
+    "wireframe",
+    "svg",
+    "documentation",
+    "ai-skill"
+  ],
+  "author": "SolarWire Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "generate-svg.js",
+    "prompts/",
+    "lib/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solarwire/solarwire",
+    "directory": "packages/ai/skill/solarwire-prd"
+  }
+}

@@ -41,7 +41,7 @@ Mobile apps typically have the following characteristics:
 !gap=12
 
 // Container Rectangle - iPhone 12 size
-[] @(0,0) w=390 h=844 bg=#fff hide
+[] @(0,0) w=390 h=844 bg=#fff
 
 // Top status bar/navigation bar
 ["<"] @(16,44) w=44 h=44 note="[Icon] Return to previous page"

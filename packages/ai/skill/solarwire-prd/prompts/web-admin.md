@@ -43,7 +43,7 @@ Admin dashboards typically have the following characteristics:
 !gap=16
 
 // Container Rectangle - Admin Dashboard
-[] @(0,0) w=1920 h=1080 bg=#fff hide
+[] @(0,0) w=1920 h=1080 bg=#fff
 
 // Left sidebar
 ["Logo"] @(0,0) w=240 h=60 bg=#f5f5f5 note="[Icon] Click to return to homepage"

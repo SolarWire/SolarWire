@@ -264,12 +264,27 @@ function renderTableElement(
   
   rows.forEach((row, rowIndex) => {
     const cells = (row as any).children || [];
-    cells.forEach((cell: any) => {
+    cells.forEach((cell: any, cellIndex: number) => {
       if ('w' in cell.attributes || 'h' in cell.attributes) {
-        throw new Error('Table cell elements cannot specify w or h attributes');
+        const attrName = 'w' in cell.attributes ? 'w' : 'h';
+        const attrValue = cell.attributes[attrName];
+        throw new Error(
+          `Table cell element cannot specify "${attrName}" attribute.\n` +
+          `Cell content: "${cell.content || ''}"\n` +
+          `Row: ${rowIndex + 1}, Cell: ${cellIndex + 1}\n` +
+          `Found: ${attrName}=${attrValue}\n` +
+          `Reason: Table cell dimensions are automatically calculated based on table width and row height.\n` +
+          `Solution: Remove the "${attrName}" attribute from this cell element.`
+        );
       }
       if (cell.type === 'line') {
-        throw new Error('Table cell elements cannot be lines');
+        throw new Error(
+          `Table cell element cannot be a line element.\n` +
+          `Row: ${rowIndex + 1}, Cell: ${cellIndex + 1}\n` +
+          `Found: line element\n` +
+          `Reason: Lines are not supported inside table cells.\n` +
+          `Solution: Use text ("..."), rectangle ([...]), rounded rectangle ((...)), circle (((...))), or placeholder ([?...]) elements instead.`
+        );
       }
       const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
       const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;

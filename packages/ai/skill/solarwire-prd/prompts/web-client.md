@@ -39,7 +39,7 @@ Web client applications typically have the following characteristics:
 !gap=16
 
 // Container Rectangle - Web Client
-[] @(0,0) w=1440 h=900 bg=#fff hide
+[] @(0,0) w=1440 h=900 bg=#fff
 
 // Top navigation bar
 ["Logo"] @(50,0) w=120 h=60 note="[Icon] Click to return to homepage"

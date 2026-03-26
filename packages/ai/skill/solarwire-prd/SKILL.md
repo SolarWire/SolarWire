@@ -94,6 +94,39 @@ After confirming requirements, generate documents with the following structure:
 
 ---
 
+## SVG Generation
+
+This skill is **fully portable**. All dependencies are bundled in the `lib` directory.
+
+After generating the PRD markdown file, run the SVG generation script:
+
+```bash
+node generate-svg.js path/to/prd-[project-name].md
+```
+
+**The script will:**
+- Extract all `solarwire` code blocks from the markdown file
+- Generate two SVG files for each block:
+  - `[page-name]-with-notes.svg` - Includes note annotations
+  - `[page-name]-without-notes.svg` - Clean wireframe only
+- Save files to `.solarwire/assets/` directory
+
+**Updating Dependencies:**
+
+If you need to update the bundled dependencies:
+
+```bash
+# Build the latest parser and renderer
+cd SolarWire/packages/core/parser && npm run build
+cd SolarWire/packages/core/renderer-svg && npm run build
+
+# Copy to skill lib directory
+cp -r SolarWire/packages/core/parser/dist/* solarwire-prd/lib/parser/
+cp -r SolarWire/packages/core/renderer-svg/dist/* solarwire-prd/lib/renderer-svg/
+```
+
+---
+
 ## PRD Document Structure
 
 ```markdown
@@ -335,7 +368,7 @@ sequenceDiagram
 !bg=#f5f7fa
 !r=8
 
-// Container Rectangle - Represents screen/device boundary, placed at the bottom
+// Container Rectangle - Represents screen/device boundary, placed at the beginning
 [] @(0,0) w=375 h=812 bg=#fff
 
 // Page content...
@@ -343,7 +376,7 @@ sequenceDiagram
 
 **Container Rectangle Specifications:**
 - Place at the beginning of the code block
-- Use `[]` rectangle (don't write text content)
+- Use `[]` rectangle (don't display text content)
 - `bg=#fff` white background
 - Dimensions by scenario:
   - Mobile: `w=375 h=812` (iPhone X) or `w=390 h=844` (iPhone 12+)
