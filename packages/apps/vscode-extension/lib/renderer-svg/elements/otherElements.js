@@ -222,6 +222,16 @@ function renderTableElement(element, context, pos, renderChild) {
     let estimatedMaxColCount = 0;
     let estimatedMaxRowSpan = 0;
     rows.forEach((row, rowIndex) => {
+        const rowNote = row.attributes?.['note'];
+        if (rowNote) {
+            throw new Error(`Table row element does not support "note" attribute.\n` +
+                `Row: ${rowIndex + 1}\n` +
+                `Found: note="${rowNote}"\n` +
+                `Reason: Notes are only supported on individual cell elements, not on row elements.\n` +
+                `Solution: Remove the "note" attribute from the row element and add notes to individual cells if needed.`);
+        }
+    });
+    rows.forEach((row, rowIndex) => {
         const cells = row.children || [];
         cells.forEach((cell, cellIndex) => {
             if ('w' in cell.attributes || 'h' in cell.attributes) {

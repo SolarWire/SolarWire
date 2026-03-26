@@ -321,6 +321,9 @@ SolarWire/
 
 ## Version History
 
+### v1.5.1 (2026-03-26)
+- ✅ **Table row note error** - 修复表格行 note 属性报错功能，现在会正确抛出错误提示
+
 ### v1.5.0 (2026-03-26)
 - ✅ **Project restructuring** - 重新组织项目结构（packages/ai、packages/apps、packages/core、packages/example）
 - ✅ **Table syntax restored** - 恢复表格语法（## 和 #）
