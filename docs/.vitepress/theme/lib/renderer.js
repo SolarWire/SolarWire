@@ -2,7 +2,8 @@
 // Bundled from @solarwire/renderer-svg
 
 function escapeHtml(text) {
-  return text
+  if (!text) return '';
+  return String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
