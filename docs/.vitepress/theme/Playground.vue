@@ -12,12 +12,12 @@ const defaultCode = `!title="Login Page"
 "Please sign in" @(140,115) c=#666
 
 "Email" @(50,180)
-["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd
+["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd note="Email input field"
 
 "Password" @(50,280)
-["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd
+["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd note="Password input field"
 
-["Sign In"] @(50,420) w=300 h=48 bg=#A8B1FF c=white size=16
+["Sign In"] @(50,420) w=300 h=48 bg=#A8B1FF c=white size=16 note="Submit login form"
 
 "No account?" @(100,500) c=#666
 "Sign up" @(260,500) c=#A8B1FF`
@@ -28,6 +28,11 @@ const error = ref('')
 const showNotes = ref(true)
 const loading = ref(false)
 const loadError = ref('')
+const scale = ref(1)
+const panX = ref(0)
+const panY = ref(0)
+const isDragging = ref(false)
+const dragStart = ref({ x: 0, y: 0 })
 
 let debounceTimer = null
 
@@ -65,6 +70,35 @@ function copyCode() {
   navigator.clipboard.writeText(code.value)
 }
 
+function zoomIn() {
+  scale.value = Math.min(scale.value * 1.2, 3)
+}
+
+function zoomOut() {
+  scale.value = Math.max(scale.value / 1.2, 0.1)
+}
+
+function resetZoom() {
+  scale.value = 1
+  panX.value = 0
+  panY.value = 0
+}
+
+function startDrag(e) {
+  isDragging.value = true
+  dragStart.value = { x: e.clientX - panX.value, y: e.clientY - panY.value }
+}
+
+function onDrag(e) {
+  if (!isDragging.value) return
+  panX.value = e.clientX - dragStart.value.x
+  panY.value = e.clientY - dragStart.value.y
+}
+
+function endDrag() {
+  isDragging.value = false
+}
+
 const examples = [
   {
     name: 'Login Form',
@@ -77,12 +111,12 @@ const examples = [
 "Please sign in" @(140,115) c=#666
 
 "Email" @(50,180)
-["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd
+["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd note="Email input field"
 
 "Password" @(50,280)
-["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd
+["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd note="Password input field"
 
-["Sign In"] @(50,420) w=300 h=48 bg=#A8B1FF c=white size=16`
+["Sign In"] @(50,420) w=300 h=48 bg=#A8B1FF c=white size=16 note="Submit login form"`
   },
   {
     name: 'Dashboard',
@@ -100,11 +134,11 @@ const examples = [
 "Users" @(20,140) c=#aaa
 "Settings" @(20,180) c=#aaa
 
-[] @(220,20) w=180 h=100 bg=#fff r=8
+[] @(220,20) w=180 h=100 bg=#fff r=8 note="Total users card"
 "Total Users" @(240,40) c=#666
 "12345" @(240,70) size=24 bold
 
-[] @(420,20) w=180 h=100 bg=#fff r=8
+[] @(420,20) w=180 h=100 bg=#fff r=8 note="Revenue card"
 "Revenue" @(440,40) c=#666
 "45678" @(440,70) size=24 bold`
   },
@@ -123,11 +157,11 @@ const examples = [
 
 "Good Morning!" @(20,130) size=20 bold
 
-[] @(20,180) w=160 h=80 bg=#e8f5e9 r=12
+[] @(20,180) w=160 h=80 bg=#e8f5e9 r=12 note="Balance card"
 "Balance" @(40,195) c=#666 size=12
 "12345" @(40,220) size=20 bold c=#27ae60
 
-[] @(195,180) w=160 h=80 bg=#e3f2fd r=12
+[] @(195,180) w=160 h=80 bg=#e3f2fd r=12 note="Points card"
 "Points" @(215,195) c=#666 size=12
 "2450" @(215,220) size=20 bold c=#2196f3`
   }
@@ -154,6 +188,10 @@ function loadExample(example) {
           <input type="checkbox" v-model="showNotes" @change="render" />
           Show Notes
         </label>
+        <button @click="zoomOut" class="btn btn-icon" title="Zoom Out">−</button>
+        <span class="zoom-level">{{ Math.round(scale.value * 100) }}%</span>
+        <button @click="zoomIn" class="btn btn-icon" title="Zoom In">+</button>
+        <button @click="resetZoom" class="btn" title="Reset">Reset</button>
         <button @click="copyCode" class="btn">Copy Code</button>
         <button @click="downloadSVG" class="btn btn-primary" :disabled="!svgOutput">Download SVG</button>
       </div>
@@ -173,10 +211,21 @@ function loadExample(example) {
       
       <div class="preview-panel">
         <div class="panel-header">Preview</div>
-        <div class="preview-content">
+        <div 
+          class="preview-content"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+        >
           <div v-if="loading" class="loading">Loading...</div>
           <div v-else-if="error" class="error">{{ error }}</div>
-          <div v-else-if="svgOutput" class="svg-container" v-html="svgOutput"></div>
+          <div 
+            v-else-if="svgOutput" 
+            class="svg-container" 
+            :style="{ transform: `translate(${panX}px, ${panY}px) scale(${scale})`, cursor: isDragging ? 'grabbing' : 'grab' }"
+            v-html="svgOutput"
+          ></div>
           <div v-else class="placeholder">Enter code to see preview</div>
         </div>
       </div>
@@ -211,7 +260,7 @@ function loadExample(example) {
 .toolbar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .title {
@@ -245,7 +294,7 @@ select:hover{
 }
 
 .btn {
-  padding: 6px 16px;
+  padding: 6px 12px;
   background: #3c3c3c;
   color: #fff;
   border: 1px solid #555;
@@ -256,6 +305,14 @@ select:hover{
 
 .btn:hover{
   background: #4a4a4a;
+}
+
+.btn-icon {
+  width: 32px;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .btn-primary{
@@ -270,6 +327,13 @@ select:hover{
 .btn:disabled{
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.zoom-level {
+  color: #ccc;
+  font-size: 12px;
+  min-width: 40px;
+  text-align: center;
 }
 
 .editor-container{
@@ -335,6 +399,7 @@ select:hover{
   align-items: flex-start;
   justify-content: flex-start;
   min-height: 0;
+  user-select: none;
 }
 
 .svg-container{
@@ -342,6 +407,8 @@ select:hover{
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
 }
 
 .svg-container :deep(svg){
