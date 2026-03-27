@@ -20,7 +20,6 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started/quick-start' },
       { text: 'Reference', link: '/reference/elements' },
-      { text: 'Examples', link: '/examples/login-form' },
       { text: 'AI Integration', link: '/guides/ai-integration' },
       { text: 'GitHub', link: 'https://github.com/SolarWire/SolarWire' }
     ],
@@ -45,18 +44,7 @@ export default defineConfig({
             { text: 'Attributes', link: '/reference/attributes' },
             { text: 'Coordinates', link: '/reference/coordinates' },
             { text: 'Tables', link: '/reference/tables' },
-            { text: 'Notes', link: '/reference/notes' }
-          ]
-        }
-      ],
-      '/examples/': [
-        {
-          text: 'Examples',
-          items: [
-            { text: 'Login Form', link: '/examples/login-form' },
-            { text: 'Dashboard', link: '/examples/dashboard' },
-            { text: 'Mobile App', link: '/examples/mobile-app' },
-            { text: 'Data Table', link: '/examples/data-table' }
+            { text: 'Examples', link: '/reference/examples' }
           ]
         }
       ],
