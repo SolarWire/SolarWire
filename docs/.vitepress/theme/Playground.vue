@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { parse } from './lib/parser.js'
 import { render as renderSvg } from './lib/renderer.js'
 
@@ -27,17 +27,22 @@ const svgOutput = ref('')
 const error = ref('')
 const showNotes = ref(true)
 const loading = ref(false)
-const loadError = ref('')
 const scale = ref(1)
 const panX = ref(0)
 const panY = ref(0)
 const isDragging = ref(false)
 const dragStart = ref({ x: 0, y: 0 })
+const previewRef = ref(null)
 
 let debounceTimer = null
 
 onMounted(() => {
   render()
+  document.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
 })
 
 function render() {
@@ -84,7 +89,30 @@ function resetZoom() {
   panY.value = 0
 }
 
+function handleWheel(e) {
+  if (e.ctrlKey) {
+    e.preventDefault()
+    if (e.deltaY < 0) {
+      zoomIn()
+    } else {
+      zoomOut()
+    }
+  }
+}
+
+function handleKeydown(e) {
+  if (e.target.tagName === 'TEXTAREA') return
+  if (e.key === '+' || e.key === '=') {
+    zoomIn()
+  } else if (e.key === '-') {
+    zoomOut()
+  } else if (e.key === '0') {
+    resetZoom()
+  }
+}
+
 function startDrag(e) {
+  if (e.button !== 0) return
   isDragging.value = true
   dragStart.value = { x: e.clientX - panX.value, y: e.clientY - panY.value }
 }
@@ -189,7 +217,7 @@ function loadExample(example) {
           Show Notes
         </label>
         <button @click="zoomOut" class="btn btn-icon" title="Zoom Out">−</button>
-        <span class="zoom-level">{{ Math.round(scale.value * 100) }}%</span>
+        <span class="zoom-level">{{ Math.round(scale * 100) }}%</span>
         <button @click="zoomIn" class="btn btn-icon" title="Zoom In">+</button>
         <button @click="resetZoom" class="btn" title="Reset">Reset</button>
         <button @click="copyCode" class="btn">Copy Code</button>
@@ -210,13 +238,15 @@ function loadExample(example) {
       </div>
       
       <div class="preview-panel">
-        <div class="panel-header">Preview</div>
+        <div class="panel-header">Preview <span class="hint">(Ctrl+Scroll to zoom, drag to pan)</span></div>
         <div 
+          ref="previewRef"
           class="preview-content"
           @mousedown="startDrag"
           @mousemove="onDrag"
           @mouseup="endDrag"
           @mouseleave="endDrag"
+          @wheel="handleWheel"
         >
           <div v-if="loading" class="loading">Loading...</div>
           <div v-else-if="error" class="error">{{ error }}</div>
@@ -365,6 +395,15 @@ select:hover{
   text-transform: uppercase;
   border-bottom: 1px solid #3c3c3c;
   flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hint {
+  font-weight: normal;
+  color: #888;
+  font-size: 11px;
 }
 
 .code-editor{
@@ -395,11 +434,10 @@ select:hover{
   padding: 16px;
   background: #f5f5f5;
   overflow: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  display: block;
   min-height: 0;
   user-select: none;
+  position: relative;
 }
 
 .svg-container{
@@ -409,10 +447,12 @@ select:hover{
   overflow: hidden;
   transform-origin: 0 0;
   transition: transform 0.1s ease;
+  display: inline-block;
 }
 
 .svg-container :deep(svg){
   display: block;
+  max-width: none;
 }
 
 .loading{

@@ -6,7 +6,7 @@ const defaultColors = {
   secondary: '#AAAAAA',
   border: '#F2F2F2',
   background: '#FFFFFF',
-  primary: '#1890FF',
+  primary: '#A8B1FF',
   error: '#D9001B'
 };
 
@@ -28,7 +28,7 @@ function render(ast, options = {}) {
   const textColor = declarations.c || defaultColors.text;
   const fontSize = declarations.size || defaultFont.size;
   
-  // Calculate bounds
+  // Calculate bounds from elements
   let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
   const elements = ast.elements || [];
   
@@ -37,24 +37,28 @@ function render(ast, options = {}) {
       minX = Math.min(minX, el.x);
       minY = Math.min(minY, el.y);
     }
-    const w = el.attributes?.w || 100;
-    const h = el.attributes?.h || 40;
+    const w = parseInt(el.attributes?.w) || 100;
+    const h = parseInt(el.attributes?.h) || 40;
     if (el.x !== undefined) {
       maxX = Math.max(maxX, el.x + w);
       maxY = Math.max(maxY, el.y + h);
     }
   });
   
-  if (minX === Infinity) minX = 0;
-  if (minY === Infinity) minY = 0;
+  // If no elements, use default size
+  if (minX === Infinity) {
+    minX = 0;
+    minY = 0;
+    maxX = 400;
+    maxY = 300;
+  }
   
   const margin = 20;
-  const width = Math.max(400, maxX - minX + margin * 2);
+  const width = maxX - minX + margin * 2;
   const height = maxY - minY + margin * 2;
   
   // Build SVG
-  let svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="${minX - margin} ${minY - margin} ${width} ${height}" width="${width}" height="${height}">
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${minX - margin} ${minY - margin} ${width} ${height}" width="${width}" height="${height}">
 <style>
   text { font-family: Arial, sans-serif; }
   .note-badge { fill: #70B603; }
@@ -68,12 +72,12 @@ function render(ast, options = {}) {
   elements.forEach(el => {
     const x = el.x || 0;
     const y = el.y || 0;
-    const w = el.attributes?.w || 100;
-    const h = el.attributes?.h || 40;
+    const w = parseInt(el.attributes?.w) || 100;
+    const h = parseInt(el.attributes?.h) || 40;
     const bg = el.attributes?.bg || bgColor;
     const c = el.attributes?.c || textColor;
-    const size = el.attributes?.size || fontSize;
-    const r = el.attributes?.r || 0;
+    const size = parseInt(el.attributes?.size) || fontSize;
+    const r = parseInt(el.attributes?.r) || 0;
     const b = el.attributes?.b || 'none';
     const opacity = el.attributes?.opacity;
     
@@ -144,8 +148,8 @@ function renderTable(table, showNotes) {
   let svg = '';
   const x = table.x || 0;
   const y = table.y || 0;
-  const w = table.attributes?.w || 400;
-  const border = table.attributes?.border || 1;
+  const w = parseInt(table.attributes?.w) || 400;
+  const border = parseInt(table.attributes?.border) || 1;
   
   // Simple table rendering
   const rows = table.children || [];
@@ -164,7 +168,7 @@ function renderTable(table, showNotes) {
       const cellX = x + cellIndex * cellWidth;
       const cellY = rowY + 25;
       const cellC = cell.attributes?.c || '#333';
-      const cellSize = cell.attributes?.size || 13;
+      const cellSize = parseInt(cell.attributes?.size) || 13;
       
       if (cell.type === 'text') {
         svg += `\n  <text x="${cellX + 10}" y="${cellY}" fill="${cellC}" font-size="${cellSize}">${escapeXml(cell.content)}</text>`;
