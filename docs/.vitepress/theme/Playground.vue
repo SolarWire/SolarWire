@@ -39,8 +39,9 @@ let renderer = null
 
 onMounted(async () => {
   try {
-    const parserModule = await import('/lib/parser/index.js')
-    const rendererModule = await import('/lib/renderer-svg/index.js')
+    const base = import.meta.env.BASE_URL || '/'
+    const parserModule = await import(base + 'lib/parser/index.js')
+    const rendererModule = await import(base + 'lib/renderer-svg/index.js')
     parser = parserModule
     renderer = rendererModule
     loading.value = false
