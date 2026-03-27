@@ -168,6 +168,23 @@ cp -r SolarWire/packages/core/renderer-svg/dist/* solarwire-prd/lib/renderer-svg
 ### 1.3 Core Value
 [Core value provided to users by the product]
 
+### 1.4 User Stories
+
+**Format: As a [user role], I want to [action], so that [benefit]**
+
+| ID | User Story | Acceptance Criteria | Priority |
+|----|------------|---------------------|----------|
+| US-001 | As a [role], I want to [action], so that [benefit] | - Given [context], when [action], then [result] | P0 |
+| US-002 | As a [role], I want to [action], so that [benefit] | - Given [context], when [action], then [result] | P0 |
+| US-003 | As a [role], I want to [action], so that [benefit] | - Given [context], when [action], then [result] | P1 |
+
+**User Story Writing Guidelines:**
+- **User Role**: Identify who the user is (e.g., "As a registered user", "As an admin")
+- **Action**: What the user wants to do (e.g., "I want to reset my password")
+- **Benefit**: Why the user wants this (e.g., "so that I can regain access to my account")
+- **Acceptance Criteria**: Use Given-When-Then format to define testable conditions
+- **Priority**: P0 (Must have), P1 (Should have), P2 (Nice to have)
+
 ---
 
 ## 2. Feature Scope
