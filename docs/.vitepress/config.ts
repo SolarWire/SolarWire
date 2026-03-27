@@ -20,6 +20,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started/quick-start' },
       { text: 'Reference', link: '/reference/elements' },
+      { text: 'Playground', link: '/playground' },
       { text: 'GitHub', link: 'https://github.com/SolarWire/SolarWire' }
     ],
     
