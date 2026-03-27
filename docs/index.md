@@ -95,13 +95,16 @@ VSCode extension with syntax highlighting, preview, and auto-completion.
 
 ## Comparison
 
-| Feature | SolarWire | Figma | Balsamiq | Mermaid |
-|---------|-----------|-------|----------|---------|
-| Text-based | ✅ | ❌ | ❌ | ✅ |
-| AI-Native | ✅ | ❌ | ❌ | ⚠️ |
-| Wireframes | ✅ | ✅ | ✅ | ❌ |
-| Git-friendly | ✅ | ⚠️ | ⚠️ | ✅ |
-| Markdown Embed | ✅ | ❌ | ❌ | ✅ |
+| Feature | SolarWire | Figma | Sketch | Axure | 墨刀 | Pencil | Balsamiq | Mermaid |
+|---------|-----------|-------|--------|-------|------|--------|----------|---------|
+| Text-based | ✅ | ❌ | ❌ | ❌ | ❌ | ⚠️ XML | ❌ | ✅ |
+| AI-Native | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ⚠️ |
+| Wireframes | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Git-friendly | ✅ | ⚠️ | ⚠️ | ❌ | ❌ | ⚠️ | ⚠️ | ✅ |
+| Markdown Embed | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Free & Open | ✅ | ⚠️ Freemium | ❌ | ⚠️ Trial | ⚠️ Freemium | ✅ | ⚠️ Trial | ✅ |
+| Offline Use | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Learning Curve | Low | Medium | Medium | High | Low | Low | Low | Low |
 
 ## Get Started in 30 Seconds
 
