@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const defaultCode = `!title="Login Page"
 !bg=#f5f5f5
@@ -33,21 +33,28 @@ const svgOutput = ref('')
 const error = ref('')
 const showNotes = ref(true)
 const loading = ref(true)
+const loadError = ref('')
 
 let parser = null
 let renderer = null
+let debounceTimer = null
 
 onMounted(async () => {
   try {
     const base = import.meta.env.BASE_URL || '/'
-    const parserModule = await import(base + 'lib/parser/index.js')
-    const rendererModule = await import(base + 'lib/renderer-svg/index.js')
+    console.log('Loading SolarWire from:', base)
+    
+    const parserModule = await import(/* @vite-ignore */ base + 'lib/parser/index.js')
+    const rendererModule = await import(/* @vite-ignore */ base + 'lib/renderer-svg/index.js')
+    
     parser = parserModule
     renderer = rendererModule
     loading.value = false
+    console.log('SolarWire loaded successfully')
     render()
   } catch (e) {
-    error.value = 'Failed to load SolarWire libraries: ' + e.message
+    console.error('Failed to load SolarWire:', e)
+    loadError.value = 'Failed to load SolarWire libraries: ' + e.message
     loading.value = false
   }
 })
@@ -62,6 +69,11 @@ function render() {
   } catch (e) {
     error.value = e.message
   }
+}
+
+function handleInput() {
+  if (debounceTimer) clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(render, 300)
 }
 
 function downloadSVG() {
@@ -186,6 +198,10 @@ function loadExample(example) {
   code.value = example.code
   render()
 }
+
+watch(showNotes, () => {
+  render()
+})
 </script>
 
 <template>
@@ -200,7 +216,7 @@ function loadExample(example) {
       </div>
       <div class="toolbar-right">
         <label class="checkbox">
-          <input type="checkbox" v-model="showNotes" @change="render" />
+          <input type="checkbox" v-model="showNotes" />
           Show Notes
         </label>
         <button @click="copyCode" class="btn">Copy Code</button>
@@ -210,15 +226,22 @@ function loadExample(example) {
     
     <div class="editor-container">
       <div class="editor-panel">
-        <div class="panel-header">Code</div>
+        <div class="panel-header">
+          Code
+          <span v-if="loading" class="status loading-status">Loading...</span>
+        </div>
         <textarea 
+          v-if="!loadError"
           v-model="code" 
-          @input="render"
+          @input="handleInput"
           class="code-editor"
           spellcheck="false"
           placeholder="Enter SolarWire code here..."
-          :disabled="loading"
         ></textarea>
+        <div v-else class="load-error">
+          {{ loadError }}
+          <button @click="() => location.reload()" class="btn" style="margin-top: 12px;">Retry</button>
+        </div>
       </div>
       
       <div class="preview-panel">
@@ -249,6 +272,7 @@ function loadExample(example) {
   padding: 12px 16px;
   background: #252526;
   border-bottom: 1px solid #3c3c3c;
+  flex-shrink: 0;
 }
 
 .toolbar-left {
@@ -276,6 +300,11 @@ select {
   border: 1px solid #555;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+}
+
+select:hover {
+  background: #4a4a4a;
 }
 
 .checkbox {
@@ -284,6 +313,11 @@ select {
   gap: 6px;
   color: #ccc;
   font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox input {
   cursor: pointer;
 }
 
@@ -295,6 +329,7 @@ select {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  transition: background 0.2s;
 }
 
 .btn:hover {
@@ -319,6 +354,7 @@ select {
   display: flex;
   flex: 1;
   overflow: hidden;
+  min-height: 0;
 }
 
 .editor-panel,
@@ -327,6 +363,7 @@ select {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
 }
 
 .editor-panel {
@@ -341,6 +378,19 @@ select {
   font-weight: 600;
   text-transform: uppercase;
   border-bottom: 1px solid #3c3c3c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.status {
+  font-weight: normal;
+  text-transform: none;
+}
+
+.loading-status {
+  color: #f0ad4e;
 }
 
 .code-editor {
@@ -350,14 +400,34 @@ select {
   color: #d4d4d4;
   border: none;
   resize: none;
-  font-family: 'Fira Code', 'Monaco', 'Menlo', monospace;
+  font-family: 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace;
   font-size: 14px;
   line-height: 1.6;
   outline: none;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.code-editor:focus {
+  background: #1a1a1a;
 }
 
 .code-editor::placeholder {
   color: #666;
+}
+
+.load-error {
+  flex: 1;
+  padding: 16px;
+  color: #e74c3c;
+  background: #1e1e1e;
+  font-family: monospace;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .preview-content {
@@ -368,6 +438,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 0;
 }
 
 .svg-container {
@@ -411,11 +482,16 @@ select {
   .editor-panel {
     border-right: none;
     border-bottom: 1px solid #3c3c3c;
+    min-height: 200px;
   }
   
   .toolbar {
     flex-wrap: wrap;
     gap: 8px;
+  }
+  
+  .toolbar-left, .toolbar-right {
+    flex-wrap: wrap;
   }
 }
 </style>
