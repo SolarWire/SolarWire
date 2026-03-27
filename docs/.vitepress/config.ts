@@ -21,6 +21,7 @@ export default defineConfig({
       { text: 'Getting Started', link: '/getting-started/quick-start' },
       { text: 'Reference', link: '/reference/elements' },
       { text: 'Examples', link: '/examples/login-form' },
+      { text: 'AI Integration', link: '/guides/ai-integration' },
       { text: 'GitHub', link: 'https://github.com/SolarWire/SolarWire' }
     ],
     

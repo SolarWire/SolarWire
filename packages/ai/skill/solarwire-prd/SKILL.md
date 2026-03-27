@@ -397,20 +397,20 @@ sequenceDiagram
 **Key Principles for Clean Wireframes:**
 1. **Use appropriate element types** - Match element shape to its real-world counterpart
 2. **Include realistic content** - Use actual placeholder text, not generic labels
-3. **Proper spacing** - Elements should have appropriate gaps (8-16px typical)
+3. **Proper spacing** - Element spacing: 10px (unified)
 4. **Visual hierarchy** - Important elements should be larger/prominent
 5. **Consistent styling** - Use consistent colors and sizes throughout
 
 | Scenario | Recommended Element | Example |
 |----------|---------------------|---------|
-| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#3498db c=white` |
-| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#fff b=#ddd` |
+| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#1890FF c=#FFFFFF` |
+| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#FFFFFF b=#F2F2F2` |
 | Cards/Containers | Rounded Rectangle `()` | `("User Info Card") @(100,50) w=300 h=200` |
-| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#ddd c=#666` |
-| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#f5f5f5` |
+| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#F2F2F2 c=#AAAAAA` |
+| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#F2F2F2` |
 | Labels/Text | Plain Text `""` | `"Username" @(100,50)` |
-| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#fff b=#ddd c=#999` |
-| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#eee` |
+| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA` |
+| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#F2F2F2` |
 | Data Tables | Table `##` | `## @(100,50) w=500 border=1` |
 
 **⚠️ CRITICAL: Text Content Syntax**
@@ -1054,8 +1054,8 @@ Each page/tab/modal needs to generate two SVG files:
 **Element Sizes:**
 - Button height: 44-56px
 - Input field height: 44-52px
-- Text size: 14px (min), 18-22px (titles)
-- Element spacing: 8-16px, Page margins: 16-24px
+- Text size: 13px (default), 18-22px (titles)
+- Element spacing: 10px (unified), Page margins: 16-24px
 
 **Common Patterns:**
 - Login: Logo + Title + Form + Button (full width)
@@ -1089,8 +1089,8 @@ Each page/tab/modal needs to generate two SVG files:
 **Element Sizes:**
 - Button height: 36-48px, width: min 80px
 - Input field height: 36-44px, width: 200-400px
-- Text size: 12-16px, titles: 18-24px
-- Element spacing: 12-24px, Page margins: 24-48px
+- Text size: 13px (default), 18-24px (titles)
+- Element spacing: 10px (unified), Page margins: 24-48px
 
 **Common Patterns:**
 - Login: Centered layout, Logo + Form + Button
@@ -1126,8 +1126,8 @@ Each page/tab/modal needs to generate two SVG files:
 - Input field height: 32-36px
 - Table row height: 40-48px
 - Sidebar width: 200-280px
-- Text size: 12-14px, titles: 16-20px
-- Element spacing: 16-32px, Page margins: 24-32px
+- Text size: 13px (default), 16-20px (titles)
+- Element spacing: 10px (unified), Page margins: 24-32px
 
 **Common Patterns:**
 - List: Search/filter + Batch actions + Table + Pagination
@@ -1155,14 +1155,16 @@ Each page/tab/modal needs to generate two SVG files:
 ## Important Reminders
 
 1. **Confirm Requirements Step by Step** - Don't rush to generate, fully understand requirements first
-2. **Notes Describe Function, Not Visuals** - Focus on behavior, avoid colors/sizes/fonts in notes
-3. **Not Every Element Needs a Note** - Skip notes for dividers, containers, static labels, decorative elements, table headers, column titles
-4. **Notes Must Contain Functional Information** - Never write notes that just say "[Button]", "[Table]", "[Header Row]" - these contain no useful information
-5. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
-6. **No Brackets for Attributes** - Write directly `w=100 h=40`
-7. **Note Category Tags** - Use `[]` tags to identify element types ([Primary Button], [Input Field], [Link], etc.)
+2. **Notes Describe Function and Business Logic** - Focus on behavior and logic, avoid visual details and technical implementation
+3. **Not Every Element Needs a Note** - Skip notes for visual elements; common sense exemption for back button, close button, page selector, number stepper
+4. **First Line Defines Element** - Note first line must describe what the element is (e.g., "Login button"), not element type (e.g., "[Primary Button]")
+5. **Note Structure Required** - Use numbered first level, dash for second level, double dash for third level
+6. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
+7. **No Brackets for Attributes** - Write directly `w=100 h=40`
 8. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
-9. **Layout Close to Reality** - Wireframes should reflect actual page structure
-10. **Separate Modals/States/Tabs** - Each independent view in separate code block
+9. **Layout Close to Reality** - Wireframes should reflect actual page structure with 10px spacing
+10. **Separate Modals/States/Tabs** - Each independent view in separate code block; all modals must have separate wireframe
 11. **Container Rectangle Required** - First element of each page is white background container
 12. **Generate Dual SVG Versions** - With notes and without notes versions
+13. **Color Standards** - Use unified colors: #333333 (text), #AAAAAA (secondary), #F2F2F2 (border), #FFFFFF (bg), #1890FF (primary), #D9001B (error)
+14. **Font Standards** - Font size 13px, line height 22px
