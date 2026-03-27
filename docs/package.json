@@ -1,6 +1,7 @@
 {
   "name": "solarwire-docs",
   "version": "1.0.0",
+  "type": "module",
   "description": "SolarWire Documentation",
   "scripts": {
     "docs:dev": "vitepress dev",
