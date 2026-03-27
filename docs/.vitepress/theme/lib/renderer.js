@@ -1,51 +1,375 @@
 // SolarWire SVG Renderer - Browser Bundle
-// Simplified version for browser use
+// Bundled from @solarwire/renderer-svg
 
-const defaultColors = {
-  text: '#333333',
-  secondary: '#AAAAAA',
-  border: '#F2F2F2',
-  background: '#FFFFFF',
-  primary: '#A8B1FF',
-  error: '#D9001B'
-};
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
-const defaultFont = {
-  size: 13,
-  lineHeight: 22
-};
+function wrapText(text, maxWidth, fontSize = 12) {
+  const lines = [];
+  const avgCharWidth = fontSize * 0.65;
+  const cjkCharWidth = fontSize * 1.0;
+  const isCJK = (char) => /[\u4e00-\u9fa5\u3400-\u4dbf\u3040-\u30ff\u31f0-\u31ff\uac00-\ud7af]/.test(char);
+  const getCharWidth = (char) => {
+    return isCJK(char) ? cjkCharWidth : avgCharWidth;
+  };
+  
+  text.split('\n').forEach(paragraph => {
+    if (paragraph.trim() === '') {
+      lines.push('');
+      return;
+    }
+    let currentLine = '';
+    let currentWidth = 0;
+    let i = 0;
+    while (i < paragraph.length) {
+      const char = paragraph[i];
+      if (char === ' ' || char === '\t') {
+        currentLine += char;
+        currentWidth += avgCharWidth;
+        i++;
+        continue;
+      }
+      let token = '';
+      let tokenWidth = 0;
+      if (isCJK(char)) {
+        token = char;
+        tokenWidth = cjkCharWidth;
+        i++;
+      } else {
+        let j = i;
+        while (j < paragraph.length && !isCJK(paragraph[j]) && paragraph[j] !== ' ' && paragraph[j] !== '\t') {
+          token += paragraph[j];
+          tokenWidth += avgCharWidth;
+          j++;
+        }
+        i = j;
+      }
+      if (currentWidth + tokenWidth <= maxWidth || currentLine === '') {
+        currentLine += token;
+        currentWidth += tokenWidth;
+      } else {
+        if (tokenWidth > maxWidth) {
+          if (currentLine.trim() !== '') {
+            lines.push(currentLine.trim());
+          }
+          let remainingToken = token;
+          while (remainingToken.length > 0) {
+            let part = '';
+            let partWidth = 0;
+            let k = 0;
+            while (k < remainingToken.length) {
+              const charWidth = getCharWidth(remainingToken[k]);
+              if (partWidth + charWidth > maxWidth && part.length > 0) {
+                break;
+              }
+              part += remainingToken[k];
+              partWidth += charWidth;
+              k++;
+            }
+            if (k >= remainingToken.length) {
+              currentLine = part;
+              currentWidth = partWidth;
+              remainingToken = '';
+            } else {
+              lines.push(part);
+              remainingToken = remainingToken.substring(k);
+            }
+          }
+        } else {
+          lines.push(currentLine.trim());
+          currentLine = token;
+          currentWidth = tokenWidth;
+        }
+      }
+    }
+    if (currentLine.trim()) {
+      lines.push(currentLine.trim());
+    }
+  });
+  return lines;
+}
+
+function createRenderContext(declarations = [], sourceInput) {
+  const globalDefaults = {};
+  declarations.forEach(decl => {
+    const { key, value } = decl;
+    if (['size', 'line-height', 'gap', 'r'].includes(key)) {
+      globalDefaults[key] = parseFloat(value);
+    } else if (key === 'bold') {
+      globalDefaults[key] = true;
+    } else {
+      globalDefaults[key] = value;
+    }
+  });
+  return {
+    offsetX: 0,
+    offsetY: 0,
+    lastElementBounds: null,
+    isFirstElement: true,
+    globalDefaults,
+    sourceInput,
+  };
+}
+
+function getNumberAttribute(attributes, globalDefaults, key, defaultValue) {
+  const localValue = attributes[key];
+  if (localValue !== undefined) {
+    const parsed = parseFloat(localValue);
+    return isNaN(parsed) ? defaultValue : parsed;
+  }
+  if (globalDefaults[key] !== undefined && typeof globalDefaults[key] === 'number') {
+    return globalDefaults[key];
+  }
+  return defaultValue;
+}
+
+function getColorAttribute(attributes, globalDefaults, key, defaultValue) {
+  return attributes[key] ?? globalDefaults[key] ?? defaultValue;
+}
+
+function getBooleanAttribute(attributes, globalDefaults, key) {
+  if (key in attributes) return true;
+  if (globalDefaults[key] !== undefined) return !!globalDefaults[key];
+  return false;
+}
+
+function getAlignAttribute(attributes, defaultValue) {
+  const align = attributes['align'];
+  switch (align) {
+    case 'l': return 'start';
+    case 'c': return 'middle';
+    case 'r': return 'end';
+    default: return defaultValue;
+  }
+}
+
+function getStyleAttribute(attributes) {
+  const style = attributes['style'];
+  switch (style) {
+    case 'dashed': return { strokeDasharray: '5,5' };
+    case 'dotted': return { strokeDasharray: '2,2' };
+    default: return {};
+  }
+}
+
+function getOpacityAttribute(attributes, key = 'opacity') {
+  const value = attributes[key];
+  if (value === undefined) return undefined;
+  const parsed = parseFloat(value);
+  if (isNaN(parsed)) return undefined;
+  return Math.max(0, Math.min(1, parsed));
+}
+
+function calculateCoordinate(context, coord, isX, lastBounds) {
+  let baseValue;
+  switch (coord.type) {
+    case 'absolute':
+      baseValue = coord.value;
+      break;
+    case 'edge':
+      if (!lastBounds) {
+        baseValue = 0;
+      } else {
+        switch (coord.direction) {
+          case 'L': baseValue = lastBounds.x; break;
+          case 'R': baseValue = lastBounds.x + lastBounds.width; break;
+          case 'T': baseValue = lastBounds.y; break;
+          case 'B': baseValue = lastBounds.y + lastBounds.height; break;
+          case 'C':
+            baseValue = isX
+              ? lastBounds.x + lastBounds.width / 2
+              : lastBounds.y + lastBounds.height / 2;
+            break;
+          default: baseValue = 0;
+        }
+      }
+      baseValue += coord.value;
+      break;
+    default:
+      baseValue = 0;
+  }
+  return baseValue + (isX ? context.offsetX : context.offsetY);
+}
+
+function calculatePosition(context, coords) {
+  const x = calculateCoordinate(context, coords.x, true, context.lastElementBounds);
+  const y = calculateCoordinate(context, coords.y, false, context.lastElementBounds);
+  return { x, y };
+}
+
+function renderRectangle(element, context) {
+  const { coordinates, attributes, content } = element;
+  const pos = calculatePosition(context, coordinates);
+  const width = getNumberAttribute(attributes, context.globalDefaults, 'w', 100);
+  const height = getNumberAttribute(attributes, context.globalDefaults, 'h', 40);
+  const bg = getColorAttribute(attributes, context.globalDefaults, 'bg', '#FFFFFF');
+  const c = getColorAttribute(attributes, context.globalDefaults, 'c', '#333333');
+  const size = getNumberAttribute(attributes, context.globalDefaults, 'size', 13);
+  const r = getNumberAttribute(attributes, context.globalDefaults, 'r', 0);
+  const b = attributes.b || attributes.border;
+  const opacity = getOpacityAttribute(attributes);
+  
+  const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+  const borderAttr = b ? ` stroke="${b}" stroke-width="1"` : '';
+  const radiusAttr = r > 0 ? ` rx="${r}"` : '';
+  const isBold = getBooleanAttribute(attributes, context.globalDefaults, 'bold');
+  
+  let svg = `  <rect x="${pos.x}" y="${pos.y}" width="${width}" height="${height}" fill="${bg}"${radiusAttr}${borderAttr}${opacityAttr}/>`;
+  
+  if (content) {
+    const align = getAlignAttribute(attributes, 'middle');
+    const textX = align === 'middle' ? pos.x + width / 2 : align === 'end' ? pos.x + width - 10 : pos.x + 10;
+    const textY = pos.y + height / 2 + size / 3;
+    svg += `\n  <text x="${textX}" y="${textY}" text-anchor="${align}" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(content)}</text>`;
+  }
+  
+  return {
+    svg,
+    bounds: { x: pos.x, y: pos.y, width, height }
+  };
+}
+
+function renderCircle(element, context) {
+  const { coordinates, attributes, content } = element;
+  const pos = calculatePosition(context, coordinates);
+  const width = getNumberAttribute(attributes, context.globalDefaults, 'w', 40);
+  const height = getNumberAttribute(attributes, context.globalDefaults, 'h', 40);
+  const bg = getColorAttribute(attributes, context.globalDefaults, 'bg', '#FFFFFF');
+  const c = getColorAttribute(attributes, context.globalDefaults, 'c', '#333333');
+  const size = getNumberAttribute(attributes, context.globalDefaults, 'size', 13);
+  const b = attributes.b || attributes.border;
+  const opacity = getOpacityAttribute(attributes);
+  
+  const cx = pos.x + width / 2;
+  const cy = pos.y + height / 2;
+  const radius = Math.min(width, height) / 2;
+  const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+  const borderAttr = b ? ` stroke="${b}" stroke-width="1"` : '';
+  const isBold = getBooleanAttribute(attributes, context.globalDefaults, 'bold');
+  
+  let svg = `  <circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}"${borderAttr}${opacityAttr}/>`;
+  
+  if (content) {
+    svg += `\n  <text x="${cx}" y="${cy + size / 3}" text-anchor="middle" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(content)}</text>`;
+  }
+  
+  return {
+    svg,
+    bounds: { x: pos.x, y: pos.y, width, height }
+  };
+}
+
+function renderText(element, context) {
+  const { coordinates, attributes, content } = element;
+  const pos = calculatePosition(context, coordinates);
+  const c = getColorAttribute(attributes, context.globalDefaults, 'c', '#333333');
+  const size = getNumberAttribute(attributes, context.globalDefaults, 'size', 13);
+  const isBold = getBooleanAttribute(attributes, context.globalDefaults, 'bold');
+  
+  const svg = `  <text x="${pos.x}" y="${pos.y + size}" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(content)}</text>`;
+  
+  return {
+    svg,
+    bounds: { x: pos.x, y: pos.y, width: content.length * size * 0.5, height: size }
+  };
+}
+
+function renderLine(element, context) {
+  const { coordinates, attributes } = element;
+  const startPos = calculatePosition(context, coordinates);
+  const endPos = element.end ? calculatePosition(context, element.end) : { x: startPos.x + 100, y: startPos.y };
+  const b = attributes.b || attributes.border || '#F2F2F2';
+  const style = getStyleAttribute(attributes);
+  
+  const dashAttr = style.strokeDasharray ? ` stroke-dasharray="${style.strokeDasharray}"` : '';
+  const svg = `  <line x1="${startPos.x}" y1="${startPos.y}" x2="${endPos.x}" y2="${endPos.y}" stroke="${b}" stroke-width="1"${dashAttr}/>`;
+  
+  return {
+    svg,
+    bounds: {
+      x: Math.min(startPos.x, endPos.x),
+      y: Math.min(startPos.y, endPos.y),
+      width: Math.abs(endPos.x - startPos.x) || 1,
+      height: Math.abs(endPos.y - startPos.y) || 1
+    }
+  };
+}
+
+function renderElement(element, context, options) {
+  let result;
+  
+  switch (element.type) {
+    case 'rectangle':
+    case 'rounded-rectangle':
+      result = renderRectangle(element, context);
+      break;
+    case 'circle':
+      result = renderCircle(element, context);
+      break;
+    case 'text':
+      result = renderText(element, context);
+      break;
+    case 'line':
+      result = renderLine(element, context);
+      break;
+    case 'placeholder':
+      result = renderRectangle(element, context);
+      break;
+    default:
+      result = renderRectangle(element, context);
+  }
+  
+  // Handle notes
+  const { notes, noteNumberRef, disableNotes } = options || {};
+  if (notes && noteNumberRef && !disableNotes && element.attributes && element.attributes.note) {
+    notes.push({
+      number: noteNumberRef.current,
+      note: element.attributes.note,
+      bounds: result.bounds
+    });
+    noteNumberRef.current++;
+  }
+  
+  return result;
+}
 
 function render(ast, options = {}) {
-  const showNotes = options.showNotes !== false;
+  const context = createRenderContext(ast.declarations, options?.sourceInput);
+  const svgParts = [];
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = 0;
+  let maxY = 0;
   
-  // Get declarations
-  const declarations = {};
-  (ast.declarations || []).forEach(d => {
-    declarations[d.name] = d.value;
+  const notes = [];
+  const noteNumberRef = { current: 1 };
+  const disableNotes = options?.disableNotes ?? false;
+  const showNotes = options?.showNotes !== false;
+  
+  const renderOptions = {
+    disableNotes: !showNotes,
+    sourceInput: options?.sourceInput,
+    notes,
+    noteNumberRef
+  };
+  
+  const elementResults = [];
+  
+  (ast.elements || []).forEach(element => {
+    const result = renderElement(element, context, renderOptions);
+    elementResults.push(result);
+    minX = Math.min(minX, result.bounds.x);
+    minY = Math.min(minY, result.bounds.y);
+    maxX = Math.max(maxX, result.bounds.x + result.bounds.width);
+    maxY = Math.max(maxY, result.bounds.y + result.bounds.height);
   });
   
-  const bgColor = declarations.bg || defaultColors.background;
-  const textColor = declarations.c || defaultColors.text;
-  const fontSize = declarations.size || defaultFont.size;
-  
-  // Calculate bounds from elements
-  let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
-  const elements = ast.elements || [];
-  
-  elements.forEach(el => {
-    if (el.x !== undefined) {
-      minX = Math.min(minX, el.x);
-      minY = Math.min(minY, el.y);
-    }
-    const w = parseInt(el.attributes?.w) || 100;
-    const h = parseInt(el.attributes?.h) || 40;
-    if (el.x !== undefined) {
-      maxX = Math.max(maxX, el.x + w);
-      maxY = Math.max(maxY, el.y + h);
-    }
-  });
-  
-  // If no elements, use default size
   if (minX === Infinity) {
     minX = 0;
     minY = 0;
@@ -54,146 +378,144 @@ function render(ast, options = {}) {
   }
   
   const margin = 20;
-  const width = maxX - minX + margin * 2;
-  const height = maxY - minY + margin * 2;
+  const viewBoxX = minX - margin;
+  const viewBoxY = minY - margin;
+  const viewBoxWidth = maxX - minX + margin * 2;
   
-  // Build SVG
-  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${minX - margin} ${minY - margin} ${width} ${height}" width="${width}" height="${height}">
-<style>
-  text { font-family: Arial, sans-serif; }
-  .note-badge { fill: #70B603; }
-  .note-badge-text { fill: white; font-size: 12px; font-weight: bold; }
-</style>`;
+  // Calculate notes area height
+  let notesAreaHeight = 0;
+  const extraNoteSpacing = 20;
   
-  let noteNumber = 1;
-  const notes = [];
-  
-  // Render elements
-  elements.forEach(el => {
-    const x = el.x || 0;
-    const y = el.y || 0;
-    const w = parseInt(el.attributes?.w) || 100;
-    const h = parseInt(el.attributes?.h) || 40;
-    const bg = el.attributes?.bg || bgColor;
-    const c = el.attributes?.c || textColor;
-    const size = parseInt(el.attributes?.size) || fontSize;
-    const r = parseInt(el.attributes?.r) || 0;
-    const b = el.attributes?.b || 'none';
-    const opacity = el.attributes?.opacity;
+  if (showNotes && notes.length > 0) {
+    const cardMargin = 10;
+    const cardsPerRow = 2;
+    const lineHeight = 22;
+    const cardPadding = 12;
+    const cardWidth = (viewBoxWidth - margin * 2 - 10) / 2;
     
-    const opacityAttr = opacity ? ` opacity="${opacity}"` : '';
-    const borderAttr = b !== 'none' ? ` stroke="${b}" stroke-width="1"` : '';
-    const radiusAttr = r > 0 ? ` rx="${r}"` : '';
-    
-    switch (el.type) {
-      case 'rectangle':
-      case 'placeholder':
-        svg += `\n  <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bg}"${radiusAttr}${borderAttr}${opacityAttr}/>`;
-        if (el.content) {
-          const textX = x + w / 2;
-          const textY = y + h / 2 + size / 3;
-          svg += `\n  <text x="${textX}" y="${textY}" text-anchor="middle" fill="${c}" font-size="${size}"${el.attributes?.bold ? ' font-weight="bold"' : ''}>${escapeXml(el.content)}</text>`;
-        }
-        break;
-        
-      case 'rounded-rectangle':
-        svg += `\n  <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bg}" rx="${r || 8}"${borderAttr}${opacityAttr}/>`;
-        if (el.content) {
-          const textX = x + w / 2;
-          const textY = y + h / 2 + size / 3;
-          svg += `\n  <text x="${textX}" y="${textY}" text-anchor="middle" fill="${c}" font-size="${size}"${el.attributes?.bold ? ' font-weight="bold"' : ''}>${escapeXml(el.content)}</text>`;
-        }
-        break;
-        
-      case 'circle':
-        const cx = x + w / 2;
-        const cy = y + h / 2;
-        const radius = Math.min(w, h) / 2;
-        svg += `\n  <circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}"${borderAttr}${opacityAttr}/>`;
-        if (el.content) {
-          svg += `\n  <text x="${cx}" y="${cy + size / 3}" text-anchor="middle" fill="${c}" font-size="${size}"${el.attributes?.bold ? ' font-weight="bold"' : ''}>${escapeXml(el.content)}</text>`;
-        }
-        break;
-        
-      case 'text':
-        svg += `\n  <text x="${x}" y="${y + size}" fill="${c}" font-size="${size}"${el.attributes?.bold ? ' font-weight="bold"' : ''}>${escapeXml(el.content)}</text>`;
-        break;
-        
-      case 'line':
-        svg += `\n  <line x1="${el.x1}" y1="${el.y1}" x2="${el.x2}" y2="${el.y2}" stroke="${b || '#F2F2F2'}" stroke-width="1"/>`;
-        break;
-        
-      case 'table':
-        svg += renderTable(el, showNotes);
-        break;
-    }
-    
-    // Add note badge
-    if (showNotes && el.attributes?.note) {
-      const badgeX = x + w - 8;
-      const badgeY = y - 8;
-      svg += `\n  <circle cx="${badgeX}" cy="${badgeY}" r="10" class="note-badge"/>`;
-      svg += `\n  <text x="${badgeX}" y="${badgeY + 4}" text-anchor="middle" class="note-badge-text">${noteNumber}</text>`;
-      notes.push({ number: noteNumber, note: el.attributes.note });
-      noteNumber++;
-    }
-  });
-  
-  svg += '\n</svg>';
-  
-  return svg;
-}
-
-function renderTable(table, showNotes) {
-  let svg = '';
-  const x = table.x || 0;
-  const y = table.y || 0;
-  const w = parseInt(table.attributes?.w) || 400;
-  const border = parseInt(table.attributes?.border) || 1;
-  
-  // Simple table rendering
-  const rows = table.children || [];
-  let rowY = y;
-  
-  rows.forEach((row, rowIndex) => {
-    const rowH = 40;
-    const rowBg = row.attributes?.bg || (rowIndex === 0 ? '#f5f5f5' : '#ffffff');
-    
-    svg += `\n  <rect x="${x}" y="${rowY}" width="${w}" height="${rowH}" fill="${rowBg}" stroke="#ddd" stroke-width="${border}"/>`;
-    
-    const cells = row.cells || [];
-    const cellWidth = w / Math.max(cells.length, 1);
-    
-    cells.forEach((cell, cellIndex) => {
-      const cellX = x + cellIndex * cellWidth;
-      const cellY = rowY + 25;
-      const cellC = cell.attributes?.c || '#333';
-      const cellSize = parseInt(cell.attributes?.size) || 13;
-      
-      if (cell.type === 'text') {
-        svg += `\n  <text x="${cellX + 10}" y="${cellY}" fill="${cellC}" font-size="${cellSize}">${escapeXml(cell.content)}</text>`;
-      } else if (cell.type === 'rectangle') {
-        svg += `\n  <rect x="${cellX + 5}" y="${rowY + 8}" width="60" height="24" fill="${cell.attributes?.bg || '#A8B1FF'}" rx="4"/>`;
-        if (cell.content) {
-          svg += `\n  <text x="${cellX + 35}" y="${rowY + 24}" text-anchor="middle" fill="${cell.attributes?.c || 'white'}" font-size="12">${escapeXml(cell.content)}</text>`;
-        }
-      }
+    const cardHeights = notes.map(note => {
+      const lines = wrapText(note.note, cardWidth - 28 - 12, 12);
+      const contentHeight = lines.length * lineHeight;
+      return Math.max(60, contentHeight + cardPadding * 2);
     });
     
-    rowY += rowH;
+    const rowMaxHeights = [];
+    notes.forEach((_, index) => {
+      const row = Math.floor(index / cardsPerRow);
+      if (!rowMaxHeights[row]) rowMaxHeights[row] = 0;
+      rowMaxHeights[row] = Math.max(rowMaxHeights[row], cardHeights[index]);
+    });
+    
+    const totalRowHeight = rowMaxHeights.reduce((sum, height) => sum + height, 0);
+    const rows = rowMaxHeights.length;
+    notesAreaHeight = totalRowHeight + (rows + 1) * cardMargin + extraNoteSpacing;
+  }
+  
+  const viewBoxHeight = maxY - minY + margin * 2 + notesAreaHeight;
+  
+  // Build SVG
+  svgParts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}" width="${viewBoxWidth}" height="${viewBoxHeight}">`);
+  svgParts.push(`<style>`);
+  svgParts.push(`  text { font-family: Arial, sans-serif; }`);
+  if (showNotes) {
+    svgParts.push(`  .note-badge { fill: #70B603; }`);
+    svgParts.push(`  .note-badge-text { fill: white; font-size: 12px; font-weight: bold; }`);
+    svgParts.push(`  .note-card { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; }`);
+    svgParts.push(`  .note-card-text { fill: #333; font-size: 12px; line-height: 22px; }`);
+    svgParts.push(`  .note-card-badge { fill: #70B603; }`);
+    svgParts.push(`  .note-card-badge-text { fill: white; font-size: 10px; font-weight: bold; }`);
+  }
+  svgParts.push(`</style>`);
+  
+  // Render elements
+  elementResults.forEach(result => {
+    svgParts.push(result.svg);
   });
   
-  return svg;
-}
-
-function escapeXml(text) {
-  if (!text) return '';
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+  // Render note badges on elements
+  if (showNotes) {
+    notes.forEach(note => {
+      const badgeX = note.bounds.x + note.bounds.width - 8;
+      const badgeY = note.bounds.y - 8;
+      const badgeRadius = 10;
+      
+      svgParts.push(`  <defs>`);
+      svgParts.push(`    <filter id="badge-shadow-${note.number}" x="-50%" y="-50%" width="200%" height="200%">`);
+      svgParts.push(`      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>`);
+      svgParts.push(`    </filter>`);
+      svgParts.push(`  </defs>`);
+      svgParts.push(`  <path d="M${badgeX} ${badgeY - badgeRadius} C${badgeX + badgeRadius} ${badgeY - badgeRadius} ${badgeX + badgeRadius} ${badgeY + badgeRadius * 0.5} ${badgeX} ${badgeY + badgeRadius * 1.5} C${badgeX - badgeRadius} ${badgeY + badgeRadius * 0.5} ${badgeX - badgeRadius} ${badgeY - badgeRadius} ${badgeX} ${badgeY - badgeRadius} Z" fill="#70B603" stroke="white" stroke-width="1" filter="url(#badge-shadow-${note.number})"/>`);
+      svgParts.push(`  <text x="${badgeX}" y="${badgeY + 2}" text-anchor="middle" class="note-badge-text">${note.number}</text>`);
+    });
+    
+    // Render note cards at bottom
+    if (notes.length > 0) {
+      const notesY = maxY + margin + extraNoteSpacing;
+      const cardWidth = (viewBoxWidth - margin * 2 - 10) / 2;
+      const cardMargin = 10;
+      const cardsPerRow = 2;
+      const lineHeight = 22;
+      const cardPadding = 12;
+      
+      const cardHeights = notes.map(note => {
+        const lines = wrapText(note.note, cardWidth - 28 - 12, 12);
+        const contentHeight = lines.length * lineHeight;
+        return Math.max(60, contentHeight + cardPadding * 2);
+      });
+      
+      const rowMaxHeights = [];
+      notes.forEach((_, index) => {
+        const row = Math.floor(index / cardsPerRow);
+        if (!rowMaxHeights[row]) rowMaxHeights[row] = 0;
+        rowMaxHeights[row] = Math.max(rowMaxHeights[row], cardHeights[index]);
+      });
+      
+      const rowStartYs = [0];
+      for (let row = 1; row < rowMaxHeights.length; row++) {
+        rowStartYs[row] = rowStartYs[row - 1] + rowMaxHeights[row - 1] + cardMargin;
+      }
+      
+      notes.forEach((note, index) => {
+        const col = index % cardsPerRow;
+        const row = Math.floor(index / cardsPerRow);
+        const cardX = viewBoxX + margin + col * (cardWidth + cardMargin);
+        const cardY = notesY + cardMargin + rowStartYs[row];
+        const cardHeight = cardHeights[index];
+        
+        svgParts.push(`  <rect x="${cardX}" y="${cardY}" width="${cardWidth}" height="${cardHeight}" rx="8" class="note-card"/>`);
+        
+        const badgeX = cardX + 12;
+        const badgeY = cardY + 12;
+        const badgeRadius = 8;
+        
+        svgParts.push(`  <defs>`);
+        svgParts.push(`    <filter id="card-badge-shadow-${index}" x="-50%" y="-50%" width="200%" height="200%">`);
+        svgParts.push(`      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.7"/>`);
+        svgParts.push(`    </filter>`);
+        svgParts.push(`  </defs>`);
+        svgParts.push(`  <circle cx="${badgeX}" cy="${badgeY}" r="${badgeRadius}" fill="#70B603" stroke="white" stroke-width="1" filter="url(#card-badge-shadow-${index})"/>`);
+        svgParts.push(`  <text x="${badgeX}" y="${badgeY + 3}" text-anchor="middle" class="note-card-badge-text">${note.number}</text>`);
+        
+        const textX = cardX + 28;
+        const textY = cardY + cardPadding;
+        svgParts.push(`  <text x="${textX}" y="${textY}" fill="#333" font-size="12" dominant-baseline="hanging">`);
+        
+        const lines = wrapText(note.note, cardWidth - 28 - 12, 12);
+        lines.forEach((line, lineIndex) => {
+          if (lineIndex === 0) {
+            svgParts.push(`    <tspan x="${textX}">${escapeHtml(line)}</tspan>`);
+          } else {
+            svgParts.push(`    <tspan x="${textX}" dy="22">${escapeHtml(line)}</tspan>`);
+          }
+        });
+        svgParts.push(`  </text>`);
+      });
+    }
+  }
+  
+  svgParts.push('</svg>');
+  
+  return svgParts.join('\n');
 }
 
 export { render };
