@@ -332,8 +332,8 @@ select:hover{
   background: #f5f5f5;
   overflow: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   min-height: 0;
 }
 
