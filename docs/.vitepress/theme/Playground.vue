@@ -6,25 +6,20 @@ import { render as renderSvg } from './lib/renderer.js'
 const defaultCode = `!title="Login Page"
 !bg=#f5f5f5
 
-// Container
 [] @(0,0) w=400 h=500 bg=#fff
 
-// Header
 "Welcome Back" @(130,80) size=24 bold
 "Please sign in" @(140,115) c=#666
 
-// Form
 "Email" @(50,180)
 ["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd
 
 "Password" @(50,280)
 ["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd
 
-// Actions
-["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16`
+["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16
 
-// Footer
-"Don't have an account?" @(100,500) c=#666
+"No account?" @(100,500) c=#666
 "Sign up" @(260,500) c=#3498db`
 
 const code = ref(defaultCode)
@@ -96,7 +91,6 @@ const examples = [
 
 [] @(0,0) w=800 h=600 bg=#fff
 
-// Sidebar
 [] @(0,0) w=200 h=600 bg=#1a1a2e
 
 (("SW")) @(20,20) w=40 h=40 bg=#3498db c=white
@@ -106,14 +100,13 @@ const examples = [
 "Users" @(20,140) c=#aaa
 "Settings" @(20,180) c=#aaa
 
-// Stats
 [] @(220,20) w=180 h=100 bg=#fff r=8
 "Total Users" @(240,40) c=#666
-"12,345" @(240,70) size=24 bold
+"12345" @(240,70) size=24 bold
 
 [] @(420,20) w=180 h=100 bg=#fff r=8
 "Revenue" @(440,40) c=#666
-"$45,678" @(440,70) size=24 bold`
+"45678" @(440,70) size=24 bold`
   },
   {
     name: 'Mobile App',
@@ -122,24 +115,21 @@ const examples = [
 
 [] @(0,0) w=375 h=812 bg=#fff
 
-// Status Bar
 [] @(0,0) w=375 h=44 bg=#3498db
 "9:41" @(170,12) c=white bold
 
-// Header
 [] @(0,44) w=375 h=60 bg=#3498db
 "Home" @(165,64) c=white size=18 bold
 
-// Content
 "Good Morning!" @(20,130) size=20 bold
 
 [] @(20,180) w=160 h=80 bg=#e8f5e9 r=12
 "Balance" @(40,195) c=#666 size=12
-"$12,345" @(40,220) size=20 bold c=#27ae60
+"12345" @(40,220) size=20 bold c=#27ae60
 
 [] @(195,180) w=160 h=80 bg=#e3f2fd r=12
 "Points" @(215,195) c=#666 size=12
-"2,450" @(215,220) size=20 bold c=#2196f3`
+"2450" @(215,220) size=20 bold c=#2196f3`
   }
 ]
 
@@ -240,7 +230,7 @@ select {
   font-size: 14px;
 }
 
-select:hover {
+select:hover{
   background: #4a4a4a;
 }
 
@@ -264,25 +254,25 @@ select:hover {
   font-size: 14px;
 }
 
-.btn:hover {
+.btn:hover{
   background: #4a4a4a;
 }
 
-.btn-primary {
+.btn-primary{
   background: #3498db;
   border-color: #3498db;
 }
 
-.btn-primary:hover {
+.btn-primary:hover{
   background: #2980b9;
 }
 
-.btn:disabled {
+.btn:disabled{
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.editor-container {
+.editor-container{
   display: flex;
   flex: 1;
   overflow: hidden;
@@ -290,7 +280,7 @@ select:hover {
 }
 
 .editor-panel,
-.preview-panel {
+.preview-panel{
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -298,11 +288,11 @@ select:hover {
   min-width: 0;
 }
 
-.editor-panel {
+.editor-panel{
   border-right: 1px solid #3c3c3c;
 }
 
-.panel-header {
+.panel-header{
   padding: 8px 16px;
   background: #252526;
   color: #ccc;
@@ -313,7 +303,7 @@ select:hover {
   flex-shrink: 0;
 }
 
-.code-editor {
+.code-editor{
   flex: 1;
   padding: 16px;
   background: #1e1e1e;
@@ -328,15 +318,15 @@ select:hover {
   box-sizing: border-box;
 }
 
-.code-editor:focus {
+.code-editor:focus{
   background: #1a1a1a;
 }
 
-.code-editor::placeholder {
+.code-editor::placeholder{
   color: #666;
 }
 
-.preview-content {
+.preview-content{
   flex: 1;
   padding: 16px;
   background: #f5f5f5;
@@ -347,23 +337,23 @@ select:hover {
   min-height: 0;
 }
 
-.svg-container {
+.svg-container{
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
 }
 
-.svg-container :deep(svg) {
+.svg-container :deep(svg){
   display: block;
 }
 
-.loading {
+.loading{
   color: #666;
   font-size: 14px;
 }
 
-.error {
+.error{
   color: #e74c3c;
   background: #fff;
   padding: 16px;
@@ -375,28 +365,28 @@ select:hover {
   overflow: auto;
 }
 
-.placeholder {
+.placeholder{
   color: #999;
   font-size: 14px;
 }
 
 @media (max-width: 768px) {
-  .editor-container {
+  .editor-container{
     flex-direction: column;
   }
   
-  .editor-panel {
+  .editor-panel{
     border-right: none;
     border-bottom: 1px solid #3c3c3c;
     min-height: 200px;
   }
   
-  .toolbar {
+  .toolbar{
     flex-wrap: wrap;
     gap: 8px;
   }
   
-  .toolbar-left, .toolbar-right {
+  .toolbar-left, .toolbar-right{
     flex-wrap: wrap;
   }
 }
