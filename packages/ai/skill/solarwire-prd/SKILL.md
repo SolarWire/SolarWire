@@ -75,6 +75,46 @@ Here's my understanding of the requirements:
 Is this understanding correct? Any adjustments or additions needed?
 ```
 
+### Phase 3.5: Multi-language Requirements
+
+```
+**Step 3.5: Multi-language Support Confirmation**
+
+Does this project require multi-language support?
+
+If yes:
+- Which languages need to be supported?
+- Common options: English, 中文, 日本語, 한국어, Deutsch, Français, Español, etc.
+- The default language will be set based on your primary language.
+
+If no:
+- All notes will be written in the default language only.
+- No i18n information will be added to any elements.
+```
+
+**⚠️ IMPORTANT: Multi-language Rules**
+
+1. **Only when explicitly confirmed**: Add i18n information ONLY when user explicitly confirms multi-language support is needed
+2. **Never add i18n if not requested**: If user says no multi-language, absolutely DO NOT add any i18n information
+3. **All meaningful elements**: If multi-language is confirmed, ALL meaningful text elements MUST include i18n translations
+4. **Default language**: Based on user's primary language (the language they use to communicate)
+
+**Elements requiring i18n (if multi-language is confirmed):**
+- Button text
+- Label text
+- Placeholder text
+- Error/Success messages
+- Table headers
+- Menu items
+- Page titles
+- Status values
+
+**Elements NOT requiring i18n:**
+- User input data (usernames, comments, etc.)
+- System generated data (IDs, timestamps, etc.)
+- Decorative elements
+- Icons
+
 ### Phase 4: Generate Output
 
 After confirming requirements, generate documents with the following structure:
@@ -367,7 +407,7 @@ sequenceDiagram
 
 **Correct Example:**
 ```solarwire
-["Login"] @(100,50) w=100 h=40 bg=#3498db c=white note="Submit login form"
+["Login"] @(100,50) w=100 h=40 bg=#1890FF c=#FFFFFF note="Submit login form"
 "Username" @(100,100)
 (("Avatar")) @(100,150) w=40  // Circle with text - MUST use double quotes
 ```
@@ -392,14 +432,7 @@ sequenceDiagram
 
 #### 2. Element Selection Principles
 
-**Goal: Wireframes should be clean, clear, and close to actual page display**
-
-**Key Principles for Clean Wireframes:**
-1. **Use appropriate element types** - Match element shape to its real-world counterpart
-2. **Include realistic content** - Use actual placeholder text, not generic labels
-3. **Proper spacing** - Element spacing: 10px (unified)
-4. **Visual hierarchy** - Important elements should be larger/prominent
-5. **Consistent styling** - Use consistent colors and sizes throughout
+**Choose appropriate element types based on actual UI components:**
 
 | Scenario | Recommended Element | Example |
 |----------|---------------------|---------|
@@ -427,12 +460,7 @@ sequenceDiagram
 - ❌ `[Login]` - Text without double quotes
 - ❌ Using placeholder `[?]` for buttons (use `["Button Text"]` instead)
 - ❌ Using rectangle `[]` for plain labels (use `"Label"` instead)
-- ❌ Overcrowding elements - leave proper spacing
-
-**Do Not Abuse:**
-- ❌ Don't use placeholder `[?]` for buttons or text (use rectangle or plain text)
-- ❌ Don't use rectangle `[]` for plain labels (use plain text `""`)
-- ❌ Don't use circle `(())` for non-avatar/icon button elements
+- ❌ Overcrowding elements - use 10px spacing
 
 #### 3. Page Organization Rules
 
@@ -487,6 +515,7 @@ sequenceDiagram
 **Write notes for:**
 - Interactive elements (buttons, links, etc.)
 - Input elements with validation or logic
+- Dropdowns (selection behavior, options source)
 - Data display elements with complex rules (tables, lists)
 - Elements with business logic (calculations, conditions)
 - Complex concepts requiring additional explanation
@@ -668,7 +697,107 @@ Describe directly in note, no separate wireframe needed.
 
 ---
 
-##### 7. Examples: Good vs Bad Notes
+##### 7. Multi-language (i18n) Support
+
+**⚠️ CRITICAL: Only add i18n when user explicitly confirms multi-language support is needed**
+
+**If user does NOT need multi-language:**
+- Do NOT add any i18n information to any element
+- Write notes in the user's primary language only
+
+**If user confirms multi-language support:**
+- ALL meaningful text elements MUST include i18n translations
+- Use full language names (e.g., "English", "中文", "日本語") instead of language codes
+- Default language is based on user's primary language
+
+---
+
+**i18n Format for Single Text Element:**
+
+```solarwire
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+2. i18n: English=Login, 中文=登录, 日本語=ログイン"
+```
+
+**Format:** `i18n: Language1=Text1, Language2=Text2, Language3=Text3`
+
+---
+
+**i18n Format for Multiple Text Elements (e.g., buttons in a group):**
+
+```solarwire
+["Cancel"] @(100,50) w=80 h=36 note="Cancel button
+1. Click action
+   - Close dialog without saving
+2. i18n: English=Cancel, 中文=取消, 日本語=キャンセル"
+
+["Confirm"] @(200,50) w=80 h=36 note="Confirm button
+1. Click action
+   - Save changes and close dialog
+2. i18n: English=Confirm, 中文=确认, 日本語=確認"
+```
+
+---
+
+**i18n Format for Table with Multiple Fields:**
+
+Use compact format with language names declared once:
+
+```solarwire
+## @(100,50) w=600 border=1 note="User list table
+1. Data source
+   - User list data from User Management module
+2. Fields (i18n: English/中文/日本語)
+   - ID: Unique user identifier [ID/ID/ID]
+   - Name: User display name [Name/用户名/ユーザー名]
+   - Status: 1=Active, 0=Disabled [Status/状态/ステータス]
+     - Values: Active/正常/有効, Disabled/禁用/無効
+   - Created: Account creation time [Created/创建时间/作成日時]
+   - Actions: View and edit operations [Actions/操作/操作]
+3. Buttons (i18n: English/中文/日本語)
+   - View [View/查看/表示]
+   - Edit [Edit/编辑/編集]
+   - Delete [Delete/删除/削除]"
+```
+
+**Format for table fields:**
+- Declare languages once: `Fields (i18n: Language1/Language2/Language3)`
+- Each field: `- FieldName: Description [Text1/Text2/Text3]`
+- Status values: `Values: Value1/Lang1/Lang2, Value2/Lang1/Lang2`
+
+---
+
+**i18n Format for Dropdown Options:**
+
+```solarwire
+["Select status"] @(100,50) w=200 h=36 note="Status dropdown
+1. Options (i18n: English/中文/日本語)
+   - All [All/全部/すべて]
+   - Active [Active/正常/有効]
+   - Disabled [Disabled/禁用/無効]
+2. Default: All"
+```
+
+---
+
+**i18n Format for Error/Success Messages:**
+
+```solarwire
+["Submit"] @(100,50) w=100 h=40 note="Submit button
+1. Click action
+   - Validate and submit form data
+2. Success message
+   - i18n: English=Submitted successfully, 中文=提交成功, 日本語=送信成功
+3. Error messages
+   - Network error: i18n: English=Network error, please try again, 中文=网络错误，请重试, 日本語=ネットワークエラー、再試行してください
+   - Validation error: i18n: English=Please check your input, 中文=请检查您的输入, 日本語=入力内容を確認してください"
+```
+
+---
+
+##### 8. Examples: Good vs Bad Notes
 
 **❌ Bad Note (Visual details + element type label):**
 ```solarwire
@@ -746,7 +875,7 @@ Each page/tab/modal needs to generate two SVG files:
 | `<url>` | Real image | `<https://example.com/logo.png> @(100,50) w=40` |
 | `--` | Divider line | `-- @(0,100)->(400,100)` |
 | `##` | Table container | `## @(100,50) w=500 border=1` |
-| `#` | Table row (indented) | `  # bg=#eee` |
+| `#` | Table row (indented) | `  # bg=#F2F2F2` |
 
 ### Table Syntax (Indentation Required)
 
@@ -771,7 +900,7 @@ Each page/tab/modal needs to generate two SVG files:
   # bg=#FAFAFA                  // Alternating row color
     "Data 4"
     "Data 5"
-    ["Edit"] ["Delete"]         // Action buttons in cell
+    "Data 6"
 ```
 
 **⚠️ Indentation Rules:**
@@ -789,13 +918,15 @@ Each page/tab/modal needs to generate two SVG files:
 | Attribute | Description | Example |
 |-----------|-------------|---------|
 | `w` `h` | Width, Height | `w=100 h=40` |
-| `bg` | Background color | `bg=#3498db` |
-| `c` | Text color | `c=white` or `c=#fff` |
-| `b` | Border color | `b=#ddd` |
+| `bg` | Background color | `bg=#1890FF` |
+| `c` | Text color | `c=#FFFFFF` or `c=#333333` |
+| `b` | Border color | `b=#F2F2F2` |
 | `r` | Border radius | `r=8` |
 | `size` | Font size | `size=16` |
 | `bold` | Bold text | `bold` |
 | `opacity` | Element opacity (0-1) | `opacity=0.5` for 50% transparency |
+| `colspan` | Column span for table cells | `colspan=2` (merge 2 columns) |
+| `rowspan` | Row span for table cells | `rowspan=2` (merge 2 rows) |
 | `note` | Functional description | `note="Click to submit form"` |
 
 ### Table Row Attributes
@@ -822,11 +953,12 @@ Each page/tab/modal needs to generate two SVG files:
   # bg=#F2F2F2 c=#333333 bold      // Header row
     "ID"
     "Name"
-    "Actions"
+    "Actions" colspan=2            // Merge 2 columns for actions
   # bg=#FAFAFA                     // Data row: alternating color
     "1"
     "John Doe"
-    ["Edit"] ["Delete"]
+    ["Edit"]                       // Each button in separate cell
+    ["Delete"]
 ```
 
 ---
@@ -834,6 +966,35 @@ Each page/tab/modal needs to generate two SVG files:
 ## Creating Clean, Realistic Wireframes
 
 **Goal: Wireframes should look like actual UI, clean and professional**
+
+### Key Principles
+
+1. **Use Realistic Placeholder Content**
+   - Use actual placeholder text, not generic labels
+   - Example: `["Enter your email..."]` instead of `["Input"]`
+   - Example: `["Login"]` instead of `["Button"]`
+
+2. **Proper Visual Hierarchy**
+   - Primary buttons: Colored background (`bg=#1890FF c=#FFFFFF`)
+   - Secondary buttons: Border only (`bg=#FFFFFF b=#F2F2F2`)
+   - Important elements should be larger/prominent
+
+3. **Appropriate Element Types**
+   - Buttons → Rectangle `[]` with text
+   - Cards → Rounded rectangle `()`
+   - Avatars → Circle with letter `(("A"))`
+   - Labels → Plain text `""`
+   - Inputs → Rectangle with placeholder
+
+4. **Consistent Spacing**
+   - Element spacing: 10px (unified)
+   - Group related elements together
+   - Use consistent margins throughout
+
+5. **Clean Layout**
+   - Don't overcrowd elements
+   - Use dividers `--` to separate sections
+   - Container rectangle should contain all elements
 
 ### Page Presentation Rules
 
@@ -865,6 +1026,7 @@ Each page/tab/modal needs to generate two SVG files:
 | Secondary text | `#AAAAAA` | Placeholder, descriptions |
 | Borders/Lines | `#F2F2F2` | Dividers, borders |
 | Background | `#FFFFFF` | Page background |
+| Alternating row | `#FAFAFA` | Table alternating row background |
 | Primary elements | `#1890FF` | Primary buttons, links, selected state |
 | Warning/Error | `#D9001B` | Error messages, warnings |
 
@@ -947,40 +1109,9 @@ Each page/tab/modal needs to generate two SVG files:
 "Are you sure you want to delete this item? This action cannot be undone." @(20,70) c=#333333
 
 // Action buttons
-["Cancel"] @(100,140) w=80 h=36 bg=#FFFFFF b=#DDDDDD
+["Cancel"] @(100,140) w=80 h=36 bg=#FFFFFF b=#F2F2F2
 ["Confirm"] @(220,140) w=80 h=36 bg=#D9001B c=#FFFFFF
 ```
-
----
-
-### Key Principles
-
-1. **Use Realistic Placeholder Content**
-   - Use actual placeholder text, not generic labels
-   - Example: `["Enter your email..."]` instead of `["Input"]`
-   - Example: `["Login"]` instead of `["Button"]`
-
-2. **Proper Visual Hierarchy**
-   - Primary buttons: Colored background (`bg=#1890FF c=white`)
-   - Secondary buttons: Border only (`bg=#FFFFFF b=#F2F2F2`)
-   - Important elements should be larger/prominent
-
-3. **Appropriate Element Types**
-   - Buttons → Rectangle `[]` with text
-   - Cards → Rounded rectangle `()`
-   - Avatars → Circle with letter `(("A"))`
-   - Labels → Plain text `""`
-   - Inputs → Rectangle with placeholder
-
-4. **Consistent Spacing**
-   - Element spacing: 10px (unified)
-   - Group related elements together
-   - Use consistent margins throughout
-
-5. **Clean Layout**
-   - Don't overcrowd elements
-   - Use dividers `--` to separate sections
-   - Container rectangle should contain all elements
 
 ### Example: Clean Login Form
 
@@ -1158,7 +1289,7 @@ Each page/tab/modal needs to generate two SVG files:
 2. **Notes Describe Function and Business Logic** - Focus on behavior and logic, avoid visual details and technical implementation
 3. **Not Every Element Needs a Note** - Skip notes for visual elements; common sense exemption for back button, close button, page selector, number stepper
 4. **First Line Defines Element** - Note first line must describe what the element is (e.g., "Login button"), not element type (e.g., "[Primary Button]")
-5. **Note Structure Required** - Use numbered first level, dash for second level, double dash for third level
+5. **Note Structure Required** - First line: element definition; First level: numbered (1. 2. 3.); Second level: dash (-); Third level: double dash (--)
 6. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
 7. **No Brackets for Attributes** - Write directly `w=100 h=40`
 8. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
@@ -1166,5 +1297,6 @@ Each page/tab/modal needs to generate two SVG files:
 10. **Separate Modals/States/Tabs** - Each independent view in separate code block; all modals must have separate wireframe
 11. **Container Rectangle Required** - First element of each page is white background container
 12. **Generate Dual SVG Versions** - With notes and without notes versions
-13. **Color Standards** - Use unified colors: #333333 (text), #AAAAAA (secondary), #F2F2F2 (border), #FFFFFF (bg), #1890FF (primary), #D9001B (error)
+13. **Color Standards** - Use unified colors: #333333 (text), #AAAAAA (secondary), #F2F2F2 (border), #FFFFFF (bg), #FAFAFA (alternating row), #1890FF (primary), #D9001B (error)
 14. **Font Standards** - Font size 13px, line height 22px
+15. **i18n Only When Confirmed** - Add multi-language support ONLY when user explicitly confirms; if not confirmed, absolutely NO i18n information; if confirmed, ALL meaningful elements MUST include i18n translations using full language names (English, 中文, 日本語)

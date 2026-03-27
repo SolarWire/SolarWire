@@ -26,7 +26,6 @@
     "SKILL.md",
     "README.md",
     "generate-svg.js",
-    "prompts/",
     "lib/"
   ],
   "repository": {

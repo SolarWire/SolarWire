@@ -86,8 +86,6 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.80.0",
-    "typescript": "^5.3.0",
-    "@solarwire/parser": "1.5.1",
-    "@solarwire/renderer-svg": "1.5.1"
+    "typescript": "^5.3.0"
   }
 }

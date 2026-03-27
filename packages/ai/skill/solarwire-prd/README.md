@@ -86,56 +86,112 @@ All scenario-specific settings are integrated into SKILL.md:
 
 ## Note Writing Guidelines
 
-**Core Principle: Notes describe functional behavior, not visual details**
+**Core Principle: Notes describe functional behavior and business logic, not visual details or technical implementation**
 
 ### When to Write Notes
 
-**Write notes for elements with functional behavior:**
-- Buttons, input fields, links, checkboxes, dropdowns
+**Write notes for:**
+- Interactive elements (buttons, links, etc.)
+- Input elements with validation or logic
+- Dropdowns (selection behavior, options source)
+- Data display elements with complex rules (tables, lists)
+- Elements with business logic (calculations, conditions)
+- Complex concepts requiring additional explanation
 
-**Skip notes for purely visual elements:**
-- Divider lines, containers, static labels, decorative icons
-- Table headers, column titles (unless they have sorting/filtering)
+**Skip notes for:**
+- Pure visual elements (dividers, containers, decorative icons)
+- Static labels and titles
 
-### ⚠️ IMPORTANT: Notes Must Contain Functional Information
+**Common Sense Exemption (no note needed unless special behavior):**
+- Back button (standard behavior: return to previous page)
+- Close button
+- Page selector
+- Number stepper/incrementer
 
-**❌ Bad Notes (Just element type labels - AVOID):**
+**Note:** If exempted elements have special validation or interaction, they MUST be documented.
+
+### Note Structure Format
+
+**Format Rules:**
+- First line: Element definition (what this element is, NOT element type)
+- First level: Numbered (1. 2. 3.)
+- Second level: dash (-)
+- Third level: double dash (--)
+
+**Example:**
 ```solarwire
-["Login"] note="[Primary Button]"              // ❌ Just says "Button" - no behavior info
-## @(260,460) w=1600 border=1 note="[Table]"   // ❌ Just says "Table" - no data info
-"ID" note="[Column Title]"                     // ❌ Just says "Column" - no useful info
+["Enter password"] @(100,100) w=280 h=40 note="Password input
+1. Input rules
+   - Password displayed as dots
+   - Minimum 6 characters, maximum 32 characters
+2. Interaction
+   - Show/hide toggle icon on the right"
 ```
 
-**✅ Good Notes (Contain functional information):**
-```solarwire
-["Login"] note="[Primary Button]
-- Validates username and password on click
-- Success: Redirect to homepage
-- Failure: Display error message"
+### First Line: Element Definition
 
-## @(260,460) w=1600 border=1 note="[Table] User list.
-- Data source: User management API
-- Default sort: Created time descending
-- Pagination: 20 items per page"
+**The first line of a note MUST define what this element is (functional description, NOT element type).**
+
+| Correct | Incorrect |
+|---------|-----------|
+| `Password input` | `[Password Field]` |
+| `Username input` | `[Input Field]` |
+| `User data table` | `[Data Table]` |
+| `Submit form button` | `[Primary Button]` |
+
+### Content Forbidden in Notes
+
+**NEVER include:**
+
+- Colors: "Button is blue", "Text color #333"
+- Fonts: "Font size 14px", "Bold text"
+- Sizes: "Width 100px", "Height 40px"
+- Spacing: "Margin 16px", "Padding 8px"
+- Border: "Border radius 8px"
+- Shadows, animations
+- Technical details: API names, database fields
+- Just element type: "[Button]", "[Input]", "[Table]"
+
+### Examples: Good vs Bad Notes
+
+**❌ Bad Note (Visual details + element type label):**
+```solarwire
+["Login"] @(100,50) w=100 h=40 note="[Primary Button]
+- Blue background, white text
+- Border radius 8px
+- API: POST /api/auth/login"
 ```
 
-**✅ No Note Needed (No functional behavior):**
+**✅ Good Note (Functional behavior):**
 ```solarwire
-"Page Title" @(100,50) size=24 bold          // Static text - no note needed
--- @(0,100)->(400,100) b=#eee                 // Divider - no note needed
-"ID"                                          // Column title - no note needed
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid credentials'
+4. Disabled conditions
+   - Disabled when username or password is empty"
 ```
 
-### NEVER Include in Notes
+**✅ No Note Needed (Visual element):**
+```solarwire
+-- @(0,100)->(400,100) b=#F2F2F2
+```
 
-- ❌ Colors: "Button is blue", "Text color #333"
-- ❌ Fonts: "Font size 14px", "Bold text"
-- ❌ Sizes: "Width 100px", "Height 40px"
-- ❌ Spacing: "Margin 16px", "Padding 8px"
-- ❌ Border: "Border radius 8px"
-- ❌ Shadows, animations
-- ❌ Technical: API names, database fields
-- ❌ Just element type: "[Button]", "[Input]", "[Table]", "[Header Row]"
+## Color Standards
+
+| Purpose | Color | Usage |
+|---------|-------|-------|
+| Normal text | `#333333` | Labels, content text |
+| Secondary text | `#AAAAAA` | Placeholder, descriptions |
+| Borders/Lines | `#F2F2F2` | Dividers, borders |
+| Background | `#FFFFFF` | Page background |
+| Alternating row | `#FAFAFA` | Table alternating row background |
+| Primary elements | `#1890FF` | Primary buttons, links, selected state |
+| Warning/Error | `#D9001B` | Error messages, warnings |
 
 ## Updating Dependencies
 

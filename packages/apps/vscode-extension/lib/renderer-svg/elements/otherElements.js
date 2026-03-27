@@ -216,6 +216,23 @@ function renderTableElement(element, context, pos, renderChild) {
     const svgParts = [];
     const rows = element.children || [];
     const declaredNumRows = rows.length;
+    rows.forEach((row, rowIndex) => {
+        if (row.type !== 'table-row') {
+            throw new Error(`Invalid table structure: expected table-row element but found "${row.type}".\n` +
+                `Row index: ${rowIndex + 1}\n` +
+                `Found element: ${row.type}${row.type === 'text' ? ` ("${row.text || ''}")` : ''}\n` +
+                `Reason: Table elements can only contain table-row (#) elements as direct children.\n` +
+                `Solution: Ensure all elements inside the table (##) are properly indented under table-row (#) elements.\n` +
+                `Example:\n` +
+                `  ## @(x,y) w=width\n` +
+                `    #\n` +
+                `      "Cell 1"\n` +
+                `      "Cell 2"\n` +
+                `    #\n` +
+                `      "Cell 3"\n` +
+                `      "Cell 4"`);
+        }
+    });
     const tableWidth = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'w', 600);
     const declaredTableHeight = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'h', 0);
     const defaultRowHeight = 40;

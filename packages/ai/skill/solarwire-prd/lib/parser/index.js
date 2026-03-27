@@ -116,34 +116,275 @@ function isDeclarationLine(line) {
     const trimmed = line.trim();
     return trimmed.startsWith('!');
 }
+function isElementStart(char) {
+    return char === '[' || char === '(' || char === '"' || char === "'";
+}
+function checkForMultipleElementsOnLine(line, lineNum, input, inMultilineStringRef, stringCharRef) {
+    const trimmed = line.trim();
+    if (!trimmed)
+        return;
+    if (trimmed.startsWith('//'))
+        return;
+    if (trimmed.startsWith('!'))
+        return;
+    if (trimmed.startsWith('#'))
+        return;
+    if (inMultilineStringRef.value) {
+        for (let i = 0; i < line.length; i++) {
+            if (line[i] === '\\' && i + 1 < line.length) {
+                i++;
+                continue;
+            }
+            if (line[i] === stringCharRef.value) {
+                inMultilineStringRef.value = false;
+                return;
+            }
+        }
+        return;
+    }
+    let elementCount = 0;
+    let i = 0;
+    const len = line.length;
+    while (i < len) {
+        const char = line[i];
+        if (char === ' ' || char === '\t') {
+            i++;
+            continue;
+        }
+        if (char === '/' && i + 1 < len && line[i + 1] === '/') {
+            break;
+        }
+        if (char === '@') {
+            while (i < len && line[i] !== ')')
+                i++;
+            if (i < len)
+                i++;
+            continue;
+        }
+        if ((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) {
+            while (i < len && /[\w-]/.test(line[i]))
+                i++;
+            if (i < len && line[i] === '=') {
+                i++;
+                if (i < len && (line[i] === '"' || line[i] === "'")) {
+                    const quote = line[i];
+                    i++;
+                    let foundClose = false;
+                    while (i < len) {
+                        if (line[i] === '\\' && i + 1 < len) {
+                            i += 2;
+                            continue;
+                        }
+                        if (line[i] === quote) {
+                            foundClose = true;
+                            i++;
+                            break;
+                        }
+                        i++;
+                    }
+                    if (!foundClose) {
+                        inMultilineStringRef.value = true;
+                        stringCharRef.value = quote;
+                        return;
+                    }
+                }
+                else {
+                    while (i < len && !/[\s\t]/.test(line[i]))
+                        i++;
+                }
+            }
+            continue;
+        }
+        if (char === '-' && i + 1 < len && line[i + 1] === '-') {
+            elementCount++;
+            i += 2;
+            while (i < len && (line[i] === ' ' || line[i] === '\t'))
+                i++;
+            if (i < len && line[i] === '@') {
+                while (i < len && line[i] !== ')')
+                    i++;
+                if (i < len)
+                    i++;
+            }
+            while (i < len && (line[i] === ' ' || line[i] === '\t'))
+                i++;
+            if (i < len && line[i] === '-' && i + 1 < len && line[i + 1] === '>') {
+                i += 2;
+                while (i < len && (line[i] === ' ' || line[i] === '\t'))
+                    i++;
+                if (i < len && line[i] === '@') {
+                    while (i < len && line[i] !== ')')
+                        i++;
+                    if (i < len)
+                        i++;
+                }
+                else if (i < len && line[i] === '(') {
+                    let depth = 1;
+                    i++;
+                    while (i < len && depth > 0) {
+                        if (line[i] === '(')
+                            depth++;
+                        else if (line[i] === ')')
+                            depth--;
+                        i++;
+                    }
+                }
+            }
+            continue;
+        }
+        if (char === '<') {
+            elementCount++;
+            while (i < len && line[i] !== '>')
+                i++;
+            if (i < len)
+                i++;
+            continue;
+        }
+        if (char === '[' || char === '(' || char === '"' || char === "'") {
+            elementCount++;
+            if (char === '"' || char === "'") {
+                const quote = char;
+                i++;
+                let foundClose = false;
+                while (i < len) {
+                    if (line[i] === '\\' && i + 1 < len) {
+                        i += 2;
+                        continue;
+                    }
+                    if (line[i] === quote) {
+                        foundClose = true;
+                        i++;
+                        break;
+                    }
+                    i++;
+                }
+                if (!foundClose) {
+                    inMultilineStringRef.value = true;
+                    stringCharRef.value = quote;
+                }
+            }
+            else if (char === '[') {
+                let depth = 1;
+                i++;
+                while (i < len && depth > 0) {
+                    if (line[i] === '[')
+                        depth++;
+                    else if (line[i] === ']')
+                        depth--;
+                    else if (line[i] === '"' || line[i] === "'") {
+                        const quote = line[i];
+                        i++;
+                        while (i < len) {
+                            if (line[i] === '\\' && i + 1 < len) {
+                                i += 2;
+                                continue;
+                            }
+                            if (line[i] === quote) {
+                                i++;
+                                break;
+                            }
+                            i++;
+                        }
+                        continue;
+                    }
+                    i++;
+                }
+            }
+            else if (char === '(') {
+                let depth = 1;
+                i++;
+                while (i < len && depth > 0) {
+                    if (line[i] === '(')
+                        depth++;
+                    else if (line[i] === ')')
+                        depth--;
+                    else if (line[i] === '"' || line[i] === "'") {
+                        const quote = line[i];
+                        i++;
+                        while (i < len) {
+                            if (line[i] === '\\' && i + 1 < len) {
+                                i += 2;
+                                continue;
+                            }
+                            if (line[i] === quote) {
+                                i++;
+                                break;
+                            }
+                            i++;
+                        }
+                        continue;
+                    }
+                    i++;
+                }
+            }
+            continue;
+        }
+        i++;
+    }
+    if (elementCount > 1) {
+        throw new Error(formatError(`Multiple elements on the same line are not supported.\n` +
+            `Each element must be on its own line.\n` +
+            `Line content: ${trimmed}\n` +
+            `Found ${elementCount} elements on this line.\n` +
+            `Solution: Put each element on a separate line.`, input, lineNum, 1, 'one element per line', `${elementCount} elements`));
+    }
+}
 function parse(input) {
     if (!parser) {
         throw new Error('Parser not generated. Please run: npm run build');
     }
     try {
-        const rawResult = parser.parse(input);
         const lines = input.split(/\r?\n/);
-        const elementLines = [];
-        let inQuotes = false;
-        let quoteChar = '';
+        const inMultilineStringRef = { value: false };
+        const stringCharRef = { value: '' };
         lines.forEach((line, index) => {
-            let isElementLine = !isBlankLine(line) && !isCommentLine(line) && !isDeclarationLine(line);
-            if (isElementLine) {
-                let i = 0;
-                while (i < line.length) {
-                    if (!inQuotes && (line[i] === '"' || line[i] === "'")) {
-                        inQuotes = true;
-                        quoteChar = line[i];
+            checkForMultipleElementsOnLine(line, index + 1, input, inMultilineStringRef, stringCharRef);
+        });
+        const rawResult = parser.parse(input);
+        const elementLines = [];
+        let inMultilineString = false;
+        let stringChar = '';
+        lines.forEach((line, index) => {
+            if (inMultilineString) {
+                for (let i = 0; i < line.length; i++) {
+                    if (line[i] === '\\' && i + 1 < line.length) {
+                        i++;
+                        continue;
                     }
-                    else if (inQuotes && line[i] === quoteChar) {
-                        if (i > 0 && line[i - 1] !== '\\') {
-                            inQuotes = false;
+                    if (line[i] === stringChar) {
+                        inMultilineString = false;
+                        break;
+                    }
+                }
+                return;
+            }
+            const isElementLine = !isBlankLine(line) && !isCommentLine(line) && !isDeclarationLine(line);
+            if (isElementLine) {
+                for (let i = 0; i < line.length; i++) {
+                    if (line[i] === '\\' && i + 1 < line.length) {
+                        i++;
+                        continue;
+                    }
+                    if (line[i] === '"' || line[i] === "'") {
+                        stringChar = line[i];
+                        let foundClose = false;
+                        for (let j = i + 1; j < line.length; j++) {
+                            if (line[j] === '\\' && j + 1 < line.length) {
+                                j++;
+                                continue;
+                            }
+                            if (line[j] === stringChar) {
+                                foundClose = true;
+                                i = j;
+                                break;
+                            }
+                        }
+                        if (!foundClose) {
+                            inMultilineString = true;
+                            break;
                         }
                     }
-                    i++;
                 }
-            }
-            if (isElementLine && !inQuotes) {
                 elementLines.push({ line, lineNum: index + 1 });
             }
         });
