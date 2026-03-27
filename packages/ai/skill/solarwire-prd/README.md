@@ -103,7 +103,6 @@ All scenario-specific settings are integrated into SKILL.md:
 ```solarwire
 ["Login"] note="[Primary Button]"              // ❌ Just says "Button" - no behavior info
 ## @(260,460) w=1600 border=1 note="[Table]"   // ❌ Just says "Table" - no data info
-# bg=#fafafa note="[Header Row]"               // ❌ Just says "Header" - no useful info
 "ID" note="[Column Title]"                     // ❌ Just says "Column" - no useful info
 ```
 

@@ -247,9 +247,9 @@ sequenceDiagram
 // Page Content - Each element has detailed note description
 ["Logo"] @(50,50) w=120 h=60 note="Click to return to homepage"
 
-"User Login" @(100,150) size=24 bold note="Page title"
+"User Login" @(100,150) size=24 bold
 
-"Username" @(100,220) note="Input field label"
+"Username" @(100,220)
 ["Enter phone or email"] @(100,245) w=300 h=44 bg=#fff b=#ddd note="[Input Field]
 - Supports phone number or email login
 - Automatically trims leading/trailing spaces
@@ -257,7 +257,7 @@ sequenceDiagram
 - Error message: Display 'Please enter a valid phone number or email' on format error
 - Max length: 50 characters"
 
-"Password" @(100,310) note="Input field label"
+"Password" @(100,310)
 ["Enter password"] @(100,335) w=300 h=44 bg=#fff b=#ddd note="[Password Field]
 - Password displayed as dots
 - Show/hide toggle icon on the right
@@ -277,7 +277,7 @@ sequenceDiagram
 - Disabled when: username or password is empty
 - Debounce: Button disabled for 3 seconds after click, or until request returns"
 
-"Or login with" @(160,530) c=#999 note="Separator text"
+"Or login with" @(160,530) c=#999
 
 [?"WeChat Work"] @(120,560) w=40 h=40 note="[Third-party Login] WeChat Work QR code login"
 [?"DingTalk"] @(180,560) w=40 h=40 note="[Third-party Login] DingTalk QR code login"
@@ -385,7 +385,7 @@ sequenceDiagram
 | Plain Text | `"Label"` | `Label` ❌ |
 
 **Common Mistakes to Avoid:**
-- ❌ `((用户头像))` - Text without double quotes
+- ❌ `((Avatar))` - Text without double quotes
 - ❌ `[Login]` - Text without double quotes
 - ❌ Using placeholder `[?]` for buttons (use `["Button Text"]` instead)
 - ❌ Using rectangle `[]` for plain labels (use `"Label"` instead)
@@ -502,7 +502,6 @@ sequenceDiagram
     "John Doe"
     "Login"
 ```
-- Spacing elements
 
 ---
 
@@ -558,19 +557,19 @@ sequenceDiagram
 
 ##### 4. Note Category Tags
 
-**Use 【】 tags to identify element types:**
+**Use `[]` tags to identify element types:**
 
 | Tag | Usage | Needs Note? |
 |-----|-------|-------------|
-| 【Primary Button】 | Primary action button | Yes |
-| 【Secondary Button】 | Secondary action button | Yes |
-| 【Input Field】 | Text input field | Yes |
-| 【Dropdown】 | Dropdown select | Yes |
-| 【Checkbox】 | Checkbox | Yes |
-| 【Link】 | Text link | Yes |
-| 【Icon】 | Icon button | If interactive |
-| 【Card】 | Card container | If has behavior |
-| 【Table】 | Data table | Yes |
+| [Primary Button] | Primary action button | Yes |
+| [Secondary Button] | Secondary action button | Yes |
+| [Input Field] | Text input field | Yes |
+| [Dropdown] | Dropdown select | Yes |
+| [Checkbox] | Checkbox | Yes |
+| [Link] | Text link | Yes |
+| [Icon] | Icon button | If interactive |
+| [Card] | Card container | If has behavior |
+| [Table] | Data table | Yes |
 
 ---
 
@@ -650,17 +649,6 @@ Each page/tab/modal needs to generate two SVG files:
 | `--` | Divider line | `-- @(0,100)->(400,100)` |
 | `##` | Table container | `## @(100,50) w=500 border=1` |
 | `#` | Table row (indented) | `  # bg=#eee` |
-
-### ⚠️ CRITICAL: Text Content MUST Use Double Quotes
-
-**All text content inside elements MUST be wrapped in double quotes `""`:**
-
-| Element | ✅ Correct | ❌ Wrong |
-|---------|-----------|----------|
-| Rectangle | `["Login"]` | `[Login]` |
-| Rounded | `("Card")` | `(Card)` |
-| Circle | `(("Avatar"))` | `((Avatar))` |
-| Plain Text | `"Label"` | `Label` |
 
 ### Table Syntax (Indentation Required)
 
@@ -928,7 +916,7 @@ Each page/tab/modal needs to generate two SVG files:
 4. **Notes Must Contain Functional Information** - Never write notes that just say "[Button]", "[Table]", "[Header Row]" - these contain no useful information
 5. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
 6. **No Brackets for Attributes** - Write directly `w=100 h=40`
-7. **Note Category Tags** - Use 【】 tags to identify element types ([Primary Button], [Input Field], [Link], etc.)
+7. **Note Category Tags** - Use `[]` tags to identify element types ([Primary Button], [Input Field], [Link], etc.)
 8. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
 9. **Layout Close to Reality** - Wireframes should reflect actual page structure
 10. **Separate Modals/States/Tabs** - Each independent view in separate code block
