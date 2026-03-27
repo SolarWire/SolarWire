@@ -20,7 +20,6 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started/quick-start' },
       { text: 'Reference', link: '/reference/elements' },
-      { text: 'AI Integration', link: '/guides/ai-integration' },
       { text: 'GitHub', link: 'https://github.com/SolarWire/SolarWire' }
     ],
     
@@ -32,7 +31,8 @@ export default defineConfig({
             { text: 'Introduction', link: '/getting-started/introduction' },
             { text: 'Quick Start', link: '/getting-started/quick-start' },
             { text: 'Installation', link: '/getting-started/installation' },
-            { text: 'Basic Syntax', link: '/getting-started/basic-syntax' }
+            { text: 'Basic Syntax', link: '/getting-started/basic-syntax' },
+            { text: 'AI Integration', link: '/getting-started/ai-integration' }
           ]
         }
       ],
@@ -45,17 +45,6 @@ export default defineConfig({
             { text: 'Coordinates', link: '/reference/coordinates' },
             { text: 'Tables', link: '/reference/tables' },
             { text: 'Examples', link: '/reference/examples' }
-          ]
-        }
-      ],
-      '/guides/': [
-        {
-          text: 'Guides',
-          items: [
-            { text: 'Best Practices', link: '/guides/best-practices' },
-            { text: 'AI Integration', link: '/guides/ai-integration' },
-            { text: 'VSCode Extension', link: '/guides/vscode-extension' },
-            { text: 'Markdown Integration', link: '/guides/markdown-integration' }
           ]
         }
       ]
