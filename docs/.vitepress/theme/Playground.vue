@@ -1,5 +1,7 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
+import { parse } from './lib/parser.js'
+import { render as renderSvg } from './lib/renderer.js'
 
 const defaultCode = `!title="Login Page"
 !bg=#f5f5f5
@@ -19,10 +21,7 @@ const defaultCode = `!title="Login Page"
 ["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd
 
 // Actions
-["Remember me"] @(50,370) w=16 h=16
-"Remember me" @(74,372)
-
-["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16
+["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16`
 
 // Footer
 "Don't have an account?" @(100,500) c=#666
@@ -32,42 +31,22 @@ const code = ref(defaultCode)
 const svgOutput = ref('')
 const error = ref('')
 const showNotes = ref(true)
-const loading = ref(true)
+const loading = ref(false)
 const loadError = ref('')
 
-let parser = null
-let renderer = null
 let debounceTimer = null
 
-onMounted(async () => {
-  try {
-    const base = import.meta.env.BASE_URL || '/'
-    console.log('Loading SolarWire from:', base)
-    
-    const parserModule = await import(/* @vite-ignore */ base + 'lib/parser/index.js')
-    const rendererModule = await import(/* @vite-ignore */ base + 'lib/renderer-svg/index.js')
-    
-    parser = parserModule
-    renderer = rendererModule
-    loading.value = false
-    console.log('SolarWire loaded successfully')
-    render()
-  } catch (e) {
-    console.error('Failed to load SolarWire:', e)
-    loadError.value = 'Failed to load SolarWire libraries: ' + e.message
-    loading.value = false
-  }
+onMounted(() => {
+  render()
 })
 
 function render() {
-  if (!parser || !renderer) return
-  
   error.value = ''
   try {
-    const ast = parser.parse(code.value)
-    svgOutput.value = renderer.render(ast, { showNotes: showNotes.value })
+    const ast = parse(code.value)
+    svgOutput.value = renderSvg(ast, { showNotes: showNotes.value })
   } catch (e) {
-    error.value = e.message
+    error.value = e.message || String(e)
   }
 }
 
@@ -161,36 +140,6 @@ const examples = [
 [] @(195,180) w=160 h=80 bg=#e3f2fd r=12
 "Points" @(215,195) c=#666 size=12
 "2,450" @(215,220) size=20 bold c=#2196f3`
-  },
-  {
-    name: 'Data Table',
-    code: `!title="User List"
-!bg=#f5f5f5
-
-[] @(0,0) w=800 h=500 bg=#fff
-
-"User Management" @(20,30) size=20 bold
-["Add User"] @(700,25) w=80 h=36 bg=#3498db c=white r=4
-
-## @(20,80) w=760 border=1
-  # bg=#f5f5f5 bold
-    "ID"
-    "Name"
-    "Email"
-    "Status"
-    "Actions"
-  # bg=#fff
-    "1"
-    "John Doe"
-    "john@example.com"
-    "Active" c=#27ae60
-    ["Edit"] ["Delete"]
-  # bg=#f9f9f9
-    "2"
-    "Jane Smith"
-    "jane@example.com"
-    "Active" c=#27ae60
-    ["Edit"] ["Delete"]`
   }
 ]
 
@@ -198,10 +147,6 @@ function loadExample(example) {
   code.value = example.code
   render()
 }
-
-watch(showNotes, () => {
-  render()
-})
 </script>
 
 <template>
@@ -216,7 +161,7 @@ watch(showNotes, () => {
       </div>
       <div class="toolbar-right">
         <label class="checkbox">
-          <input type="checkbox" v-model="showNotes" />
+          <input type="checkbox" v-model="showNotes" @change="render" />
           Show Notes
         </label>
         <button @click="copyCode" class="btn">Copy Code</button>
@@ -226,28 +171,20 @@ watch(showNotes, () => {
     
     <div class="editor-container">
       <div class="editor-panel">
-        <div class="panel-header">
-          Code
-          <span v-if="loading" class="status loading-status">Loading...</span>
-        </div>
+        <div class="panel-header">Code</div>
         <textarea 
-          v-if="!loadError"
           v-model="code" 
           @input="handleInput"
           class="code-editor"
           spellcheck="false"
           placeholder="Enter SolarWire code here..."
         ></textarea>
-        <div v-else class="load-error">
-          {{ loadError }}
-          <button @click="() => location.reload()" class="btn" style="margin-top: 12px;">Retry</button>
-        </div>
       </div>
       
       <div class="preview-panel">
         <div class="panel-header">Preview</div>
         <div class="preview-content">
-          <div v-if="loading" class="loading">Loading SolarWire...</div>
+          <div v-if="loading" class="loading">Loading...</div>
           <div v-else-if="error" class="error">{{ error }}</div>
           <div v-else-if="svgOutput" class="svg-container" v-html="svgOutput"></div>
           <div v-else class="placeholder">Enter code to see preview</div>
@@ -317,10 +254,6 @@ select:hover {
   user-select: none;
 }
 
-.checkbox input {
-  cursor: pointer;
-}
-
 .btn {
   padding: 6px 16px;
   background: #3c3c3c;
@@ -329,7 +262,6 @@ select:hover {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.2s;
 }
 
 .btn:hover {
@@ -378,19 +310,7 @@ select:hover {
   font-weight: 600;
   text-transform: uppercase;
   border-bottom: 1px solid #3c3c3c;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-shrink: 0;
-}
-
-.status {
-  font-weight: normal;
-  text-transform: none;
-}
-
-.loading-status {
-  color: #f0ad4e;
 }
 
 .code-editor {
@@ -414,20 +334,6 @@ select:hover {
 
 .code-editor::placeholder {
   color: #666;
-}
-
-.load-error {
-  flex: 1;
-  padding: 16px;
-  color: #e74c3c;
-  background: #1e1e1e;
-  font-family: monospace;
-  font-size: 13px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }
 
 .preview-content {
