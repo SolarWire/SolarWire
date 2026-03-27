@@ -457,102 +457,177 @@ sequenceDiagram
 
 #### 5. Note Writing Guidelines
 
-**Core Principle: Notes describe functional behavior, not visual details**
+**Core Principle: Notes describe functional behavior and business logic, not visual details or technical implementation**
 
 ---
 
 ##### 1. When to Write Notes
 
-**Write notes for elements with functional behavior:**
-- Buttons (click actions, form submission)
-- Input fields (validation, constraints, error handling)
-- Links (navigation)
-- Checkboxes/Switches (state changes)
-- Dropdowns (selection behavior)
-- Interactive elements (hover, click, drag)
+**Write notes for:**
+- Interactive elements (buttons, links, etc.)
+- Input elements with validation or logic
+- Data display elements with complex rules (tables, lists)
+- Elements with business logic (calculations, conditions)
+- Complex concepts requiring additional explanation
 
-**Skip notes for purely visual elements:**
-- Divider lines (`--`)
-- Container rectangles (background only)
-- Static labels without interaction
-- Decorative icons
-- Table headers (unless they have sorting/filtering behavior)
-- Column titles (unless they have special behavior)
+**Skip notes for:**
+- Pure visual elements (dividers, containers, decorative icons)
+- Static labels and titles
 
-**⚠️ IMPORTANT: Notes must contain FUNCTIONAL information, not just element type labels**
+**Common Sense Exemption (no note needed unless special behavior):**
+- Back button (standard behavior: return to previous page)
+- Close button
+- Page selector
+- Number stepper/incrementer
 
-**❌ Bad Notes (Just element type labels - AVOID THESE):**
-```solarwire
-## @(260,460) w=1600 border=1 note="[Table]"              // ❌ Just says "Table" - no useful info
-"Column Title" @(280,470) w=180 note="[Column Title]"     // ❌ Just says "Column Title" - no useful info
-["Button"] @(100,50) note="[Primary Button]"              // ❌ Just says "Primary Button" - no behavior info
+**Note:** If exempted elements have special validation or interaction, they MUST be documented.
+
+---
+
+##### 2. Note Structure Format
+
+**Format Rules:**
+```
+First line: Element definition (what this element is, NOT element type)
+First level: Numbered (1. 2. 3.)
+Second level: - or # (if third level exists)
+Third level: -- or -
 ```
 
-**✅ Good Notes (Contain functional information):**
+**Example:**
 ```solarwire
-## @(260,460) w=1600 border=1 note="[Table] Operation logs.
-- Data source: System audit log
-- Default 20 items per page
-- Supports filtering by date range and operation type
-- Columns: Time, Operator, Action, Details"
-
-["Submit"] @(100,50) w=100 h=40 note="[Primary Button]
-- Validates form data on click
-- Success: Save data and close modal
-- Failure: Display validation errors"
-
-["Username"] @(100,100) w=280 h=40 note="[Input Field]
-- Required field
-- Format: email or phone number
-- Max length: 50 characters"
-```
-
-**✅ No Note Needed (No functional behavior to describe):**
-```solarwire
-## @(260,460) w=1600 border=1           // Table - no note needed if no special behavior
-  # bg=#fafafa                          // Header row - note NOT supported on rows
-    "Time"                              // Column title - no note needed
-    "Operator"
-    "Action"
-  #
-    "2024-01-15 10:30"
-    "John Doe"
-    "Login"
+["Enter password"] @(100,100) w=280 h=40 note="Password input
+1. Input rules
+   - Password displayed as dots
+   - Minimum 6 characters, maximum 32 characters
+   - Must contain both letters and numbers
+2. Interaction
+   - Show/hide toggle icon on the right
+   - Validate format on blur
+   - Display error on format failure: 'Invalid password format'
+3. Special notes
+   - Lock account for 15 minutes after 5 consecutive errors"
 ```
 
 ---
 
-##### 2. What to Write in Notes
+##### 3. First Line: Element Definition
 
-**Focus on functional behavior:**
+**The first line of a note MUST define what this element is (functional description, NOT element type).**
 
-```solarwire
-["Login"] @(100,50) w=100 h=40 note="[Primary Button]
-- Validates username and password on click
-- Success: Redirect to homepage
-- Failure: Display error message, clear password field
-- Disabled when: username or password is empty"
-
-["Username"] @(100,100) w=280 h=40 note="[Input Field]
-- Supports phone number or email
-- Format validation: 11-digit phone or email format
-- Max length: 50 characters
-- Error: Display 'Invalid format' below on validation failure"
-```
-
-**Element-level Note Should Include (as needed):**
-1. **Element Type**: [Button], [Input Field], [Link], [Checkbox], etc.
-2. **Functional Behavior**: What happens on click/operation
-3. **Success/Failure Scenarios**: Handling of different results
-4. **Input Constraints**: Format, length, required, etc.
-5. **State Changes**: Disabled conditions, loading states, etc.
-6. **Error Messages**: What messages to display
+| Correct | Incorrect |
+|---------|-----------|
+| `Password input` | `[Password Field]` |
+| `Username input` | `[Input Field]` |
+| `User data table` | `[Data Table]` |
+| `Submit form button` | `[Primary Button]` |
 
 ---
 
-##### 3. ❌ Content Forbidden in Notes
+##### 4. Content Requirements by Element Type
 
-**NEVER include these in notes:**
+**Interactive/Operational Elements:**
+
+Must include:
+- What happens on click/operation
+- Success/failure handling
+- Disabled conditions
+- Special handling (debounce, throttle, etc.)
+
+**Example:**
+```solarwire
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+   - Submit login request if validation passes
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid username or password'
+   - Clear password field
+4. Disabled conditions
+   - Disabled when username or password is empty"
+```
+
+**Elements with Logic:**
+
+Must include:
+- Show/hide conditions
+- Calculation rules
+- Validation rules
+- State transitions
+
+**Example:**
+```solarwire
+["Batch Delete"] @(200,50) w=100 h=36 note="Batch delete button
+1. Visibility conditions
+   - Show when ≥ 1 items selected
+   - Hide when no items selected
+2. Click action
+   - Show confirmation: 'Delete N selected items?'
+   - Execute batch delete on confirmation"
+```
+
+**Data Display Elements:**
+
+Must include:
+- **Data source**: Module, page, or operation (NOT API/technical details); include formula if calculated
+- **Display fields and rules**: Field meanings, formats, special handling
+- **Sorting rules**: Default sort, sortable fields
+
+**Example:**
+```solarwire
+## @(100,50) w=500 border=1 note="User list table
+1. Data source
+   - User list data from User Management module
+   - Default sort: creation time descending
+2. Field descriptions
+   - ID: Unique user identifier
+   - Username: Display nickname, show 'Not set' if empty
+   - Status: 1='Active', 0='Disabled', disabled shown in red
+   - Created: Format as YYYY-MM-DD HH:mm
+3. Sorting rules
+   - Support sorting by username and created time"
+```
+
+**Calculated field example:**
+```solarwire
+"Total: ¥1,234.00" @(100,50) note="Order total amount
+1. Data source
+   - Formula: Sum of item amounts + Shipping - Discount
+   - Item amount = Unit price × Quantity"
+```
+
+**Tooltip/Toast:**
+
+Describe directly in note, no separate wireframe needed.
+
+**Example:**
+```solarwire
+["?"] @(100,50) w=16 h=16 note="Help icon
+1. Tooltip content
+   - Hover to show: 'Supports phone number or email login'"
+```
+
+---
+
+##### 5. Note Writing Principles
+
+| Principle | Description |
+|-----------|-------------|
+| **Necessity** | Only write for meaningful elements, avoid over-documentation |
+| **Completeness** | Fully describe the element, cover all aspects |
+| **Single Responsibility** | Only describe current element; affected elements document in their own notes |
+| **Organization** | Use standard format, clear hierarchy |
+| **Self-explanatory** | Element definition should be clear, no need for secondary explanation |
+| **Business-focused** | Describe business logic, avoid technical implementation details |
+
+---
+
+##### 6. Content Forbidden in Notes
+
+**NEVER include:**
 
 | Forbidden | Example (Don't Write) |
 |-----------|----------------------|
@@ -560,60 +635,45 @@ sequenceDiagram
 | Fonts | "Font size 14px", "Bold text" |
 | Sizes | "Width 100px", "Height 40px" |
 | Spacing | "Margin 16px", "Padding 8px" |
-| Border | "Border radius 8px", "1px solid #ddd" |
+| Border | "Border radius 8px" |
 | Shadows | "Box shadow 0 2px 4px" |
-| Animations | "Fade in 0.3s", "Slide from left" |
-| Technical | "API: /api/login", "Database field: user_id" |
+| Animations | "Fade in 0.3s" |
+| Technical details | "API: /api/login", "Database: user_id" |
 
-**Why?** These are visual/design decisions that:
-- The wireframe already shows visually
-- Will be decided by designers later
-- May change during implementation
-
----
-
-##### 4. Note Category Tags
-
-**Use `[]` tags to identify element types:**
-
-| Tag | Usage | Needs Note? |
-|-----|-------|-------------|
-| [Primary Button] | Primary action button | Yes |
-| [Secondary Button] | Secondary action button | Yes |
-| [Input Field] | Text input field | Yes |
-| [Dropdown] | Dropdown select | Yes |
-| [Checkbox] | Checkbox | Yes |
-| [Link] | Text link | Yes |
-| [Icon] | Icon button | If interactive |
-| [Card] | Card container | If has behavior |
-| [Table] | Data table | Yes |
+**Why?** These are:
+- Already shown visually in wireframe
+- Design decisions to be made later
+- Subject to change during implementation
 
 ---
 
-##### 5. Examples: Good vs Bad Notes
+##### 7. Examples: Good vs Bad Notes
 
-**❌ Bad Note (Too much visual detail):**
+**❌ Bad Note (Visual details + element type label):**
 ```solarwire
-["Login"] @(100,50) w=100 h=40 bg=#3498db c=white r=8 note="[Primary Button]
-- Blue background (#3498db), white text
-- Border radius 8px, height 40px
-- Font size 16px, bold
-- API: POST /api/auth/login
-- On click: validate and submit"
+["Login"] @(100,50) w=100 h=40 note="[Primary Button]
+- Blue background, white text
+- Border radius 8px
+- API: POST /api/auth/login"
 ```
 
-**✅ Good Note (Functional behavior only):**
+**✅ Good Note (Functional behavior):**
 ```solarwire
-["Login"] @(100,50) w=100 h=40 bg=#3498db c=white note="[Primary Button]
-- Validates username and password on click
-- Success: Redirect to homepage, save login state
-- Failure: Display 'Invalid credentials' error
-- Disabled when: username or password is empty"
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid credentials'
+4. Disabled conditions
+   - Disabled when username or password is empty"
 ```
 
 **✅ No Note Needed (Visual element):**
 ```solarwire
--- @(0,100)->(400,100) b=#eee
+-- @(0,100)->(400,100) b=#F2F2F2
 ```
 
 ---

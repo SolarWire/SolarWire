@@ -6,7 +6,7 @@ hero:
   text: "UI Wireframes in Markdown"
   tagline: A lightweight, Markdown-style DSL for creating UI wireframes with AI integration
   image:
-    src: /hero-image.svg
+    src: /logo.svg
     alt: SolarWire
   actions:
     - theme: brand
