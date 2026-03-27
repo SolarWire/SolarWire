@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
   diagnosticCollection = vscode.languages.createDiagnosticCollection('solarwire');
   context.subscriptions.push(diagnosticCollection);
 
-  const previewCommand = vscode.commands.registerCommand('solarwire.preview', () => {
+  const previewCommand = vscode.commands.registerCommand('solarwire.showPreview', () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
       vscode.window.showErrorMessage('No active editor!');

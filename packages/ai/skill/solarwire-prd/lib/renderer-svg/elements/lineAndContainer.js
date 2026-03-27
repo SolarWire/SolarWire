@@ -24,7 +24,7 @@ function renderLine(element, context) {
         const labelWidth = element.label.length * textSize * 0.6 + labelPadding * 2;
         const labelHeight = textSize + labelPadding * 2;
         svgParts.push(`<rect x="${midX - labelWidth / 2}" y="${midY - labelHeight / 2}" width="${labelWidth}" height="${labelHeight}" fill="white" stroke="none"/>`);
-        svgParts.push(`<text x="${midX}" y="${midY}" text-anchor="middle" dominant-baseline="middle" fill="${textColor}" font-size="${textSize}">${element.label}</text>`);
+        svgParts.push(`<text x="${midX}" y="${midY}" text-anchor="middle" dominant-baseline="middle" fill="${textColor}" font-size="${textSize}">${(0, context_1.escapeHtml)(element.label)}</text>`);
     }
     const bounds = {
         x: Math.min(start.x, end.x),
@@ -39,7 +39,7 @@ function renderLine(element, context) {
         height: 0,
     });
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),

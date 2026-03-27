@@ -321,6 +321,20 @@ SolarWire/
 
 ## Version History
 
+### v1.6.0 (2026-03-27)
+- ✅ **Improved error messages** - 所有错误信息现在包含上下文代码片段和精确的错误位置标记
+- ✅ **Unified error formatting** - 创建统一的 `formatRenderError` 函数处理所有渲染器错误
+- ✅ **Source location tracking** - AST 元素现在包含行号位置信息
+- ✅ **Code quality improvements**:
+  - 修复 `pointerLength` 计算错误
+  - 修复 `renderText` 空数组导致 `-Infinity` 问题
+  - 修复 `renderCircle` radius 负数问题
+  - 添加 `relative` 坐标类型处理
+  - 改进 `getOpacityAttribute` 返回默认值
+  - 使用现代 `includes` 替代 `indexOf`
+  - 为 `parser` 变量添加类型定义
+- ✅ **Dependency updates** - 同步更新所有包的解析器和渲染器
+
 ### v1.5.1 (2026-03-26)
 - ✅ **Table row note error** - 修复表格行 note 属性报错功能，现在会正确抛出错误提示
 

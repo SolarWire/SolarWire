@@ -27,11 +27,17 @@ export type CoordinateExpression = {
   y: Coordinate;
 };
 
+export interface SourceLocation {
+  line: number;
+  column?: number;
+}
+
 export interface BaseElement {
   type: string;
   attributes: Record<string, string>;
   coordinates?: CoordinateExpression;
   children?: BaseElement[];
+  location?: SourceLocation;
 }
 
 export interface RectangleElement extends BaseElement {

@@ -1,4 +1,16 @@
-import { Coordinate, CoordinateExpression, RelativeEndCoordinate, DocumentDeclaration } from '@solarwire/parser';
+import { Coordinate, CoordinateExpression, RelativeEndCoordinate, Element, DocumentDeclaration, SourceLocation } from '@solarwire/parser';
+export declare function escapeHtml(text: string): string;
+export interface ErrorDetails {
+    title: string;
+    expected?: string;
+    found?: string;
+    location?: string;
+    reason?: string;
+    solution?: string;
+}
+export declare function formatRenderError(details: ErrorDetails, sourceInput: string | undefined, location: SourceLocation | undefined, contextLines?: number): string;
+export declare function formatErrorWithContext(message: string, sourceInput: string | undefined, location: SourceLocation | undefined, contextLines?: number): string;
+export declare function getElementLocationInfo(element: Element): string;
 export interface GlobalDefaults {
     c?: string;
     size?: number;
@@ -21,8 +33,9 @@ export interface RenderContext {
     lastElementBounds: ElementBounds | null;
     isFirstElement: boolean;
     globalDefaults: GlobalDefaults;
+    sourceInput?: string;
 }
-export declare function createRenderContext(declarations?: DocumentDeclaration[]): RenderContext;
+export declare function createRenderContext(declarations?: DocumentDeclaration[], sourceInput?: string): RenderContext;
 export declare function createChildContext(parentContext: RenderContext, offsetX: number, offsetY: number): RenderContext;
 export declare function updateLastElementBounds(context: RenderContext, bounds: ElementBounds): void;
 export interface AbsolutePosition {
@@ -39,3 +52,4 @@ export declare function getAlignAttribute(attributes: Record<string, string>, de
 export declare function getStyleAttribute(attributes: Record<string, string>): {
     strokeDasharray?: string;
 };
+export declare function getOpacityAttribute(attributes: Record<string, string>, key?: string, defaultValue?: number): number;

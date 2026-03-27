@@ -1,5 +1,5 @@
 import { Document, Element } from '@solarwire/parser';
-import { createRenderContext, RenderContext, ElementBounds } from './context';
+import { createRenderContext, RenderContext, ElementBounds, escapeHtml, formatRenderError, getElementLocationInfo } from './context';
 import { renderRectangle, RenderResult } from './elements/rectangle';
 import { renderCircle, renderText, renderPlaceholder, renderImage, renderTable } from './elements/otherElements';
 import { renderLine } from './elements/lineAndContainer';
@@ -107,13 +107,14 @@ interface NoteInfo {
   bounds: ElementBounds;
 }
 
-interface RenderOptions {
+interface InternalRenderOptions {
   disableNotes?: boolean;
+  sourceInput?: string;
   notes?: NoteInfo[];
   noteNumberRef?: { current: number };
 }
 
-export function renderElement(element: Element, context: RenderContext, options?: RenderOptions): RenderResult {
+export function renderElement(element: Element, context: RenderContext, options?: InternalRenderOptions): RenderResult {
   const result = (() => {
     switch (element.type) {
       case 'rectangle':
@@ -132,8 +133,15 @@ export function renderElement(element: Element, context: RenderContext, options?
       case 'table':
       case 'table-row':
         return renderTable(element, context, (child, ctx) => renderElement(child, ctx, options));
-      default:
-        throw new Error(`Unknown element type: ${(element as any).type}`);
+      default: {
+        const elem = element as any;
+        throw new Error(formatRenderError({
+          title: `Unknown element type: "${elem.type}"`,
+          location: getElementLocationInfo(elem),
+          reason: 'The renderer does not recognize this element type.',
+          solution: 'Check if the element type is correct and supported.'
+        }, context.sourceInput, elem.location));
+      }
     }
   })();
   
@@ -150,8 +158,13 @@ export function renderElement(element: Element, context: RenderContext, options?
   return result;
 }
 
-export function render(ast: Document, options?: { disableNotes?: boolean }): string {
-  const context = createRenderContext(ast.declarations);
+export interface RenderOptions {
+  disableNotes?: boolean;
+  sourceInput?: string;
+}
+
+export function render(ast: Document, options?: RenderOptions): string {
+  const context = createRenderContext(ast.declarations, options?.sourceInput);
   const svgParts: string[] = [];
   let minX = Infinity;
   let minY = Infinity;
@@ -162,8 +175,9 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
   const noteNumberRef = { current: 1 };
   const disableNotes = options?.disableNotes ?? false;
   
-  const renderOptions: RenderOptions = {
+  const renderOptions: InternalRenderOptions = {
     disableNotes,
+    sourceInput: options?.sourceInput,
     notes,
     noteNumberRef
   };
@@ -302,9 +316,9 @@ export function render(ast: Document, options?: { disableNotes?: boolean }): str
         
         lines.forEach((line, lineIndex) => {
           if (lineIndex === 0) {
-            svgParts.push(`    <tspan x="${textX}">${line}</tspan>`);
+            svgParts.push(`    <tspan x="${textX}">${escapeHtml(line)}</tspan>`);
           } else {
-            svgParts.push(`    <tspan x="${textX}" dy="22">${line}</tspan>`);
+            svgParts.push(`    <tspan x="${textX}" dy="22">${escapeHtml(line)}</tspan>`);
           }
         });
         

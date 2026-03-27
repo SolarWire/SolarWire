@@ -23,9 +23,9 @@ function renderRectangle(element, context) {
     const bold = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'bold');
     const italic = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'italic');
     const note = element.attributes['note'];
-    const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
+    const opacity = (0, context_1.getOpacityAttribute)(element.attributes);
     let svgParts = [];
-    const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+    const opacityAttr = opacity !== 1 ? ` opacity="${opacity}"` : '';
     if (isRounded) {
         svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" rx="${r}" ry="${r}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
     }
@@ -45,10 +45,10 @@ function renderRectangle(element, context) {
         svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="middle" fill="${c}" font-size="${fontSize}" ${fontStyle}>`);
         lines.forEach((line, i) => {
             if (i === 0) {
-                svgParts.push(line);
+                svgParts.push((0, context_1.escapeHtml)(line));
             }
             else {
-                svgParts.push(`<tspan x="${textX}" dy="${lineHeight}">${line}</tspan>`);
+                svgParts.push(`<tspan x="${textX}" dy="${lineHeight}">${(0, context_1.escapeHtml)(line)}</tspan>`);
             }
         });
         svgParts.push('</text>');
@@ -61,7 +61,7 @@ function renderRectangle(element, context) {
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),

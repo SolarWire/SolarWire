@@ -6,15 +6,18 @@ interface NoteInfo {
     note: string;
     bounds: ElementBounds;
 }
-interface RenderOptions {
+interface InternalRenderOptions {
     disableNotes?: boolean;
+    sourceInput?: string;
     notes?: NoteInfo[];
     noteNumberRef?: {
         current: number;
     };
 }
-export declare function renderElement(element: Element, context: RenderContext, options?: RenderOptions): RenderResult;
-export declare function render(ast: Document, options?: {
+export declare function renderElement(element: Element, context: RenderContext, options?: InternalRenderOptions): RenderResult;
+export interface RenderOptions {
     disableNotes?: boolean;
-}): string;
+    sourceInput?: string;
+}
+export declare function render(ast: Document, options?: RenderOptions): string;
 export {};

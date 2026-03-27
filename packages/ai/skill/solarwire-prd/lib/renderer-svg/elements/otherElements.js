@@ -14,9 +14,9 @@ function renderCircle(element, context) {
     else {
         pos = { x: context.offsetX, y: context.offsetY };
     }
-    const w = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'w', 100);
-    const h = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'h', 40);
-    const radius = Math.min(w, h) / 2;
+    const w = Math.max(1, (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'w', 100));
+    const h = Math.max(1, (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'h', 40));
+    const radius = Math.max(0.5, Math.min(w, h) / 2);
     const cx = pos.x + w / 2;
     const cy = pos.y + h / 2;
     const bg = (0, context_1.getColorAttribute)(element.attributes, context.globalDefaults, 'bg', 'transparent');
@@ -27,8 +27,8 @@ function renderCircle(element, context) {
     const bold = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'bold');
     const italic = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'italic');
     const note = element.attributes['note'];
-    const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
-    const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+    const opacity = (0, context_1.getOpacityAttribute)(element.attributes);
+    const opacityAttr = opacity !== 1 ? ` opacity="${opacity}"` : '';
     let svgParts = [];
     svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
     if (element.text) {
@@ -37,7 +37,7 @@ function renderCircle(element, context) {
             fontStyle += 'font-weight="bold" ';
         if (italic)
             fontStyle += 'font-style="italic" ';
-        svgParts.push(`<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="${fontSize}" ${fontStyle}>${element.text}</text>`);
+        svgParts.push(`<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="${fontSize}" ${fontStyle}>${(0, context_1.escapeHtml)(element.text)}</text>`);
     }
     const bounds = {
         x: pos.x,
@@ -47,7 +47,7 @@ function renderCircle(element, context) {
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),
@@ -64,14 +64,14 @@ function renderText(element, context) {
     }
     const lines = element.text.split('\n');
     const w = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'w', 0);
-    const lineHeight = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'line-height', (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'line-height', 22));
+    const lineHeight = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'line-height', 22);
     const c = (0, context_1.getColorAttribute)(element.attributes, context.globalDefaults, 'c', '#000000');
     const fontSize = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'text-size', (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'size', 12));
     const align = (0, context_1.getAlignAttribute)(element.attributes, 'start');
     const bold = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'bold');
     const italic = (0, context_1.getBooleanAttribute)(element.attributes, context.globalDefaults, 'italic');
     const note = element.attributes['note'];
-    const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
+    const opacity = (0, context_1.getOpacityAttribute)(element.attributes);
     let fontStyle = '';
     if (bold)
         fontStyle += 'font-weight="bold" ';
@@ -86,20 +86,20 @@ function renderText(element, context) {
         textX = pos.x + (w || 100);
     }
     const textY = pos.y + fontSize;
-    const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+    const opacityAttr = opacity !== 1 ? ` opacity="${opacity}"` : '';
     let svgParts = [];
     svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="${textAnchor}" fill="${c}" font-size="${fontSize}" ${fontStyle}${opacityAttr}>`);
     lines.forEach((line, i) => {
         if (i === 0) {
-            svgParts.push(line);
+            svgParts.push((0, context_1.escapeHtml)(line));
         }
         else {
-            svgParts.push(`<tspan x="${textX}" dy="${lineHeight}">${line}</tspan>`);
+            svgParts.push(`<tspan x="${textX}" dy="${lineHeight}">${(0, context_1.escapeHtml)(line)}</tspan>`);
         }
     });
     svgParts.push('</text>');
-    const estimatedWidth = w || Math.max(...lines.map(l => l.length * fontSize * 0.6));
-    const estimatedHeight = lines.length * lineHeight;
+    const estimatedWidth = w || (lines.length > 0 ? Math.max(...lines.map(l => l.length * fontSize * 0.6)) : 100);
+    const estimatedHeight = lines.length > 0 ? lines.length * lineHeight : fontSize;
     const bounds = {
         x: pos.x,
         y: pos.y,
@@ -108,7 +108,7 @@ function renderText(element, context) {
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),
@@ -136,7 +136,7 @@ function renderPlaceholder(element, context) {
     svgParts.push(`<line x1="${pos.x}" y1="${pos.y}" x2="${pos.x + w}" y2="${pos.y + h}" stroke="${b}" stroke-width="${s}"/>`);
     svgParts.push(`<line x1="${pos.x + w}" y1="${pos.y}" x2="${pos.x}" y2="${pos.y + h}" stroke="${b}" stroke-width="${s}"/>`);
     const text = element.text || 'Placeholder';
-    svgParts.push(`<text x="${pos.x + w / 2}" y="${pos.y + h / 2}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="${fontSize}">${text}</text>`);
+    svgParts.push(`<text x="${pos.x + w / 2}" y="${pos.y + h / 2}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="${fontSize}">${(0, context_1.escapeHtml)(text)}</text>`);
     const bounds = {
         x: pos.x,
         y: pos.y,
@@ -145,7 +145,7 @@ function renderPlaceholder(element, context) {
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),
@@ -177,7 +177,7 @@ function renderImage(element, context) {
     svgParts.push(`<circle cx="${iconSize * 0.35}" cy="${iconSize * 0.4}" r="${iconSize * 0.08}" fill="${c}"/>`);
     svgParts.push(`</g>`);
     svgParts.push(`<text x="${pos.x + w / 2}" y="${pos.y + h / 2 + fontSize}" text-anchor="middle" fill="${c}" font-size="${fontSize}">Image</text>`);
-    svgParts.push(`<image x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" href="${element.url}"/>`);
+    svgParts.push(`<image x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" href="${(0, context_1.escapeHtml)(element.url)}"/>`);
     const bounds = {
         x: pos.x,
         y: pos.y,
@@ -186,7 +186,7 @@ function renderImage(element, context) {
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),
@@ -218,19 +218,14 @@ function renderTableElement(element, context, pos, renderChild) {
     const declaredNumRows = rows.length;
     rows.forEach((row, rowIndex) => {
         if (row.type !== 'table-row') {
-            throw new Error(`Invalid table structure: expected table-row element but found "${row.type}".\n` +
-                `Row index: ${rowIndex + 1}\n` +
-                `Found element: ${row.type}${row.type === 'text' ? ` ("${row.text || ''}")` : ''}\n` +
-                `Reason: Table elements can only contain table-row (#) elements as direct children.\n` +
-                `Solution: Ensure all elements inside the table (##) are properly indented under table-row (#) elements.\n` +
-                `Example:\n` +
-                `  ## @(x,y) w=width\n` +
-                `    #\n` +
-                `      "Cell 1"\n` +
-                `      "Cell 2"\n` +
-                `    #\n` +
-                `      "Cell 3"\n` +
-                `      "Cell 4"`);
+            throw new Error((0, context_1.formatRenderError)({
+                title: 'Invalid table structure',
+                expected: 'table-row element (#)',
+                found: `"${row.type}"${row.type === 'text' ? ` ("${row.text || ''}")` : ''}`,
+                location: `${(0, context_1.getElementLocationInfo)(element)}, Row ${rowIndex + 1}`,
+                reason: 'Table elements can only contain table-row (#) elements as direct children.',
+                solution: 'Ensure all elements inside the table (##) are properly indented under table-row (#) elements.'
+            }, context.sourceInput, element.location));
         }
     });
     const tableWidth = (0, context_1.getNumberAttribute)(element.attributes, context.globalDefaults, 'w', 600);
@@ -241,11 +236,14 @@ function renderTableElement(element, context, pos, renderChild) {
     rows.forEach((row, rowIndex) => {
         const rowNote = row.attributes?.['note'];
         if (rowNote) {
-            throw new Error(`Table row element does not support "note" attribute.\n` +
-                `Row: ${rowIndex + 1}\n` +
-                `Found: note="${rowNote}"\n` +
-                `Reason: Notes are only supported on individual cell elements, not on row elements.\n` +
-                `Solution: Remove the "note" attribute from the row element and add notes to individual cells if needed.`);
+            throw new Error((0, context_1.formatRenderError)({
+                title: 'Table row does not support "note" attribute',
+                expected: 'No "note" attribute on row element',
+                found: `note="${rowNote}"`,
+                location: `${(0, context_1.getElementLocationInfo)(element)}, Row ${rowIndex + 1}`,
+                reason: 'Notes are only supported on individual cell elements.',
+                solution: 'Remove the "note" attribute from the row element. Add notes to individual cells if needed.'
+            }, context.sourceInput, row.location));
         }
     });
     rows.forEach((row, rowIndex) => {
@@ -254,19 +252,24 @@ function renderTableElement(element, context, pos, renderChild) {
             if ('w' in cell.attributes || 'h' in cell.attributes) {
                 const attrName = 'w' in cell.attributes ? 'w' : 'h';
                 const attrValue = cell.attributes[attrName];
-                throw new Error(`Table cell element cannot specify "${attrName}" attribute.\n` +
-                    `Cell content: "${cell.content || ''}"\n` +
-                    `Row: ${rowIndex + 1}, Cell: ${cellIndex + 1}\n` +
-                    `Found: ${attrName}=${attrValue}\n` +
-                    `Reason: Table cell dimensions are automatically calculated based on table width and row height.\n` +
-                    `Solution: Remove the "${attrName}" attribute from this cell element.`);
+                throw new Error((0, context_1.formatRenderError)({
+                    title: `Table cell cannot specify "${attrName}" attribute`,
+                    expected: `No "${attrName}" attribute on cell element`,
+                    found: `${attrName}=${attrValue}`,
+                    location: `${(0, context_1.getElementLocationInfo)(element)}, Row ${rowIndex + 1}, Cell ${cellIndex + 1}`,
+                    reason: 'Table cell dimensions are automatically calculated based on table width and row height.',
+                    solution: `Remove the "${attrName}" attribute from this cell.`
+                }, context.sourceInput, cell.location));
             }
             if (cell.type === 'line') {
-                throw new Error(`Table cell element cannot be a line element.\n` +
-                    `Row: ${rowIndex + 1}, Cell: ${cellIndex + 1}\n` +
-                    `Found: line element\n` +
-                    `Reason: Lines are not supported inside table cells.\n` +
-                    `Solution: Use text ("..."), rectangle ([...]), rounded rectangle ((...)), circle (((...))), or placeholder ([?...]) elements instead.`);
+                throw new Error((0, context_1.formatRenderError)({
+                    title: 'Table cell cannot be a line element',
+                    expected: 'text, rectangle, or other supported element',
+                    found: 'line element',
+                    location: `${(0, context_1.getElementLocationInfo)(element)}, Row ${rowIndex + 1}, Cell ${cellIndex + 1}`,
+                    reason: 'Lines are not supported inside table cells.',
+                    solution: 'Use text ("..."), rectangle ([...]), rounded rectangle ((...)), circle (((...))), or placeholder ([?...]) elements instead.'
+                }, context.sourceInput, cell.location));
             }
             const colspan = cell.attributes['colspan'] ? parseInt(cell.attributes['colspan']) : 1;
             const rowspan = cell.attributes['rowspan'] ? parseInt(cell.attributes['rowspan']) : 1;
@@ -384,7 +387,7 @@ function renderTableElement(element, context, pos, renderChild) {
     };
     (0, context_1.updateLastElementBounds)(context, bounds);
     if (note) {
-        svgParts.push(`<title>${note}</title>`);
+        svgParts.push(`<title>${(0, context_1.escapeHtml)(note)}</title>`);
     }
     return {
         svg: svgParts.join(''),
@@ -395,9 +398,14 @@ function renderTableRow(element, context, pos, renderChild) {
     const bg = (0, context_1.getColorAttribute)(element.attributes, context.globalDefaults, 'bg', 'transparent');
     const note = element.attributes['note'];
     if (note) {
-        throw new Error(`Table row element does not support "note" attribute.\n` +
-            `Reason: Notes are only supported on individual cell elements, not on row elements.\n` +
-            `Solution: Remove the "note" attribute from the row element and add notes to individual cells if needed.`);
+        throw new Error((0, context_1.formatRenderError)({
+            title: 'Table row does not support "note" attribute',
+            expected: 'No "note" attribute on row element',
+            found: `note="${note}"`,
+            location: (0, context_1.getElementLocationInfo)(element),
+            reason: 'Notes are only supported on individual cell elements.',
+            solution: 'Remove the "note" attribute from the row element. Add notes to individual cells if needed.'
+        }, context.sourceInput, element.location));
     }
     const rowAttributes = element.attributes;
     const rowDefaults = {};

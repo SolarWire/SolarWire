@@ -1,5 +1,5 @@
 import { RectangleElement, RoundedRectangleElement } from '@solarwire/parser';
-import { RenderContext, AbsolutePosition, ElementBounds, calculatePosition, getNumberAttribute, getColorAttribute, getBooleanAttribute, getAlignAttribute, updateLastElementBounds } from '../context';
+import { RenderContext, AbsolutePosition, ElementBounds, calculatePosition, getNumberAttribute, getColorAttribute, getBooleanAttribute, getAlignAttribute, updateLastElementBounds, escapeHtml, getOpacityAttribute } from '../context';
 
 export interface RenderResult {
   svg: string;
@@ -31,11 +31,11 @@ export function renderRectangle(
   const bold = getBooleanAttribute(element.attributes, context.globalDefaults, 'bold');
   const italic = getBooleanAttribute(element.attributes, context.globalDefaults, 'italic');
   const note = element.attributes['note'];
-  const opacity = element.attributes['opacity'] ? parseFloat(element.attributes['opacity']) : undefined;
+  const opacity = getOpacityAttribute(element.attributes);
   
   let svgParts: string[] = [];
   
-  const opacityAttr = opacity !== undefined ? ` opacity="${opacity}"` : '';
+  const opacityAttr = opacity !== 1 ? ` opacity="${opacity}"` : '';
   
   if (isRounded) {
     svgParts.push(`<rect x="${pos.x}" y="${pos.y}" width="${w}" height="${h}" rx="${r}" ry="${r}" fill="${bg}" stroke="${b}" stroke-width="${s}"${opacityAttr}/>`);
@@ -57,9 +57,9 @@ export function renderRectangle(
     
     lines.forEach((line, i) => {
       if (i === 0) {
-        svgParts.push(line);
+        svgParts.push(escapeHtml(line));
       } else {
-        svgParts.push(`<tspan x="${textX}" dy="${lineHeight}">${line}</tspan>`);
+        svgParts.push(`<tspan x="${textX}" dy="${lineHeight}">${escapeHtml(line)}</tspan>`);
       }
     });
     
@@ -76,7 +76,7 @@ export function renderRectangle(
   updateLastElementBounds(context, bounds);
   
   if (note) {
-    svgParts.push(`<title>${note}</title>`);
+    svgParts.push(`<title>${escapeHtml(note)}</title>`);
   }
   
   return {

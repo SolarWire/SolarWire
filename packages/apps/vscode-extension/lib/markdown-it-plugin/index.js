@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = solarwireMarkdownItPlugin;
-const parser_1 = require("@solarwire/parser");
-const renderer_svg_1 = require("@solarwire/renderer-svg");
+const parser_1 = require("../parser");
+const renderer_svg_1 = require("../renderer-svg");
 function escapeHtml(text) {
     return text
         .replace(/&/g, '&amp;')
@@ -20,7 +20,7 @@ function solarwireMarkdownItPlugin(md) {
             const code = token.content.trim();
             try {
                 const ast = (0, parser_1.parse)(code);
-                const svg = (0, renderer_svg_1.render)(ast);
+                const svg = (0, renderer_svg_1.render)(ast, { sourceInput: code });
                 return `<div style="margin: 10px 0; padding: 10px; background: white; border-radius: 4px;">${svg}</div>`;
             }
             catch (error) {
@@ -28,7 +28,7 @@ function solarwireMarkdownItPlugin(md) {
                 return `
           <div style="border: 1px solid #dc3545; padding: 1rem; background: #fff5f5; border-radius: 4px; margin: 10px 0;">
             <strong style="color: #dc3545;">Error rendering SolarWire:</strong>
-            <pre style="margin: 0.5rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; overflow-x: auto;">${escapeHtml(err.message)}</pre>
+            <pre style="margin: 0.5rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-break: break-word;">${escapeHtml(err.message)}</pre>
             <details>
               <summary>Code</summary>
               <pre style="margin: 0.5rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; overflow-x: auto;">${escapeHtml(code)}</pre>

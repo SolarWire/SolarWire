@@ -1,5 +1,5 @@
 import { LineElement, Element } from '@solarwire/parser';
-import { RenderContext, AbsolutePosition, ElementBounds, calculatePosition, calculateLineEnd, getNumberAttribute, getColorAttribute, getStyleAttribute, updateLastElementBounds } from '../context';
+import { RenderContext, AbsolutePosition, ElementBounds, calculatePosition, calculateLineEnd, getNumberAttribute, getColorAttribute, getStyleAttribute, updateLastElementBounds, escapeHtml } from '../context';
 import { RenderResult } from './rectangle';
 
 export function renderLine(element: LineElement, context: RenderContext): RenderResult {
@@ -30,7 +30,7 @@ export function renderLine(element: LineElement, context: RenderContext): Render
     const labelHeight = textSize + labelPadding * 2;
     
     svgParts.push(`<rect x="${midX - labelWidth / 2}" y="${midY - labelHeight / 2}" width="${labelWidth}" height="${labelHeight}" fill="white" stroke="none"/>`);
-    svgParts.push(`<text x="${midX}" y="${midY}" text-anchor="middle" dominant-baseline="middle" fill="${textColor}" font-size="${textSize}">${element.label}</text>`);
+    svgParts.push(`<text x="${midX}" y="${midY}" text-anchor="middle" dominant-baseline="middle" fill="${textColor}" font-size="${textSize}">${escapeHtml(element.label)}</text>`);
   }
   
   const bounds: ElementBounds = {
@@ -48,7 +48,7 @@ export function renderLine(element: LineElement, context: RenderContext): Render
   });
   
   if (note) {
-    svgParts.push(`<title>${note}</title>`);
+    svgParts.push(`<title>${escapeHtml(note)}</title>`);
   }
   
   return {

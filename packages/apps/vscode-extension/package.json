@@ -2,7 +2,7 @@
   "name": "solarwire",
   "displayName": "SolarWire",
   "description": "SolarWire language support and preview",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "publisher": "solarwire",
   "repository": {
     "type": "git",

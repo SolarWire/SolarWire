@@ -1,4 +1,163 @@
-import { Coordinate, CoordinateExpression, RelativeEndCoordinate, Element, DocumentDeclaration } from '@solarwire/parser';
+import { Coordinate, CoordinateExpression, RelativeEndCoordinate, Element, DocumentDeclaration, SourceLocation } from '@solarwire/parser';
+
+export function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+export interface ErrorDetails {
+  title: string;
+  expected?: string;
+  found?: string;
+  location?: string;
+  reason?: string;
+  solution?: string;
+}
+
+export function formatRenderError(
+  details: ErrorDetails,
+  sourceInput: string | undefined,
+  location: SourceLocation | undefined,
+  contextLines: number = 3
+): string {
+  let result = '═'.repeat(60) + '\n';
+  result += '  RENDER ERROR\n';
+  result += '═'.repeat(60) + '\n\n';
+  result += `  ${details.title}\n\n`;
+  
+  if (details.expected || details.found) {
+    if (details.expected) {
+      result += `  Expected: ${details.expected}\n`;
+    }
+    if (details.found) {
+      result += `  Found:    ${details.found}\n`;
+    }
+    result += '\n';
+  }
+  
+  if (details.location) {
+    result += `  Position: ${details.location}\n\n`;
+  }
+  
+  if (details.reason) {
+    result += `  Reason: ${details.reason}\n\n`;
+  }
+  
+  if (details.solution) {
+    result += `  Solution: ${details.solution}\n`;
+  }
+  
+  if (!sourceInput || !location) {
+    return result;
+  }
+  
+  const lines = sourceInput.split(/\r?\n/);
+  const lineNum = location.line;
+  const columnNum = location.column || 1;
+  
+  const startLine = Math.max(0, lineNum - contextLines - 1);
+  const endLine = Math.min(lines.length, lineNum + contextLines);
+  
+  const maxLineNumWidth = Math.max(
+    String(startLine + 1).length,
+    String(endLine).length,
+    4
+  );
+  
+  result += '\n' + '─'.repeat(60) + '\n';
+  result += '  Context:\n';
+  result += '─'.repeat(60) + '\n';
+  
+  for (let i = startLine; i < endLine; i++) {
+    const currentLineNum = i + 1;
+    const isErrorLine = i === lineNum - 1;
+    const lineContent = lines[i] || '';
+    
+    if (isErrorLine) {
+      result += `>>> ${currentLineNum.toString().padStart(maxLineNumWidth, ' ')} | ${lineContent}\n`;
+      const pointerOffset = columnNum > 0 ? columnNum - 1 : 0;
+      const spaces = ' '.repeat(5 + maxLineNumWidth + 3 + pointerOffset);
+      result += `${spaces}^\n`;
+      result += `${spaces}| HERE\n`;
+    } else {
+      result += `    ${currentLineNum.toString().padStart(maxLineNumWidth, ' ')} | ${lineContent}\n`;
+    }
+  }
+  
+  result += '─'.repeat(60) + '\n';
+  
+  return result;
+}
+
+export function formatErrorWithContext(
+  message: string,
+  sourceInput: string | undefined,
+  location: SourceLocation | undefined,
+  contextLines: number = 3
+): string {
+  let result = message;
+  
+  if (!sourceInput || !location) {
+    return result;
+  }
+  
+  const lines = sourceInput.split(/\r?\n/);
+  const lineNum = location.line;
+  const columnNum = location.column || 1;
+  
+  const startLine = Math.max(0, lineNum - contextLines - 1);
+  const endLine = Math.min(lines.length, lineNum + contextLines);
+  
+  const maxLineNumWidth = Math.max(
+    String(startLine + 1).length,
+    String(endLine).length,
+    4
+  );
+  
+  result += '\n\n' + '─'.repeat(60) + '\n';
+  result += '  Context:\n';
+  result += '─'.repeat(60) + '\n';
+  
+  for (let i = startLine; i < endLine; i++) {
+    const currentLineNum = i + 1;
+    const isErrorLine = i === lineNum - 1;
+    const lineContent = lines[i] || '';
+    
+    if (isErrorLine) {
+      result += `>>> ${currentLineNum.toString().padStart(maxLineNumWidth, ' ')} | ${lineContent}\n`;
+      const pointerOffset = columnNum > 0 ? columnNum - 1 : 0;
+      const spaces = ' '.repeat(5 + maxLineNumWidth + 3 + pointerOffset);
+      result += `${spaces}^\n`;
+      result += `${spaces}| HERE\n`;
+    } else {
+      result += `    ${currentLineNum.toString().padStart(maxLineNumWidth, ' ')} | ${lineContent}\n`;
+    }
+  }
+  
+  result += '─'.repeat(60) + '\n';
+  
+  return result;
+}
+
+export function getElementLocationInfo(element: Element): string {
+  if (element.location) {
+    return `line ${element.location.line}`;
+  }
+  if (element.coordinates) {
+    const x = element.coordinates.x.type === 'absolute' 
+      ? element.coordinates.x.value 
+      : 'relative';
+    const y = element.coordinates.y.type === 'absolute' 
+      ? element.coordinates.y.value 
+      : 'relative';
+    return `@(${x}, ${y})`;
+  }
+  return 'unknown position';
+}
 
 export interface GlobalDefaults {
   c?: string;
@@ -24,9 +183,10 @@ export interface RenderContext {
   lastElementBounds: ElementBounds | null;
   isFirstElement: boolean;
   globalDefaults: GlobalDefaults;
+  sourceInput?: string;
 }
 
-export function createRenderContext(declarations: DocumentDeclaration[] = []): RenderContext {
+export function createRenderContext(declarations: DocumentDeclaration[] = [], sourceInput?: string): RenderContext {
   const globalDefaults: GlobalDefaults = {};
   
   declarations.forEach(decl => {
@@ -46,6 +206,7 @@ export function createRenderContext(declarations: DocumentDeclaration[] = []): R
     lastElementBounds: null,
     isFirstElement: true,
     globalDefaults,
+    sourceInput,
   };
 }
 
@@ -56,6 +217,7 @@ export function createChildContext(parentContext: RenderContext, offsetX: number
     lastElementBounds: null,
     isFirstElement: true,
     globalDefaults: parentContext.globalDefaults,
+    sourceInput: parentContext.sourceInput,
   };
 }
 
@@ -79,6 +241,9 @@ export function calculateCoordinate(
 
   switch (coord.type) {
     case 'absolute':
+      baseValue = coord.value;
+      break;
+    case 'relative':
       baseValue = coord.value;
       break;
     case 'edge':
@@ -109,8 +274,10 @@ export function calculateCoordinate(
       }
       baseValue += coord.value;
       break;
-    default:
-      baseValue = 0;
+    default: {
+      const exhaustiveCheck: never = coord;
+      throw new Error(`Unknown coordinate type: ${(exhaustiveCheck as any).type}`);
+    }
   }
 
   return baseValue + (isX ? context.offsetX : context.offsetY);
@@ -205,4 +372,16 @@ export function getStyleAttribute(
     default:
       return {};
   }
+}
+
+export function getOpacityAttribute(
+  attributes: Record<string, string>,
+  key: string = 'opacity',
+  defaultValue: number = 1
+): number {
+  const value = attributes[key];
+  if (value === undefined) return defaultValue;
+  const parsed = parseFloat(value);
+  if (isNaN(parsed)) return defaultValue;
+  return Math.max(0, Math.min(1, parsed));
 }

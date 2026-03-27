@@ -112,8 +112,15 @@ function renderElement(element, context, options) {
             case 'table':
             case 'table-row':
                 return (0, otherElements_1.renderTable)(element, context, (child, ctx) => renderElement(child, ctx, options));
-            default:
-                throw new Error(`Unknown element type: ${element.type}`);
+            default: {
+                const elem = element;
+                throw new Error((0, context_1.formatRenderError)({
+                    title: `Unknown element type: "${elem.type}"`,
+                    location: (0, context_1.getElementLocationInfo)(elem),
+                    reason: 'The renderer does not recognize this element type.',
+                    solution: 'Check if the element type is correct and supported.'
+                }, context.sourceInput, elem.location));
+            }
         }
     })();
     const { notes, noteNumberRef, disableNotes } = options || {};
@@ -128,7 +135,7 @@ function renderElement(element, context, options) {
     return result;
 }
 function render(ast, options) {
-    const context = (0, context_1.createRenderContext)(ast.declarations);
+    const context = (0, context_1.createRenderContext)(ast.declarations, options?.sourceInput);
     const svgParts = [];
     let minX = Infinity;
     let minY = Infinity;
@@ -140,6 +147,7 @@ function render(ast, options) {
     const disableNotes = options?.disableNotes ?? false;
     const renderOptions = {
         disableNotes,
+        sourceInput: options?.sourceInput,
         notes,
         noteNumberRef
     };
@@ -256,10 +264,10 @@ function render(ast, options) {
                 const lines = wrapText(note.note, cardWidth - 28 - 12, 12);
                 lines.forEach((line, lineIndex) => {
                     if (lineIndex === 0) {
-                        svgParts.push(`    <tspan x="${textX}">${line}</tspan>`);
+                        svgParts.push(`    <tspan x="${textX}">${(0, context_1.escapeHtml)(line)}</tspan>`);
                     }
                     else {
-                        svgParts.push(`    <tspan x="${textX}" dy="22">${line}</tspan>`);
+                        svgParts.push(`    <tspan x="${textX}" dy="22">${(0, context_1.escapeHtml)(line)}</tspan>`);
                     }
                 });
                 svgParts.push(`  </text>`);

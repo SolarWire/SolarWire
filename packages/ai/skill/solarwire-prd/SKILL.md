@@ -875,7 +875,7 @@ Each page/tab/modal needs to generate two SVG files:
 | `<url>` | Real image | `<https://example.com/logo.png> @(100,50) w=40` |
 | `--` | Divider line | `-- @(0,100)->(400,100)` |
 | `##` | Table container | `## @(100,50) w=500 border=1` |
-| `#` | Table row (indented) | `  # bg=#F2F2F2` |
+| `#` | Table row (MUST be inside `##`) | `  # bg=#F2F2F2` |
 
 ### Table Syntax (Indentation Required)
 
@@ -907,6 +907,18 @@ Each page/tab/modal needs to generate two SVG files:
 - Table `##` - No indentation
 - Row `#` - 2 spaces indentation
 - Cell content - 4 spaces indentation
+
+**⚠️ CRITICAL: Table Row Must Be Inside Table**
+- Row element `#` **CANNOT exist independently** - it MUST be inside a table container `##`
+- A row without a parent table is **invalid syntax**
+- Table structure: `##` (container) → `#` (rows) → cells (content)
+
+**⚠️ Table Child Element Restrictions:**
+- Row `#` and cells **CANNOT have coordinates** `@(x,y)` - positions are determined by table structure
+- Row `#` and cells **CANNOT have width/height** `w` `h` - sizes are determined by table container
+- Row `#` and cells **CANNOT have border** `b` or `border` - border is set on table container `##`
+- Only supported attributes for rows: `bg`, `c`, `size`, `bold`, `italic`, `align`
+- Only supported attributes for cells: `bg`, `c`, `size`, `bold`, `italic`, `align`, `colspan`, `rowspan`
 
 **⚠️ Table Note Rules:**
 - **Table-level note**: Add `note` attribute to the table element `##` for overall table description
@@ -1295,8 +1307,10 @@ Each page/tab/modal needs to generate two SVG files:
 8. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
 9. **Layout Close to Reality** - Wireframes should reflect actual page structure with 10px spacing
 10. **Separate Modals/States/Tabs** - Each independent view in separate code block; all modals must have separate wireframe
-11. **Container Rectangle Required** - First element of each page is white background container
-12. **Generate Dual SVG Versions** - With notes and without notes versions
-13. **Color Standards** - Use unified colors: #333333 (text), #AAAAAA (secondary), #F2F2F2 (border), #FFFFFF (bg), #FAFAFA (alternating row), #1890FF (primary), #D9001B (error)
-14. **Font Standards** - Font size 13px, line height 22px
-15. **i18n Only When Confirmed** - Add multi-language support ONLY when user explicitly confirms; if not confirmed, absolutely NO i18n information; if confirmed, ALL meaningful elements MUST include i18n translations using full language names (English, 中文, 日本語)
+11. **Table Row Must Be Inside Table** - Row element `#` CANNOT exist independently, MUST be inside table container `##`
+12. **Table Child Element Restrictions** - Rows and cells CANNOT have coordinates `@(x,y)`, width `w`, height `h`, or border `b`; only support style attributes (`bg`, `c`, `size`, `bold`, `italic`, `align`, `colspan`, `rowspan`)
+13. **Container Rectangle Required** - First element of each page is white background container
+14. **Generate Dual SVG Versions** - With notes and without notes versions
+15. **Color Standards** - Use unified colors: #333333 (text), #AAAAAA (secondary), #F2F2F2 (border), #FFFFFF (bg), #FAFAFA (alternating row), #1890FF (primary), #D9001B (error)
+16. **Font Standards** - Font size 13px, line height 22px
+17. **i18n Only When Confirmed** - Add multi-language support ONLY when user explicitly confirms; if not confirmed, absolutely NO i18n information; if confirmed, ALL meaningful elements MUST include i18n translations using full language names (English, 中文, 日本語)
