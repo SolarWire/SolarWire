@@ -4,6 +4,7 @@ export default defineConfig({
   title: 'SolarWire',
   description: 'A lightweight, Markdown-style DSL for UI wireframes',
   lang: 'en-US',
+  base: '/SolarWire/',
   
   head: [
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],

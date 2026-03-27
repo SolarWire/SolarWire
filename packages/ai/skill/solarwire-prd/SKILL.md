@@ -253,52 +253,73 @@ sequenceDiagram
 
 ```solarwire
 !title="[Page Name]"
-!c=#333
-!size=14
-!bg=#f5f7fa
-!r=8
+!c=#333333
+!size=13
+!bg=#F2F2F2
+!r=0
 
 // Container Rectangle
-[] @(0,0) w=1440 h=900 bg=#fff
+[] @(0,0) w=1440 h=900 bg=#FFFFFF
 
 // Page Content - Each element has detailed note description
-["Logo"] @(50,50) w=120 h=60 note="Click to return to homepage"
+["Logo"] @(50,50) w=120 h=60 note="Logo
+1. Click action
+   - Return to homepage"
 
 "User Login" @(100,150) size=24 bold
 
 "Username" @(100,220)
-["Enter phone or email"] @(100,245) w=300 h=44 bg=#fff b=#ddd note="[Input Field]
-- Supports phone number or email login
-- Automatically trims leading/trailing spaces
-- Format validation: 11-digit phone number or email format
-- Error message: Display 'Please enter a valid phone number or email' on format error
-- Max length: 50 characters"
+["Enter phone or email"] @(100,245) w=300 h=44 bg=#FFFFFF b=#F2F2F2 note="Username input
+1. Input rules
+   - Supports phone number or email
+   - Automatically trims leading/trailing spaces
+   - Max length: 50 characters
+2. Validation
+   - Format: 11-digit phone number or email format
+   - Error message: 'Please enter a valid phone number or email'"
 
 "Password" @(100,310)
-["Enter password"] @(100,335) w=300 h=44 bg=#fff b=#ddd note="[Password Field]
-- Password displayed as dots
-- Show/hide toggle icon on the right
-- Min length: 6 characters, Max: 32 characters
-- Must contain letters and numbers"
+["Enter password"] @(100,335) w=300 h=44 bg=#FFFFFF b=#F2F2F2 note="Password input
+1. Input rules
+   - Password displayed as dots
+   - Min length: 6 characters, Max: 32 characters
+   - Must contain letters and numbers
+2. Interaction
+   - Show/hide toggle icon on the right"
 
-["Remember Me"] @(100,400) w=80 h=20 note="[Checkbox]
-- When checked, stay logged in for 7 days
-- Unchecked by default"
+["Remember Me"] @(100,400) w=16 h=16 note="Remember me checkbox
+1. Behavior
+   - When checked: Stay logged in for 7 days
+   - Unchecked by default"
+"Remember Me" @(124,402)
 
-"Forgot Password?" @(320,400) c=#3498db note="[Link] Click to go to password recovery page"
+"Forgot Password?" @(320,400) c=#1890FF note="Forgot password link
+1. Click action
+   - Navigate to password recovery page"
 
-["Login"] @(100,450) w=300 h=48 bg=#3498db c=white size=16 note="[Primary Button]
-- Validates username and password on click
-- Success: Redirect to homepage, save login state
-- Failure: Display 'Invalid username or password' modal, clear password field
-- Disabled when: username or password is empty
-- Debounce: Button disabled for 3 seconds after click, or until request returns"
+["Login"] @(100,450) w=300 h=48 bg=#1890FF c=#FFFFFF size=16 note="Login button
+1. Click action
+   - Validate username and password
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display modal: 'Invalid username or password'
+   - Clear password field
+4. Disabled conditions
+   - Disabled when username or password is empty"
 
-"Or login with" @(160,530) c=#999
+"Or login with" @(160,530) c=#AAAAAA
 
-[?"WeChat Work"] @(120,560) w=40 h=40 note="[Third-party Login] WeChat Work QR code login"
-[?"DingTalk"] @(180,560) w=40 h=40 note="[Third-party Login] DingTalk QR code login"
-[?"WeChat"] @(240,560) w=40 h=40 note="[Third-party Login] WeChat authorization login"
+[?"WeChat Work"] @(120,560) w=40 h=40 note="WeChat Work login
+1. Click action
+   - WeChat Work QR code login"
+[?"DingTalk"] @(180,560) w=40 h=40 note="DingTalk login
+1. Click action
+   - DingTalk QR code login"
+[?"WeChat"] @(240,560) w=40 h=40 note="WeChat login
+1. Click action
+   - WeChat authorization login"
 ```
 
 ---
@@ -431,13 +452,13 @@ sequenceDiagram
 
 ```solarwire
 !title="Page Name"
-!c=#333
-!size=14
-!bg=#f5f7fa
-!r=8
+!c=#333333
+!size=13
+!bg=#F2F2F2
+!r=0
 
 // Container Rectangle - Represents screen/device boundary, placed at the beginning
-[] @(0,0) w=375 h=812 bg=#fff
+[] @(0,0) w=375 h=812 bg=#FFFFFF
 
 // Page content...
 ```
@@ -445,7 +466,7 @@ sequenceDiagram
 **Container Rectangle Specifications:**
 - Place at the beginning of the code block
 - Use `[]` rectangle (don't display text content)
-- `bg=#fff` white background
+- `bg=#FFFFFF` white background
 - Dimensions by scenario:
   - Mobile: `w=375 h=812` (iPhone X) or `w=390 h=844` (iPhone 12+)
   - Web: `w=1440 h=900` or as needed
@@ -707,10 +728,10 @@ Each page/tab/modal needs to generate two SVG files:
 
 ```solarwire
 !title="Page Title"
-!c=#333           // Default text color
-!size=14          // Default font size
-!bg=#f5f7fa       // Background color
-!r=8              // Default border radius
+!c=#333333        // Default text color
+!size=13          // Default font size
+!bg=#F2F2F2       // Background color
+!r=0              // Default border radius
 ```
 
 ### Basic Elements
@@ -732,19 +753,25 @@ Each page/tab/modal needs to generate two SVG files:
 **Tables use strict indentation:**
 
 ```solarwire
-## @(x,y) w=width border=1 note="[Table] Description of the table..."
-  # bg=#eee                    // Header row (indented 2 spaces)
-    "Column 1"                 // Cell (indented 4 spaces)
+## @(x,y) w=width border=1 note="Data table
+1. Data source
+   - Data from relevant module
+2. Field descriptions
+   - Column 1: Description
+   - Column 2: Description
+   - Column 3: Description"
+  # bg=#F2F2F2                  // Header row (indented 2 spaces)
+    "Column 1"                  // Cell (indented 4 spaces)
     "Column 2"
     "Column 3"
-  #                            // Data row (indented 2 spaces)
-    "Data 1"                   // Cell (indented 4 spaces)
+  #                             // Data row (indented 2 spaces)
+    "Data 1"                    // Cell (indented 4 spaces)
     "Data 2"
     "Data 3"
-  # bg=#f9f9f9                 // Alternating row color
+  # bg=#FAFAFA                  // Alternating row color
     "Data 4"
     "Data 5"
-    ["Edit"] ["Delete"]        // Action buttons in cell
+    ["Edit"] ["Delete"]         // Action buttons in cell
 ```
 
 **⚠️ Indentation Rules:**
@@ -785,14 +812,20 @@ Each page/tab/modal needs to generate two SVG files:
 
 **Example:**
 ```solarwire
-## @(100,50) w=500 border=1 note="[Table] User list with actions"
-  # bg=#4CAF50 c=white bold      // Header row: green bg, white bold text
+## @(100,50) w=500 border=1 note="User list table
+1. Data source
+   - User list data from User Management module
+2. Field descriptions
+   - ID: Unique user identifier
+   - Name: User display name
+   - Actions: Edit and delete operations"
+  # bg=#F2F2F2 c=#333333 bold      // Header row
     "ID"
     "Name"
     "Actions"
-  # bg=#f5f5f5                    // Data row: light gray bg
+  # bg=#FAFAFA                     // Data row: alternating color
     "1"
-    "John Doe" c=#333             // Override: darker text
+    "John Doe"
     ["Edit"] ["Delete"]
 ```
 
@@ -802,6 +835,124 @@ Each page/tab/modal needs to generate two SVG files:
 
 **Goal: Wireframes should look like actual UI, clean and professional**
 
+### Page Presentation Rules
+
+| Scenario | Handling |
+|----------|----------|
+| New page | Draw all elements completely, including navigation, menu, etc. |
+| Redesign page | Redraw completely |
+| Minor changes to existing page | Mark only the changed parts on original wireframe; existing parts not modified or explained |
+| New content on existing page | Add new elements to original wireframe |
+
+**Completeness Requirements:**
+- Pages must show all elements completely, including navigation, menu, and common parts
+- Within the same requirement, common parts already explained in other pages do not need to be repeated
+- Ensure developers have a clear concept of relative element positions on each page
+
+### Field Presentation Rules
+
+| Rule | Description |
+|------|-------------|
+| Field grouping | Group fields when there are many, for better user understanding |
+| Field naming | Use common, user-friendly language; self-explanatory |
+| Auxiliary explanation | When field name cannot be self-explanatory, explain via Tooltip, etc. |
+
+### Color Standards
+
+| Purpose | Color | Usage |
+|---------|-------|-------|
+| Normal text | `#333333` | Labels, content text |
+| Secondary text | `#AAAAAA` | Placeholder, descriptions |
+| Borders/Lines | `#F2F2F2` | Dividers, borders |
+| Background | `#FFFFFF` | Page background |
+| Primary elements | `#1890FF` | Primary buttons, links, selected state |
+| Warning/Error | `#D9001B` | Error messages, warnings |
+
+### Spacing Standards
+
+| Rule | Value |
+|------|-------|
+| Element spacing | 10px (unified) |
+| Font size | 13px |
+| Line height | 22px |
+
+### Other Rules
+
+| Rule | Description |
+|------|-------------|
+| Images/Icons | Use sparingly in client pages to avoid affecting UI design |
+| Shadows | Use sparingly |
+| Layout | Clear structure, distinct functional areas |
+
+### SolarWire Default Configuration
+
+```solarwire
+!title="Page Title"
+!c=#333333        // Default text color
+!size=13          // Default font size
+!bg=#F2F2F2       // Page background color
+!r=0              // Default border radius
+```
+
+---
+
+## Modal Presentation Rules
+
+**All modals MUST have a separate SolarWire wireframe, not just a simple description in a note.**
+
+### Modal Types
+
+| Type | Description |
+|------|-------------|
+| Confirmation modal | Delete confirmation, operation confirmation, etc. |
+| Form modal | Create, edit, etc. |
+| Information modal | Detail view, etc. |
+| Alert modal | Success, failure, warning, etc. |
+
+### Modal vs Tooltip/Toast
+
+| Type | Handling | Description |
+|------|----------|-------------|
+| Modal | Separate SolarWire wireframe | Complete UI, interactions, action buttons |
+| Tooltip | Describe directly in note | Simple text hint, no interaction |
+| Toast | Describe directly in note | Simple message, auto-dismiss |
+
+### Example: Modal Reference in Page Note
+
+```solarwire
+["Delete"] @(100,50) w=80 h=36 note="Delete button
+1. Click action
+   - Show delete confirmation modal (see 'Delete Confirmation Modal' wireframe)
+   - Execute delete on confirmation
+2. Success handling
+   - Display Toast: 'Deleted successfully'
+   - Refresh list data"
+```
+
+### Example: Separate Modal Wireframe
+
+```solarwire
+!title="Delete Confirmation Modal"
+!c=#333333
+!size=13
+!bg=#F2F2F2
+
+// Modal container
+[] @(0,0) w=400 h=200 bg=#FFFFFF
+
+// Modal title
+"Confirm Delete" @(160,20) size=16 bold
+
+// Modal content
+"Are you sure you want to delete this item? This action cannot be undone." @(20,70) c=#333333
+
+// Action buttons
+["Cancel"] @(100,140) w=80 h=36 bg=#FFFFFF b=#DDDDDD
+["Confirm"] @(220,140) w=80 h=36 bg=#D9001B c=#FFFFFF
+```
+
+---
+
 ### Key Principles
 
 1. **Use Realistic Placeholder Content**
@@ -810,8 +961,8 @@ Each page/tab/modal needs to generate two SVG files:
    - Example: `["Login"]` instead of `["Button"]`
 
 2. **Proper Visual Hierarchy**
-   - Primary buttons: Colored background (`bg=#3498db c=white`)
-   - Secondary buttons: Border only (`bg=#fff b=#ddd`)
+   - Primary buttons: Colored background (`bg=#1890FF c=white`)
+   - Secondary buttons: Border only (`bg=#FFFFFF b=#F2F2F2`)
    - Important elements should be larger/prominent
 
 3. **Appropriate Element Types**
@@ -822,7 +973,7 @@ Each page/tab/modal needs to generate two SVG files:
    - Inputs → Rectangle with placeholder
 
 4. **Consistent Spacing**
-   - Leave proper gaps between elements (8-16px typical)
+   - Element spacing: 10px (unified)
    - Group related elements together
    - Use consistent margins throughout
 
@@ -835,30 +986,45 @@ Each page/tab/modal needs to generate two SVG files:
 
 ```solarwire
 !title="Login"
-!size=14
-!bg=#f5f7fa
+!c=#333333
+!size=13
+!bg=#F2F2F2
 
 // Container
-[] @(0,0) w=400 h=600 bg=#fff
+[] @(0,0) w=400 h=600 bg=#FFFFFF
 
 // Header
 "Welcome Back" @(100,80) size=24 bold
-"Please sign in to continue" @(100,115) c=#666
+"Please sign in to continue" @(100,115) c=#AAAAAA
 
 // Form
 "Email" @(50,180)
-["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd c=#999
+["Enter your email"] @(50,205) w=300 h=44 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA
 
 "Password" @(50,280)
-["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd c=#999
+["Enter password"] @(50,305) w=300 h=44 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA
 
-["Remember me"] @(50,370) w=16 h=16 note="[Checkbox] Stay logged in for 7 days"
+["Remember me"] @(50,370) w=16 h=16 note="Remember me checkbox
+1. Behavior
+   - When checked: Stay logged in for 7 days
+   - Unchecked by default"
 "Remember me" @(74,372)
 
-["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16 note="[Primary Button] Submit login form"
+["Sign In"] @(50,420) w=300 h=48 bg=#1890FF c=#FFFFFF size=16 note="Sign in button
+1. Click action
+   - Validate email and password
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid credentials'
+4. Disabled conditions
+   - Disabled when email or password is empty"
 
-"Don't have an account?" @(115,500) c=#666
-"Sign up" @(270,500) c=#3498db note="[Link] Navigate to registration page"
+"Don't have an account?" @(115,500) c=#AAAAAA
+"Sign up" @(270,500) c=#1890FF note="Sign up link
+1. Click action
+   - Navigate to registration page"
 ```
 
 ### Common Mistakes to Avoid
@@ -869,7 +1035,8 @@ Each page/tab/modal needs to generate two SVG files:
 | Missing placeholder | `[""]` | `["Enter email..."]` |
 | Wrong element type | `"Submit"` (text) | `["Submit"]` (button) |
 | Text without quotes | `((Avatar))` | `(("Avatar"))` |
-| Overcrowding | Elements too close | Proper spacing |
+| Overcrowding | Elements too close | 10px spacing |
+| Wrong colors | `bg=#3498db` | `bg=#1890FF` |
 
 ---
 
