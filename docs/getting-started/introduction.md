@@ -95,5 +95,4 @@ Quickly visualize ideas during brainstorming sessions.
 ## Next Steps
 
 - [Quick Start](/getting-started/quick-start) - Create your first wireframe
-- [Basic Syntax](/getting-started/basic-syntax) - Learn the fundamentals
 - [Elements](/reference/elements) - Explore all available elements

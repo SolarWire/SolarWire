@@ -98,6 +98,5 @@ SolarWire works great in Markdown files:
 
 ## Next Steps
 
-- [Basic Syntax](/getting-started/basic-syntax) - Learn the fundamentals
 - [Elements](/reference/elements) - Explore all available elements
 - [Examples](/reference/examples) - See real-world examples

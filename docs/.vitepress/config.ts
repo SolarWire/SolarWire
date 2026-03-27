@@ -31,7 +31,6 @@ export default defineConfig({
             { text: 'Introduction', link: '/getting-started/introduction' },
             { text: 'Quick Start', link: '/getting-started/quick-start' },
             { text: 'Installation', link: '/getting-started/installation' },
-            { text: 'Basic Syntax', link: '/getting-started/basic-syntax' },
             { text: 'AI Integration', link: '/getting-started/ai-integration' }
           ]
         }
