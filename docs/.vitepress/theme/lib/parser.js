@@ -2495,9 +2495,5 @@ function peg$parse(input, options) {
   }
 }
 
-module.exports = {
-  StartRules: ["Document"],
-  SyntaxError: peg$SyntaxError,
-  parse: peg$parse
-};
+export { peg$parse as parse, peg$SyntaxError as SyntaxError };
 
