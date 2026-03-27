@@ -17,10 +17,10 @@ const defaultCode = `!title="Login Page"
 "Password" @(50,280)
 ["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd
 
-["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16
+["Sign In"] @(50,420) w=300 h=48 bg=#A8B1FF c=white size=16
 
 "No account?" @(100,500) c=#666
-"Sign up" @(260,500) c=#3498db`
+"Sign up" @(260,500) c=#A8B1FF`
 
 const code = ref(defaultCode)
 const svgOutput = ref('')
@@ -82,7 +82,7 @@ const examples = [
 "Password" @(50,280)
 ["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd
 
-["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16`
+["Sign In"] @(50,420) w=300 h=48 bg=#A8B1FF c=white size=16`
   },
   {
     name: 'Dashboard',
@@ -93,10 +93,10 @@ const examples = [
 
 [] @(0,0) w=200 h=600 bg=#1a1a2e
 
-(("SW")) @(20,20) w=40 h=40 bg=#3498db c=white
+(("SW")) @(20,20) w=40 h=40 bg=#A8B1FF c=white
 "SolarWire" @(70,28) c=white bold
 
-"Dashboard" @(20,100) c=#3498db
+"Dashboard" @(20,100) c=#A8B1FF
 "Users" @(20,140) c=#aaa
 "Settings" @(20,180) c=#aaa
 
@@ -115,10 +115,10 @@ const examples = [
 
 [] @(0,0) w=375 h=812 bg=#fff
 
-[] @(0,0) w=375 h=44 bg=#3498db
+[] @(0,0) w=375 h=44 bg=#A8B1FF
 "9:41" @(170,12) c=white bold
 
-[] @(0,44) w=375 h=60 bg=#3498db
+[] @(0,44) w=375 h=60 bg=#A8B1FF
 "Home" @(165,64) c=white size=18 bold
 
 "Good Morning!" @(20,130) size=20 bold
@@ -259,12 +259,12 @@ select:hover{
 }
 
 .btn-primary{
-  background: #3498db;
-  border-color: #3498db;
+  background: #A8B1FF;
+  border-color: #A8B1FF;
 }
 
 .btn-primary:hover{
-  background: #2980b9;
+  background: #8B96E8;
 }
 
 .btn:disabled{

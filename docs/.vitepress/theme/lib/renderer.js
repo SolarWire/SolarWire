@@ -169,7 +169,7 @@ function renderTable(table, showNotes) {
       if (cell.type === 'text') {
         svg += `\n  <text x="${cellX + 10}" y="${cellY}" fill="${cellC}" font-size="${cellSize}">${escapeXml(cell.content)}</text>`;
       } else if (cell.type === 'rectangle') {
-        svg += `\n  <rect x="${cellX + 5}" y="${rowY + 8}" width="60" height="24" fill="${cell.attributes?.bg || '#3498db'}" rx="4"/>`;
+        svg += `\n  <rect x="${cellX + 5}" y="${rowY + 8}" width="60" height="24" fill="${cell.attributes?.bg || '#A8B1FF'}" rx="4"/>`;
         if (cell.content) {
           svg += `\n  <text x="${cellX + 35}" y="${rowY + 24}" text-anchor="middle" fill="${cell.attributes?.c || 'white'}" font-size="12">${escapeXml(cell.content)}</text>`;
         }
