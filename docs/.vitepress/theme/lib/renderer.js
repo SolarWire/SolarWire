@@ -206,7 +206,7 @@ function calculatePosition(context, coords) {
 
 function renderRectangle(element, context) {
   const { coordinates, attributes, content } = element;
-  const pos = calculatePosition(context, coordinates);
+  const pos = coordinates ? calculatePosition(context, coordinates) : { x: 0, y: 0 };
   const width = getNumberAttribute(attributes, context.globalDefaults, 'w', 100);
   const height = getNumberAttribute(attributes, context.globalDefaults, 'h', 40);
   const bg = getColorAttribute(attributes, context.globalDefaults, 'bg', '#FFFFFF');
@@ -246,6 +246,7 @@ function renderCircle(element, context) {
   const size = getNumberAttribute(attributes, context.globalDefaults, 'size', 13);
   const b = attributes.b || attributes.border;
   const opacity = getOpacityAttribute(attributes);
+  const r = getNumberAttribute(attributes, context.globalDefaults, 'r', 0);
   
   const cx = pos.x + width / 2;
   const cy = pos.y + height / 2;
@@ -268,7 +269,7 @@ function renderCircle(element, context) {
 
 function renderText(element, context) {
   const { coordinates, attributes, content } = element;
-  const pos = calculatePosition(context, coordinates);
+  const pos = coordinates ? calculatePosition(context, coordinates) : { x: 0, y: 0 };
   const c = getColorAttribute(attributes, context.globalDefaults, 'c', '#333333');
   const size = getNumberAttribute(attributes, context.globalDefaults, 'size', 13);
   const isBold = getBooleanAttribute(attributes, context.globalDefaults, 'bold');
@@ -283,7 +284,7 @@ function renderText(element, context) {
 
 function renderLine(element, context) {
   const { coordinates, attributes } = element;
-  const startPos = calculatePosition(context, coordinates);
+  const startPos = coordinates ? calculatePosition(context, coordinates) : { x: 0, y: 0 };
   const endPos = element.end ? calculatePosition(context, element.end) : { x: startPos.x + 100, y: startPos.y };
   const b = attributes.b || attributes.border || '#F2F2F2';
   const style = getStyleAttribute(attributes);
