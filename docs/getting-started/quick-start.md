@@ -100,4 +100,4 @@ SolarWire works great in Markdown files:
 
 - [Basic Syntax](/getting-started/basic-syntax) - Learn the fundamentals
 - [Elements](/reference/elements) - Explore all available elements
-- [Examples](/examples/login-form) - See real-world examples
+- [Examples](/reference/examples) - See real-world examples

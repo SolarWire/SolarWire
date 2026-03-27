@@ -251,4 +251,4 @@ Use `//` for comments:
 
 - [Elements Reference](/reference/elements) - Detailed element documentation
 - [Attributes Reference](/reference/attributes) - All available attributes
-- [Examples](/examples/login-form) - Real-world examples
+- [Examples](/reference/examples) - Real-world examples
