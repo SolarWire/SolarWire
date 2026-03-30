@@ -137,7 +137,7 @@ VSCode extension with syntax highlighting, preview, and auto-completion.
 
 ## Get Started in 30 Seconds
 
-1. Install "SolarWire Support" VSCode extension
+1. Install [SolarWire Support](https://marketplace.visualstudio.com/items?itemName=SolarWire.solarwire-support) VSCode extension
 2. Create a `.solarwire` file
 3. Write `["Hello"] @(0,0) w=100 h=40`
 4. See your first wireframe!

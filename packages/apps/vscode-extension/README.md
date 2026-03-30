@@ -6,7 +6,7 @@ VS Code extension for SolarWire DSL, providing syntax highlighting, snippets, re
 
 ### From VS Code Marketplace
 
-Search for "SolarWire Support" in the VS Code Extensions marketplace and click Install.
+Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SolarWire.solarwire-support) or search for "SolarWire Support" in the Extensions panel.
 
 - ✅ **Syntax Highlighting** – Color-coded SolarWire code for better readability
 - ✅ **Snippets** – Quick code snippets for common elements
