@@ -44,7 +44,7 @@ describe('Code Generator', () => {
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[Click me]');
+      expect(result.code).toContain('["Click me"]');
     });
 
     it('should generate input element', () => {
@@ -56,9 +56,8 @@ describe('Code Generator', () => {
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[?Enter name]');
+      expect(result.code).toContain('[?"Enter name"]');
     });
-
     it('should generate text element', () => {
       const element = createElement({ type: 'text', text: 'Hello World' });
       const tree = createTree(element);
@@ -67,34 +66,30 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
       expect(result.code).toContain('"Hello World"');
     });
-
     it('should generate checkbox element', () => {
       const element = createElement({ type: 'checkbox', text: 'I agree' });
       const tree = createTree(element);
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[☑ I agree]');
+      expect(result.code).toContain('[☑ "I agree"]');
     });
-
     it('should generate radio element', () => {
       const element = createElement({ type: 'radio', text: 'Option 1' });
       const tree = createTree(element);
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[○ Option 1]');
+      expect(result.code).toContain('[○ "Option 1"]');
     });
-
     it('should generate select element', () => {
       const element = createElement({ type: 'select', text: 'Choose' });
       const tree = createTree(element);
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[▼ Choose]');
+      expect(result.code).toContain('[▼ "Choose"]');
     });
-
     it('should generate image element', () => {
       const element = createElement({
         type: 'image',
@@ -104,9 +99,8 @@ describe('Code Generator', () => {
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[🖼 Logo]');
+      expect(result.code).toContain('[🖼 "Logo"]');
     });
-
     it('should generate link element', () => {
       const element = createElement({ type: 'link', text: 'Click here' });
       const tree = createTree(element);
@@ -115,7 +109,6 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
       expect(result.code).toContain('"Click here"');
     });
-
     it('should generate divider element', () => {
       const element = createElement({ type: 'divider' });
       const tree = createTree(element);
@@ -124,7 +117,6 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
       expect(result.code).toContain('---');
     });
-
     it('should generate container with children', () => {
       const element = createElement({
         type: 'container',
@@ -139,7 +131,6 @@ describe('Code Generator', () => {
       expect(result.code).toContain('[Container]');
       expect(result.code).toContain('"Inside container"');
     });
-
     it('should generate table element', () => {
       const element = createElement({ type: 'table' });
       const tree = createTree(element);
@@ -148,7 +139,6 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
       expect(result.code).toContain('##');
     });
-
     it('should handle errors gracefully', () => {
       const element = createElement({ type: 'button' });
       const tree = createTree(element);
@@ -157,7 +147,6 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
     });
   });
-
   describe('generateFromElements', () => {
     it('should generate code for multiple elements', () => {
       const elements: UIElement[] = [
@@ -166,16 +155,14 @@ describe('Code Generator', () => {
       ];
       const result = generateFromElements(elements);
       
-      expect(result).toContain('[Submit]');
+      expect(result).toContain('["Submit"]');
       expect(result).toContain('"Hello"');
     });
-
     it('should handle empty elements array', () => {
       const result = generateFromElements([]);
       expect(result).toBe('');
     });
   });
-
   describe('Attributes generation', () => {
     it('should include width attribute', () => {
       const element = createElement({
@@ -189,7 +176,6 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
       expect(result.code).toContain('w=200');
     });
-
     it('should include background color', () => {
       const element = createElement({
         type: 'button',
@@ -202,7 +188,6 @@ describe('Code Generator', () => {
       expect(result.success).toBe(true);
       expect(result.code).toContain('bg=#ff0000');
     });
-
     it('should include position when not at origin', () => {
       const element = createElement({
         type: 'button',

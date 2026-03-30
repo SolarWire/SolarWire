@@ -1,0 +1,9 @@
+.vscode/**
+.vscode-test/**
+src/**
+**/*.ts
+**/*.map
+**/node_modules/**
+solarwire-*.vsix
+solarwire-support-*.vsix
+.gitignore

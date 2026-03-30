@@ -133,7 +133,7 @@ function generateButtonElement(
   const text = options.preserveTextContent ? (element.text || 'Button') : 'Button';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[${escapeText(text)}]${attrs}`;
+  return `${indentStr}["${escapeText(text)}"]${attrs}`;
 }
 
 function generateInputElement(
@@ -144,7 +144,7 @@ function generateInputElement(
   const placeholder = element.attributes.placeholder || element.text || 'Input';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[?${escapeText(placeholder)}]${attrs}`;
+  return `${indentStr}[?"${escapeText(placeholder)}"]${attrs}`;
 }
 
 function generateTextElement(
@@ -166,7 +166,7 @@ function generateTextareaElement(
   const text = options.preserveTextContent ? (element.text || 'Textarea') : 'Textarea';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[${escapeText(text)}]${attrs}`;
+  return `${indentStr}["${escapeText(text)}"]${attrs}`;
 }
 
 function generateCheckboxElement(
@@ -177,7 +177,7 @@ function generateCheckboxElement(
   const text = options.preserveTextContent ? (element.text || 'Checkbox') : 'Checkbox';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[☑ ${escapeText(text)}]${attrs}`;
+  return `${indentStr}[☑ "${escapeText(text)}"]${attrs}`;
 }
 
 function generateRadioElement(
@@ -188,7 +188,7 @@ function generateRadioElement(
   const text = options.preserveTextContent ? (element.text || 'Radio') : 'Radio';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[○ ${escapeText(text)}]${attrs}`;
+  return `${indentStr}[○ "${escapeText(text)}"]${attrs}`;
 }
 
 function generateSelectElement(
@@ -199,7 +199,7 @@ function generateSelectElement(
   const text = options.preserveTextContent ? (element.text || 'Select') : 'Select';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[▼ ${escapeText(text)}]${attrs}`;
+  return `${indentStr}[▼ "${escapeText(text)}"]${attrs}`;
 }
 
 function generateImageElement(
@@ -210,7 +210,7 @@ function generateImageElement(
   const alt = element.attributes.alt || 'Image';
   const attrs = generateAttributes(element, options);
 
-  return `${indentStr}[🖼 ${escapeText(alt)}]${attrs}`;
+  return `${indentStr}[🖼 "${escapeText(alt)}"]${attrs}`;
 }
 
 function generateLinkElement(

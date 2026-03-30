@@ -1,8 +1,8 @@
 {
-  "name": "solarwire",
-  "displayName": "SolarWire",
-  "description": "SolarWire language support and preview",
-  "version": "1.6.1",
+  "name": "solarwire-support",
+  "displayName": "SolarWire Support",
+  "description": "SolarWire language support and preview - A lightweight DSL for UI wireframes",
+  "version": "1.0.0",
   "publisher": "solarwire-team",
   "icon": "images/icon.png",
   "repository": {
@@ -23,16 +23,6 @@
     "onStartupFinished"
   ],
   "main": "./dist/extension.js",
-  "files": [
-    "dist/**",
-    "lib/**",
-    "images/**",
-    "syntaxes/**",
-    "snippets/**",
-    "language-configuration.json",
-    "README.md",
-    "LICENSE"
-  ],
   "contributes": {
     "languages": [
       {
