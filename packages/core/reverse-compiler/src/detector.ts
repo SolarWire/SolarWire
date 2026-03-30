@@ -3,7 +3,7 @@ import { UIElementType, UIElement, ElementDetectorResult } from './types';
 const BUTTON_TAGS = ['button', 'a'];
 const INPUT_TAGS = ['input', 'textarea', 'select'];
 const TEXT_TAGS = ['p', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'label', 'strong', 'em', 'b', 'i'];
-const CONTAINER_TAGS = ['div', 'section', 'article', 'main', 'aside', 'header', 'footer', 'nav', 'form', 'ul', 'ol', 'li'];
+const CONTAINER_TAGS = ['div', 'section', 'article', 'main', 'aside', 'header', 'footer', 'nav', 'form', 'ul', 'ol', 'li', 'body', 'html'];
 const TABLE_TAGS = ['table'];
 const TABLE_ROW_TAGS = ['tr'];
 const TABLE_CELL_TAGS = ['td', 'th'];
@@ -74,12 +74,12 @@ export function detectElementType(element: unknown): ElementDetectorResult {
     return { type: 'link', confidence: 0.85, reason: 'anchor tag detected' };
   }
 
-  if (isText(tagName, el)) {
-    return { type: 'text', confidence: 0.8, reason: 'text element detected' };
-  }
-
   if (isContainer(tagName, el)) {
     return { type: 'container', confidence: 0.7, reason: 'container element detected' };
+  }
+
+  if (isText(tagName, el)) {
+    return { type: 'text', confidence: 0.8, reason: 'text element detected' };
   }
 
   return { type: 'unknown', confidence: 0.3, reason: 'Could not determine element type' };
