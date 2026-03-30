@@ -4,15 +4,15 @@
 !bg=#f8fafc
 !r=0
 
-[] @(0,0) w=1200 h=800 bg=#ffffff
+[] @(0,0) w=1400 h=900 bg=#ffffff
 
 "🎨 SolarWire Showcase" @(40,30) size=28 bold
-"A comprehensive demonstration of all SolarWire elements" @(40,70) c=#64748b size=13
+"A comprehensive demonstration of all SolarWire elements" @(40,65) c=#64748b size=13
 
-[] @(40,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
-"Buttons" @(60,140) size=16 bold c=#1e293b
+[] @(40,100) w=400 h=320 bg=#ffffff b=#e2e8f0 r=12
+"Buttons" @(60,130) size=16 bold c=#1e293b
 
-["Primary"] @(60,180) w=100 h=42 bg=#6366f1 c=#ffffff r=8 note="Primary button
+["Primary"] @(60,170) w=100 h=42 bg=#6366f1 c=#ffffff r=8 note="Primary button
 1. Main action
    - Submit forms
    - Confirm actions
@@ -20,7 +20,7 @@
    - Filled background
    - White text"
 
-["Secondary"] @(180,180) w=100 h=42 bg=#ffffff b=#e2e8f0 c=#1e293b r=8 note="Secondary button
+["Secondary"] @(180,170) w=100 h=42 bg=#ffffff b=#e2e8f0 c=#1e293b r=8 note="Secondary button
 1. Alternative action
    - Cancel operations
    - Navigate back
@@ -28,23 +28,25 @@
    - Border only
    - Dark text"
 
-["Success"] @(300,180) w=80 h=42 bg=#22c55e c=#ffffff r=8
+["Success"] @(300,170) w=80 h=42 bg=#22c55e c=#ffffff r=8
 
-["Danger"] @(60,240) w=80 h=42 bg=#ef4444 c=#ffffff r=8
+["Danger"] @(60,230) w=80 h=42 bg=#ef4444 c=#ffffff r=8
 
-["Warning"] @(160,240) w=80 h=42 bg=#f59e0b c=#ffffff r=8
+["Warning"] @(160,230) w=80 h=42 bg=#f59e0b c=#ffffff r=8
 
-["Ghost"] @(260,240) w=80 h=42 bg=#ffffff c=#6366f1 r=8 b=#6366f1
+["Ghost"] @(260,230) w=80 h=42 bg=#ffffff c=#6366f1 r=8 b=#6366f1
 
-["Disabled"] @(60,300) w=100 h=42 bg=#e2e8f0 c=#94a3b8 r=8
+["Disabled"] @(60,290) w=100 h=42 bg=#e2e8f0 c=#94a3b8 r=8
 
-["Loading..."] @(180,300) w=100 h=42 bg=#6366f1 c=#ffffff r=8
+["Loading..."] @(180,290) w=100 h=42 bg=#6366f1 c=#ffffff r=8
 
-[] @(420,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
-"Form Elements" @(440,140) size=16 bold c=#1e293b
+["Small"] @(300,290) w=60 h=32 bg=#6366f1 c=#ffffff r=6 size=12
 
-"Email Address" @(440,180) size=12 c=#475569
-["john@example.com"] @(440,205) w=320 h=44 bg=#ffffff b=#e2e8f0 c=#94a3b8 r=8 note="Email input
+[] @(460,100) w=400 h=320 bg=#ffffff b=#e2e8f0 r=12
+"Form Elements" @(480,130) size=16 bold c=#1e293b
+
+"Email Address" @(480,170) size=12 c=#475569
+["john@example.com"] @(480,190) w=360 h=44 bg=#ffffff b=#e2e8f0 c=#94a3b8 r=8 note="Email input
 1. Validation
    - Email format check
    - Required field
@@ -52,16 +54,16 @@
    - Auto-complete
    - Clear button"
 
-"Password" @(440,270) size=12 c=#475569
-["••••••••"] @(440,295) w=320 h=44 bg=#ffffff b=#e2e8f0 c=#1e293b r=8
+"Password" @(480,260) size=12 c=#475569
+["••••••••"] @(480,280) w=360 h=44 bg=#ffffff b=#e2e8f0 c=#1e293b r=8
 
-[""] @(440,355) w=20 h=20 bg=#6366f1 c=#ffffff r=4
-"Remember me" @(468,358) size=13
+[""] @(480,340) w=20 h=20 bg=#6366f1 c=#ffffff r=4
+"Remember me" @(508,343) size=13
 
-[] @(800,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
-"Cards & Avatars" @(820,140) size=16 bold c=#1e293b
+[] @(880,100) w=480 h=320 bg=#ffffff b=#e2e8f0 r=12
+"Cards & Avatars" @(900,130) size=16 bold c=#1e293b
 
-[] @(820,180) w=320 h=100 bg=#f1f5f9 r=12 note="Profile card
+[] @(900,160) w=440 h=100 bg=#f1f5f9 r=12 note="Profile card
 1. Display info
    - User avatar
    - Name and email
@@ -70,7 +72,7 @@
    - Edit profile
    - View details"
 
-(("JD")) @(840,205) w=50 h=50 bg=#6366f1 c=#ffffff note="Avatar
+(("JD")) @(920,180) w=60 h=60 bg=#6366f1 c=#ffffff r=8 note="Avatar
 1. Content
    - User initials
    - Or profile image
@@ -79,72 +81,102 @@
    - Medium: 48px
    - Large: 64px"
 
-"John Doe" @(904,215) size=15 bold c=#1e293b
-"Product Designer" @(904,238) size=12 c=#64748b
+"John Doe" @(992,185) size=16 bold c=#1e293b
+"Product Designer" @(992,210) size=13 c=#64748b
+"john.doe@example.com" @(992,230) size=11 c=#94a3b8
 
-["Edit"] @(1060,215) w=60 h=32 bg=#ffffff b=#e2e8f0 c=#1e293b r=6 size=12
+["Edit Profile"] @(1240,195) w=80 h=32 bg=#ffffff b=#e2e8f0 c=#1e293b r=6 size=11
 
-(("AB")) @(820,300) w=40 h=40 bg=#22c55e c=#ffffff
-(("CD")) @(870,300) w=40 h=40 bg=#f59e0b c=#ffffff
-(("EF")) @(920,300) w=40 h=40 bg=#ef4444 c=#ffffff
-(("GH")) @(970,300) w=40 h=40 bg=#8b5cf6 c=#ffffff
-(("IJ")) @(1020,300) w=40 h=40 bg=#06b6d4 c=#ffffff
+(("AB")) @(900,280) w=40 h=40 bg=#22c55e c=#ffffff r=8
+(("CD")) @(950,280) w=40 h=40 bg=#f59e0b c=#ffffff r=8
+(("EF")) @(1000,280) w=40 h=40 bg=#ef4444 c=#ffffff r=8
+(("GH")) @(1050,280) w=40 h=40 bg=#8b5cf6 c=#ffffff r=8
+(("IJ")) @(1100,280) w=40 h=40 bg=#06b6d4 c=#ffffff r=8
+(("KL")) @(1150,280) w=40 h=40 bg=#ec4899 c=#ffffff r=8
 
-"+5 more" @(1080,312) c=#64748b size=12
+"+5 more" @(1200,292) c=#64748b size=12
 
-[] @(40,420) w=540 h=200 bg=#ffffff b=#e2e8f0 r=12
-"Data Table" @(60,450) size=16 bold c=#1e293b
+[] @(900,340) w=200 h=60 bg=#fef3c7 r=8
+"⭐ Featured" @(920,362) c=#92400e size=13 bold
 
-## @(60,490) w=500 border=1
+[] @(1110,340) w=230 h=60 bg=#dcfce7 r=8
+"✓ Verified Account" @(1130,362) c=#166534 size=13 bold
+
+[] @(40,440) w=600 h=220 bg=#ffffff b=#e2e8f0 r=12
+"Data Table" @(60,470) size=16 bold c=#1e293b
+
+## @(60,510) w=560 border=1
   # bg=#f1f5f9
     "ID" bold
     "Name" bold
+    "Email" bold
     "Status" bold
     "Date" bold
   #
     "001"
     "Alice Brown"
+    "alice@e.com"
     "Active"
     "2024-03-15"
   # bg=#fafafa
     "002"
     "Bob Smith"
+    "bob@e.com"
     "Pending"
     "2024-03-14"
   #
     "003"
     "Carol White"
+    "carol@e.com"
     "Inactive"
     "2024-03-10"
 
-[] @(600,420) w=560 h=340 bg=#ffffff b=#e2e8f0 r=12
-"Status & Indicators" @(620,450) size=16 bold c=#1e293b
+[] @(660,440) w=700 h=420 bg=#ffffff b=#e2e8f0 r=12
+"Status & Indicators" @(680,470) size=16 bold c=#1e293b
 
-"Status Badges" @(620,490) size=13 c=#475569
+"Status Badges" @(680,510) size=13 c=#475569
 
-["Success"] @(620,520) w=80 h=28 bg=#dcfce7 c=#166534 r=6 size=12
-["Warning"] @(720,520) w=80 h=28 bg=#fef3c7 c=#92400e r=6 size=12
-["Error"] @(820,520) w=80 h=28 bg=#fee2e2 c=#991b1b r=6 size=12
-["Info"] @(920,520) w=80 h=28 bg=#dbeafe c=#1e40af r=6 size=12
+["Success"] @(680,535) w=80 h=28 bg=#dcfce7 c=#166534 r=6 size=12
+["Warning"] @(780,535) w=80 h=28 bg=#fef3c7 c=#92400e r=6 size=12
+["Error"] @(880,535) w=80 h=28 bg=#fee2e2 c=#991b1b r=6 size=12
+["Info"] @(980,535) w=80 h=28 bg=#dbeafe c=#1e40af r=6 size=12
+["New"] @(1080,535) w=60 h=28 bg=#f3e8ff c=#7c3aed r=6 size=12
 
-"Progress Indicators" @(620,580) size=13 c=#475569
+"Progress Indicators" @(680,590) size=13 c=#475569
 
-[] @(620,610) w=200 h=8 bg=#e2e8f0 r=4
-[] @(620,610) w=150 h=8 bg=#6366f1 r=4
+[] @(680,620) w=240 h=8 bg=#e2e8f0 r=4
+[] @(680,620) w=180 h=8 bg=#6366f1 r=4
+"75%" @(940,615) size=12 c=#1e293b
 
-[] @(620,640) w=200 h=8 bg=#e2e8f0 r=4
-[] @(620,640) w=100 h=8 bg=#22c55e r=4
+[] @(680,650) w=240 h=8 bg=#e2e8f0 r=4
+[] @(680,650) w=120 h=8 bg=#22c55e r=4
+"50%" @(940,645) size=12 c=#1e293b
 
-[] @(620,670) w=200 h=8 bg=#e2e8f0 r=4
-[] @(620,670) w=180 h=8 bg=#f59e0b r=4
+[] @(680,680) w=240 h=8 bg=#e2e8f0 r=4
+[] @(680,680) w=216 h=8 bg=#f59e0b r=4
+"90%" @(940,675) size=12 c=#1e293b
 
-"75%" @(840,620) size=12 c=#1e293b
-"50%" @(840,650) size=12 c=#1e293b
-"90%" @(840,680) size=12 c=#1e293b
+"Navigation Tabs" @(680,720) size=13 c=#475569
 
-"Navigation" @(620,720) size=13 c=#475569
+["Dashboard"] @(680,750) w=90 h=36 bg=#6366f1 c=#ffffff r=6 size=12
+["Projects"] @(790,750) w=80 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
+["Settings"] @(890,750) w=80 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
+["Help"] @(990,750) w=60 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
 
-["Dashboard"] @(620,750) w=90 h=36 bg=#6366f1 c=#ffffff r=6 size=12
-["Projects"] @(730,750) w=80 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
-["Settings"] @(830,750) w=80 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
-["Help"] @(930,750) w=60 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
+"Alert Components" @(680,810) size=13 c=#475569
+
+[] @(680,835) w=320 h=40 bg=#dcfce7 r=8 b=#22c55e
+"✓ Operation completed successfully!" @(700,848) c=#166534 size=12
+
+[] @(1020,835) w=320 h=40 bg=#fee2e2 r=8 b=#ef4444
+"✕ An error occurred. Please try again." @(1040,848) c=#991b1b size=12
+
+[] @(40,680) w=600 h=180 bg=#ffffff b=#e2e8f0 r=12
+"Typography" @(60,710) size=16 bold c=#1e293b
+
+"Heading 1 - 32px Bold" @(60,750) size=24 bold c=#1e293b
+"Heading 2 - 24px Bold" @(60,785) size=18 bold c=#1e293b
+"Heading 3 - 18px Bold" @(60,815) size=14 bold c=#1e293b
+"Body text - 14px Regular" @(350,755) c=#475569 size=14
+"Small text - 12px" @(350,785) c=#64748b size=12
+"Caption - 11px Muted" @(350,815) c=#94a3b8 size=11

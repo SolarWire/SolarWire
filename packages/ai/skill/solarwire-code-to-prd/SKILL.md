@@ -215,7 +215,45 @@ Follow the exact PRD structure from `solarwire-prd` skill:
 
 ---
 
-## SolarWire Wireframe Generation
+## Output File Structure
+
+**All requirements are organized under the `.solarwire` directory, each in its own folder:**
+
+```
+.solarwire/                              # Root directory for all PRD outputs
+├── [requirement-name-1]/                # Folder for requirement 1
+│   ├── solarwire-prd.md                 # PRD document (fixed name)
+│   ├── [page-name]-with-notes.svg       # Wireframe with notes
+│   ├── [page-name]-without-notes.svg    # Wireframe without notes
+│   └── ...                              # More SVGs for this requirement
+│
+├── [requirement-name-2]/                # Folder for requirement 2
+│   ├── solarwire-prd.md
+│   └── ...
+│
+└── ...                                  # More requirement folders
+```
+
+---
+
+## SVG Generation
+
+After generating the PRD markdown file, run the SVG generation script:
+
+```bash
+node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
+```
+
+**The script will:**
+- Extract all `solarwire` code blocks from the markdown file
+- Generate two SVG files for each block:
+  - `[page-name]-with-notes.svg` - Includes note annotations
+  - `[page-name]-without-notes.svg` - Clean wireframe only
+- Save files to the same directory as the markdown file
+
+---
+
+## SolarWire Wireframe Specifications
 
 **CRITICAL: Follow all SolarWire syntax rules from `solarwire-prd` skill**
 
@@ -223,10 +261,31 @@ Follow the exact PRD structure from `solarwire-prd` skill:
 
 ```
 1. All elements must have coordinates @(x,y)
-2. Write attributes directly without brackets: w=100 h=40
+2. Write attributes directly without brackets: w=100 h=40 (not [w=100 h=40])
 3. Text content MUST use double quotes: "Login" (not Login)
 4. Attribute order: Content → Coordinates → Size → Other attributes → note
 ```
+
+### Element Selection Principles
+
+| Scenario | Recommended Element | Example |
+|----------|---------------------|---------|
+| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#1890FF c=#FFFFFF` |
+| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#FFFFFF b=#F2F2F2` |
+| Cards/Containers | Rounded Rectangle `()` | `("User Info Card") @(100,50) w=300 h=200` |
+| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#F2F2F2 c=#AAAAAA` |
+| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#F2F2F2` |
+| Labels/Text | Plain Text `""` | `"Username" @(100,50)` |
+| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA` |
+| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#F2F2F2` |
+| Data Tables | Table `##` | `## @(100,50) w=500 border=1` |
+
+**Common Mistakes to Avoid:**
+- ❌ `((Avatar))` - Text without double quotes
+- ❌ `[Login]` - Text without double quotes
+- ❌ Using placeholder `[?]` for buttons (use `["Button Text"]` instead)
+- ❌ Using rectangle `[]` for plain labels (use `"Label"` instead)
+- ❌ Overcrowding elements - use 10px spacing
 
 ### Element Mapping
 
@@ -281,7 +340,122 @@ When analyzing code, infer reasonable positions:
 
 ### Note Generation Rules
 
-**Generate notes from code analysis:**
+**Core Principle: notes describe functional behavior and business logic, not visual details or technical implementation**
+
+---
+
+#### 1. When to Write Notes
+
+**Write notes for:**
+- Interactive elements (buttons, links, etc.)
+- Input elements with validation or logic
+- Dropdowns (selection behavior, options source)
+- Data display elements with complex rules (tables, lists)
+- Elements with business logic (calculations, conditions)
+- Complex concepts requiring additional explanation
+
+**Skip notes for:**
+- Pure visual elements (dividers, containers, decorative icons)
+- Static labels and titles
+
+**Common Sense Exemption (no note needed unless special behavior):**
+- Back button (standard behavior: return to previous page)
+- Close button
+- Page selector
+- Number stepper/incrementer
+
+---
+
+#### 2. Note Structure Format
+
+**Format Rules:**
+```
+First line: Element definition (what this element is, NOT element type)
+First level: Numbered (1. 2. 3.)
+Second level: - or # (if third level exists)
+Third level: -- or -
+```
+
+**Example:**
+```solarwire
+["Enter password"] @(100,100) w=280 h=40 note="Password input
+1. Input rules
+   - Password displayed as dots
+   - Minimum 6 characters, maximum 32 characters
+   - Must contain both letters and numbers
+2. Interaction
+   - Show/hide toggle icon on the right
+   - Validate format on blur
+   - Display error on format failure: 'Invalid password format'
+3. Special notes
+   - Lock account for 15 minutes after 5 consecutive errors"
+```
+
+---
+
+#### 3. First Line: Element Definition
+
+**The first line of a note MUST define what this element is (functional description, NOT element type).**
+
+| Correct | Incorrect |
+|---------|-----------|
+| `Password input` | `[Password Field]` |
+| `Username input` | `[Input Field]` |
+| `User data table` | `[Data Table]` |
+| `Submit form button` | `[Primary Button]` |
+
+---
+
+#### 4. Content Requirements by Element Type
+
+**Interactive/Operational Elements:**
+
+Must include:
+- What happens on click/operation
+- Success/failure handling
+- Disabled conditions
+- Special handling (debounce, throttle, etc.)
+
+**Elements with Logic:**
+
+Must include:
+- Show/hide conditions
+- Calculation rules
+- Validation rules
+- State transitions
+
+**Data Display Elements:**
+
+Must include:
+- **Data source**: Module, page, or operation (NOT API/technical details); include formula if calculated
+- **Display fields and rules**: Field meanings, formats, special handling
+- **Sorting rules**: Default sort, sortable fields
+
+---
+
+#### 5. Content Forbidden in Notes
+
+**NEVER include:**
+
+| Forbidden | Example (Don't Write) |
+|-----------|----------------------|
+| Colors | "Button is blue", "Text color #333" |
+| Fonts | "Font size 14px", "Bold text" |
+| Sizes | "Width 100px", "Height 40px" |
+| Spacing | "Margin 16px", "Padding 8px" |
+| Border | "Border radius 8px" |
+| Shadows | "Box shadow 0 2px 4px" |
+| Animations | "Fade in 0.3s" |
+| Technical details | "API: /api/login", "Database: user_id" |
+
+**Why?** These are:
+- Already shown visually in wireframe
+- Design decisions to be made later
+- Subject to change during implementation
+
+---
+
+#### 6. Generate Notes from Code Analysis
 
 | Code Pattern | Note Content |
 |--------------|--------------|
@@ -292,14 +466,42 @@ When analyzing code, infer reasonable positions:
 | `errorMessage` state | "Error handling - Display: [message]" |
 | API call in handler | "API - Call [endpoint] on [action]" |
 
-**Note format:**
+---
+
+## Multi-language (i18n) Support
+
+**⚠️ CRITICAL: Only add i18n when user explicitly confirms multi-language support is needed**
+
+When i18n is confirmed, use this format:
+
+```markdown
+**Page Name:** `Login`
+
+**i18n:**
+- `login.title`: "Welcome Back"
+- `login.email`: "Email"
+- `login.password`: "Password"
+- `login.remember`: "Remember me"
+- `login.submit`: "Sign In"
 ```
-note="[Element description]
-1. [Category 1]
-   - [Detail 1]
-   - [Detail 2]
-2. [Category 2]
-   - [Detail 1]"
+
+In wireframe, use i18n keys:
+
+```solarwire
+"{login.title}" @(600,200) size=24 bold
+"{login.email}" @(520,320)
+["{login.email.placeholder}"] @(520,345) w=400 h=44
+```
+
+---
+
+## Dependencies
+
+This skill requires the `lib` directory with bundled dependencies for SVG generation. Copy from `solarwire-prd` skill:
+
+```bash
+# Copy lib directory
+cp -r .trae/skills/solarwire-prd/lib packages/ai/skill/solarwire-code-to-prd/lib
 ```
 
 ---

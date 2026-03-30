@@ -1,46 +1,122 @@
 !title="Admin Dashboard"
-!bg=#f5f5f5
+!bg=#f1f5f9
 !size=14
 
-[] @(0,0) w=1000 h=650 bg=#fff
+[] @(0,0) w=1200 h=800 bg=#f1f5f9
 
-[] @(0,0) w=220 h=650 bg=#1e1e2e
-(("🎨")) @(24,24) w=48 h=48 bg=#A8B1FF c=white r=8
-"SolarWire" @(82,48) c=white size=18 bold
+[] @(0,0) w=240 h=800 bg=#1e1e2e
+(("🎨")) @(24,24) w=44 h=44 bg=#A8B1FF c=white r=10
+"SolarWire" @(76,38) c=white size=18 bold
 
-"Overview" @(24,100) c=#A8B1FF size=13
-"Analytics" @(24,135) c=#94a3b8 size=13
-"Projects" @(24,170) c=#94a3b8 size=13
-"Team" @(24,205) c=#94a3b8 size=13
-"Settings" @(24,240) c=#94a3b8 size=13
+[] @(16,88) w=208 h=36 bg=#2a2a3e r=8
+"🔍 Search..." @(28,98) c=#64748b size=13
 
-[] @(240,24) w=220 h=120 bg=#fff r=12 b=#e2e8f0 note="Revenue statistics card"
-"Total Revenue" @(260,52) c=#64748b size=12
-"$128,450" @(260,92) size=28 bold c=#1e293b
-"+12.5%" @(420,92) size=13 c=#22c55e align=r
+"Main" @(24,148) c=#64748b size=11 bold
 
-[] @(480,24) w=220 h=120 bg=#fff r=12 b=#e2e8f0 note="Users statistics card"
-"Active Users" @(500,52) c=#64748b size=12
-"3,240" @(500,92) size=28 bold c=#1e293b
-"+8.2%" @(660,92) size=13 c=#22c55e align=r
+[] @(16,172) w=208 h=36 bg=#A8B1FF r=8
+"📊 Dashboard" @(32,182) c=white size=13
 
-[] @(720,24) w=220 h=120 bg=#fff r=12 b=#e2e8f0 note="Projects statistics card"
-"Total Projects" @(740,52) c=#64748b size=12
-"156" @(740,92) size=28 bold c=#1e293b
-"+3.1%" @(900,92) size=13 c=#ef4444 align=r
+"📦 Products" @(32,218) c=#94a3b8 size=13
+"👥 Customers" @(32,254) c=#94a3b8 size=13
+"📈 Analytics" @(32,290) c=#94a3b8 size=13
+"💬 Messages" @(32,326) c=#94a3b8 size=13
 
-[] @(240,168) w=700 h=40 bg=#e2e8f0 r=8
-"Recent Projects" @(260,192) c=#1e293b size=14 bold
-"View All" @(900,192) c=#A8B1FF size=12 align=r
+"Settings" @(24,380) c=#64748b size=11 bold
 
-[] @(240,220) w=700 h=80 bg=#fff r=8 b=#e2e8f0
-(("📊")) @(260,245) w=40 h=40 bg=#dbeafe c=#3b82f6 r=8
-"Website Redesign" @(310,240) c=#1e293b size=13 bold
-"Marketing Team" @(310,265) c=#64748b size=11
-"In Progress" @(860,255) c=#f59e0b size=12 align=r
+"⚙️ Settings" @(32,408) c=#94a3b8 size=13
+"🔧 Integrations" @(32,444) c=#94a3b8 size=13
+"❓ Help Center" @(32,480) c=#94a3b8 size=13
 
-[] @(240,316) w=700 h=80 bg=#fff r=8 b=#e2e8f0
-(("🚀")) @(260,341) w=40 h=40 bg=#dcfce7 c=#22c55e r=8
-"Mobile App Launch" @(310,336) c=#1e293b size=13 bold
-"Product Team" @(310,361) c=#64748b size=11
-"Completed" @(875,351) c=#22c55e size=12 align=r
+[] @(16,720) w=208 h=60 bg=#2a2a3e r=8
+(("JD")) @(28,732) w=36 h=36 bg=#6366f1 c=white r=8
+"John Doe" @(72,732) c=white size=13 bold
+"Admin" @(72,750) c=#64748b size=11
+
+[] @(260,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="Revenue statistics card"
+"Total Revenue" @(280,52) c=#64748b size=12
+"$128,450" @(280,88) size=32 bold c=#1e293b
+"+12.5%" @(440,100) size=13 c=#22c55e align=r
+[] @(280,120) w=160 h=6 bg=#e2e8f0 r=3
+[] @(280,120) w=120 h=6 bg=#22c55e r=3
+
+[] @(500,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="Users statistics card"
+"Active Users" @(520,52) c=#64748b size=12
+"3,240" @(520,88) size=32 bold c=#1e293b
+"+8.2%" @(680,100) size=13 c=#22c55e align=r
+[] @(520,120) w=160 h=6 bg=#e2e8f0 r=3
+[] @(520,120) w=100 h=6 bg=#6366f1 r=3
+
+[] @(740,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="Projects statistics card"
+"Total Projects" @(760,52) c=#64748b size=12
+"156" @(760,88) size=32 bold c=#1e293b
+"+3.1%" @(920,100) size=13 c=#ef4444 align=r
+[] @(760,120) w=160 h=6 bg=#e2e8f0 r=3
+[] @(760,120) w=80 h=6 bg=#f59e0b r=3
+
+[] @(980,24) w=200 h=140 bg=#fff r=12 b=#e2e8f0 note="Conversion rate"
+"Conversion" @(1000,52) c=#64748b size=12
+"24.8%" @(1000,88) size=32 bold c=#1e293b
+"+5.4%" @(1140,100) size=13 c=#22c55e align=r
+[] @(1000,120) w=160 h=6 bg=#e2e8f0 r=3
+[] @(1000,120) w=140 h=6 bg=#8b5cf6 r=3
+
+[] @(260,184) w=920 h=280 bg=#fff r=12 b=#e2e8f0
+"Recent Projects" @(280,212) c=#1e293b size=16 bold
+["View All"] @(1040,204) w=80 h=32 bg=#fff b=#e2e8f0 c=#64748b r=6 size=12
+
+[] @(280,256) w=880 h=80 bg=#f8fafc r=8 b=#e2e8f0
+(("📊")) @(300,280) w=40 h=40 bg=#dbeafe c=#3b82f6 r=8
+"Website Redesign" @(356,272) c=#1e293b size=14 bold
+"Marketing Team" @(356,296) c=#64748b size=12
+["In Progress"] @(1020,284) w=90 h=28 bg=#fef3c7 c=#92400e r=6 size=11
+
+[] @(280,352) w=880 h=80 bg=#fff r=8 b=#e2e8f0
+(("🚀")) @(300,376) w=40 h=40 bg=#dcfce7 c=#22c55e r=8
+"Mobile App Launch" @(356,368) c=#1e293b size=14 bold
+"Product Team" @(356,392) c=#64748b size=12
+["Completed"] @(1020,380) w=80 h=28 bg=#dcfce7 c=#166534 r=6 size=11
+
+[] @(260,488) w=580 h=280 bg=#fff r=12 b=#e2e8f0
+"Sales Overview" @(280,516) c=#1e293b size=16 bold
+
+[] @(300,560) w=60 h=180 bg=#e2e8f0 r=4
+[] @(300,660) w=60 h=80 bg=#6366f1 r=4
+"Jan" @(320,752) c=#64748b size=11
+
+[] @(380,560) w=60 h=180 bg=#e2e8f0 r=4
+[] @(380,640) w=60 h=100 bg=#6366f1 r=4
+"Feb" @(400,752) c=#64748b size=11
+
+[] @(460,560) w=60 h=180 bg=#e2e8f0 r=4
+[] @(460,620) w=60 h=120 bg=#6366f1 r=4
+"Mar" @(480,752) c=#64748b size=11
+
+[] @(540,560) w=60 h=180 bg=#e2e8f0 r=4
+[] @(540,600) w=60 h=140 bg=#6366f1 r=4
+"Apr" @(560,752) c=#64748b size=11
+
+[] @(620,560) w=60 h=180 bg=#e2e8f0 r=4
+[] @(620,580) w=60 h=160 bg=#A8B1FF r=4
+"May" @(640,752) c=#64748b size=11
+
+[] @(700,560) w=60 h=180 bg=#e2e8f0 r=4
+[] @(700,590) w=60 h=150 bg=#6366f1 r=4
+"Jun" @(720,752) c=#64748b size=11
+
+[] @(860,488) w=320 h=280 bg=#fff r=12 b=#e2e8f0
+"Top Products" @(880,516) c=#1e293b size=16 bold
+
+[] @(880,560) w=280 h=48 bg=#f8fafc r=8
+(("📱")) @(896,572) w=28 h=28 bg=#dbeafe c=#3b82f6 r=6
+"iPhone 15 Pro" @(936,572) c=#1e293b size=13 bold
+"$1,299" @(1100,580) c=#1e293b size=12 bold align=r
+
+[] @(880,620) w=280 h=48 bg=#fff r=8
+(("💻")) @(896,632) w=28 h=28 bg=#dcfce7 c=#22c55e r=6
+"MacBook Air" @(936,632) c=#1e293b size=13 bold
+"$999" @(1100,640) c=#1e293b size=12 bold align=r
+
+[] @(880,680) w=280 h=48 bg=#f8fafc r=8
+(("⌚")) @(896,692) w=28 h=28 bg=#fef3c7 c=#f59e0b r=6
+"Apple Watch" @(936,692) c=#1e293b size=13 bold
+"$399" @(1100,700) c=#1e293b size=12 bold align=r
