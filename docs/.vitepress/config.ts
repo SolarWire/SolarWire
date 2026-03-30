@@ -7,6 +7,7 @@ export default defineConfig({
   base: '/SolarWire/',
   
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/SolarWire/logo.svg' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],

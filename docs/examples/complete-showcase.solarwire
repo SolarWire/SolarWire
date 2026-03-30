@@ -1,0 +1,150 @@
+!title="SolarWire Showcase"
+!c=#1a1a2e
+!size=14
+!bg=#f8fafc
+!r=0
+
+[] @(0,0) w=1200 h=800 bg=#ffffff
+
+"🎨 SolarWire Showcase" @(40,30) size=28 bold
+"A comprehensive demonstration of all SolarWire elements" @(40,70) c=#64748b size=13
+
+[] @(40,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
+"Buttons" @(60,140) size=16 bold c=#1e293b
+
+["Primary"] @(60,180) w=100 h=42 bg=#6366f1 c=#ffffff r=8 note="Primary button
+1. Main action
+   - Submit forms
+   - Confirm actions
+2. Visual style
+   - Filled background
+   - White text"
+
+["Secondary"] @(180,180) w=100 h=42 bg=#ffffff b=#e2e8f0 c=#1e293b r=8 note="Secondary button
+1. Alternative action
+   - Cancel operations
+   - Navigate back
+2. Visual style
+   - Border only
+   - Dark text"
+
+["Success"] @(300,180) w=80 h=42 bg=#22c55e c=#ffffff r=8
+
+["Danger"] @(60,240) w=80 h=42 bg=#ef4444 c=#ffffff r=8
+
+["Warning"] @(160,240) w=80 h=42 bg=#f59e0b c=#ffffff r=8
+
+["Ghost"] @(260,240) w=80 h=42 bg=#ffffff c=#6366f1 r=8 b=#6366f1
+
+["Disabled"] @(60,300) w=100 h=42 bg=#e2e8f0 c=#94a3b8 r=8
+
+["Loading..."] @(180,300) w=100 h=42 bg=#6366f1 c=#ffffff r=8
+
+[] @(420,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
+"Form Elements" @(440,140) size=16 bold c=#1e293b
+
+"Email Address" @(440,180) size=12 c=#475569
+["john@example.com"] @(440,205) w=320 h=44 bg=#ffffff b=#e2e8f0 c=#94a3b8 r=8 note="Email input
+1. Validation
+   - Email format check
+   - Required field
+2. Features
+   - Auto-complete
+   - Clear button"
+
+"Password" @(440,270) size=12 c=#475569
+["••••••••"] @(440,295) w=320 h=44 bg=#ffffff b=#e2e8f0 c=#1e293b r=8
+
+["Remember me"] @(440,355) w=20 h=20 bg=#6366f1 c=#ffffff r=4
+"Remember me" @(468,358) size=13
+
+[] @(800,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
+"Cards & Avatars" @(820,140) size=16 bold c=#1e293b
+
+[] @(820,180) w=320 h=100 bg=#f1f5f9 r=12 note="Profile card
+1. Display info
+   - User avatar
+   - Name and email
+   - Role badge
+2. Actions
+   - Edit profile
+   - View details"
+
+(("JD")) @(840,205) w=50 h=50 bg=#6366f1 c=#ffffff note="Avatar
+1. Content
+   - User initials
+   - Or profile image
+2. Size options
+   - Small: 32px
+   - Medium: 48px
+   - Large: 64px"
+
+"John Doe" @(904,215) size=15 bold c=#1e293b
+"Product Designer" @(904,238) size=12 c=#64748b
+
+["Edit"] @(1060,215) w=60 h=32 bg=#ffffff b=#e2e8f0 c=#1e293b r=6 size=12
+
+(("AB")) @(820,300) w=40 h=40 bg=#22c55e c=#ffffff
+(("CD")) @(870,300) w=40 h=40 bg=#f59e0b c=#ffffff
+(("EF")) @(920,300) w=40 h=40 bg=#ef4444 c=#ffffff
+(("GH")) @(970,300) w=40 h=40 bg=#8b5cf6 c=#ffffff
+(("IJ")) @(1020,300) w=40 h=40 bg=#06b6d4 c=#ffffff
+
+"+5 more" @(1080,312) c=#64748b size=12
+
+[] @(40,420) w=540 h=200 bg=#ffffff b=#e2e8f0 r=12
+"Data Table" @(60,450) size=16 bold c=#1e293b
+
+## @(60,490) w=500 border=1
+  # bg=#f1f5f9 bold
+    "ID"
+    "Name"
+    "Status"
+    "Date"
+  #
+    "001"
+    "Alice Brown"
+    "Active"
+    "2024-03-15"
+  # bg=#fafafa
+    "002"
+    "Bob Smith"
+    "Pending"
+    "2024-03-14"
+  #
+    "003"
+    "Carol White"
+    "Inactive"
+    "2024-03-10"
+
+[] @(600,420) w=560 h=340 bg=#ffffff b=#e2e8f0 r=12
+"Status & Indicators" @(620,450) size=16 bold c=#1e293b
+
+"Status Badges" @(620,490) size=13 c=#475569
+
+["Success"] @(620,520) w=80 h=28 bg=#dcfce7 c=#166534 r=6 size=12
+["Warning"] @(720,520) w=80 h=28 bg=#fef3c7 c=#92400e r=6 size=12
+["Error"] @(820,520) w=80 h=28 bg=#fee2e2 c=#991b1b r=6 size=12
+["Info"] @(920,520) w=80 h=28 bg=#dbeafe c=#1e40af r=6 size=12
+
+"Progress Indicators" @(620,580) size=13 c=#475569
+
+[] @(620,610) w=200 h=8 bg=#e2e8f0 r=4
+[] @(620,610) w=150 h=8 bg=#6366f1 r=4
+
+[] @(620,640) w=200 h=8 bg=#e2e8f0 r=4
+[] @(620,640) w=100 h=8 bg=#22c55e r=4
+
+[] @(620,670) w=200 h=8 bg=#e2e8f0 r=4
+[] @(620,670) w=180 h=8 bg=#f59e0b r=4
+
+"75%" @(840,620) size=12 c=#1e293b
+"50%" @(840,650) size=12 c=#1e293b
+"90%" @(840,680) size=12 c=#1e293b
+
+"Navigation" @(620,720) size=13 c=#475569
+
+["Dashboard"] @(620,750) w=90 h=36 bg=#6366f1 c=#ffffff r=6 size=12
+["Projects"] @(730,750) w=80 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
+["Settings"] @(830,750) w=80 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12
+["Help"] @(930,750) w=60 h=36 bg=#ffffff b=#e2e8f0 c=#475569 r=6 size=12

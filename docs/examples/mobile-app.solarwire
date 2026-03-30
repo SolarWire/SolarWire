@@ -1,0 +1,61 @@
+!title="Mobile App"
+!bg=#f8fafc
+!size=14
+
+[] @(0,0) w=375 h=812 bg=#fff
+
+[] @(0,0) w=375 h=54 bg=#ffffff b=#f1f5f9
+"9:41" @(42,30) c=#0f172a size=15 bold
+"📶 🔋" @(310,30) c=#64748b size=14 align=r
+
+[] @(0,54) w=375 h=60 bg=#fff
+"🔙" @(20,86) c=#0f172a size=18
+"Discover" @(177,86) c=#0f172a size=17 bold
+"🔔" @(335,86) c=#0f172a size=18 align=r
+
+"Featured" @(20,140) c=#0f172a size=16 bold
+"See all" @(330,140) c=#A8B1FF size=13 align=r
+
+[] @(20,160) w=335 h=180 bg=#A8B1FF r=16 note="Featured card"
+"🎨 Design Inspiration" @(40,270) c=#fff size=18 bold
+"Explore creative UI ideas" @(40,300) c=#f1f5f9 size=13
+
+"Categories" @(20,365) c=#0f172a size=16 bold
+
+[] @(20,385) w=75 h=90 bg=#fef3c7 r=12
+"🎮" @(57,420) size=28
+"Games" @(57,455) c=#0f172a size=11
+
+[] @(105,385) w=75 h=90 bg=#dbeafe r=12
+"📚" @(142,420) size=28
+"Books" @(142,455) c=#0f172a size=11
+
+[] @(190,385) w=75 h=90 bg=#fce7f3 r=12
+"🎵" @(227,420) size=28
+"Music" @(227,455) c=#0f172a size=11
+
+[] @(275,385) w=75 h=90 bg=#dcfce7 r=12
+"🏃" @(312,420) size=28
+"Sports" @(312,455) c=#0f172a size=11
+
+"Popular Today" @(20,495) c=#0f172a size=16 bold
+
+[] @(20,515) w=335 h=80 bg=#fff r=12 b=#f1f5f9
+(("🔥")) @(40,540) w=44 h=44 bg=#fee2e2 c=#ef4444 r=10
+"Top 10 UI Trends" @(96,535) c=#0f172a size=14 bold
+"12.5K views" @(96,565) c=#64748b size=11
+
+[] @(20,610) w=335 h=80 bg=#fff r=12 b=#f1f5f9
+(("💡")) @(40,635) w=44 h=44 bg=#fef3c7 c=#f59e0b r=10
+"Productivity Hacks" @(96,630) c=#0f172a size=14 bold
+"8.2K views" @(96,660) c=#64748b size=11
+
+[] @(0,712) w=375 h=100 bg=#ffffff b=#f1f5f9
+"🏠" @(56,745) c=#A8B1FF size=22
+"Discover" @(56,775) c=#A8B1FF size=11
+"🔍" @(160,745) c=#94a3b8 size=22
+"Search" @(160,775) c=#94a3b8 size=11
+"❤️" @(263,745) c=#94a3b8 size=22
+"Saved" @(263,775) c=#94a3b8 size=11
+"👤" @(319,745) c=#94a3b8 size=22
+"Profile" @(319,775) c=#94a3b8 size=11 align=r

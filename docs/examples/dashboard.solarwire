@@ -1,0 +1,46 @@
+!title="Admin Dashboard"
+!bg=#f5f5f5
+!size=14
+
+[] @(0,0) w=1000 h=650 bg=#fff
+
+[] @(0,0) w=220 h=650 bg=#1e1e2e
+(("🎨")) @(24,24) w=48 h=48 bg=#A8B1FF c=white r=8
+"SolarWire" @(82,48) c=white size=18 bold
+
+"Overview" @(24,100) c=#A8B1FF size=13
+"Analytics" @(24,135) c=#94a3b8 size=13
+"Projects" @(24,170) c=#94a3b8 size=13
+"Team" @(24,205) c=#94a3b8 size=13
+"Settings" @(24,240) c=#94a3b8 size=13
+
+[] @(240,24) w=220 h=120 bg=#fff r=12 b=#e2e8f0 note="Revenue statistics card"
+"Total Revenue" @(260,52) c=#64748b size=12
+"$128,450" @(260,92) size=28 bold c=#1e293b
+"+12.5%" @(420,92) size=13 c=#22c55e align=r
+
+[] @(480,24) w=220 h=120 bg=#fff r=12 b=#e2e8f0 note="Users statistics card"
+"Active Users" @(500,52) c=#64748b size=12
+"3,240" @(500,92) size=28 bold c=#1e293b
+"+8.2%" @(660,92) size=13 c=#22c55e align=r
+
+[] @(720,24) w=220 h=120 bg=#fff r=12 b=#e2e8f0 note="Projects statistics card"
+"Total Projects" @(740,52) c=#64748b size=12
+"156" @(740,92) size=28 bold c=#1e293b
+"+3.1%" @(900,92) size=13 c=#ef4444 align=r
+
+[] @(240,168) w=700 h=40 bg=#e2e8f0 r=8
+"Recent Projects" @(260,192) c=#1e293b size=14 bold
+"View All" @(900,192) c=#A8B1FF size=12 align=r
+
+[] @(240,220) w=700 h=80 bg=#fff r=8 b=#e2e8f0
+(("📊")) @(260,245) w=40 h=40 bg=#dbeafe c=#3b82f6 r=8
+"Website Redesign" @(310,240) c=#1e293b size=13 bold
+"Marketing Team" @(310,265) c=#64748b size=11
+"In Progress" @(860,255) c=#f59e0b size=12 align=r
+
+[] @(240,316) w=700 h=80 bg=#fff r=8 b=#e2e8f0
+(("🚀")) @(260,341) w=40 h=40 bg=#dcfce7 c=#22c55e r=8
+"Mobile App Launch" @(310,336) c=#1e293b size=13 bold
+"Product Team" @(310,361) c=#64748b size=11
+"Completed" @(875,351) c=#22c55e size=12 align=r
