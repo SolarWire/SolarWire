@@ -230,22 +230,18 @@ function generateContainerElement(
   indent: number,
   warnings: ConversionWarning[]
 ): string {
-  const indentStr = '  '.repeat(indent);
-  const attrs = generateAttributes(element, options);
-  const note = options.includeNotes && element.note ? ` note="${escapeText(element.note)}"` : '';
-
-  let code = `${indentStr}[Container]${attrs}${note}`;
+  const lines: string[] = [];
 
   if (element.children && element.children.length > 0) {
     for (const child of element.children) {
-      const childCode = generateElementCode(child, options, indent + 1, warnings);
+      const childCode = generateElementCode(child, options, 0, warnings);
       if (childCode) {
-        code += `\n${childCode}`;
+        lines.push(childCode);
       }
     }
   }
 
-  return code;
+  return lines.join('\n');
 }
 
 function generateTableElement(

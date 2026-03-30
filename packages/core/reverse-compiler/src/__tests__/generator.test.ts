@@ -128,7 +128,6 @@ describe('Code Generator', () => {
       const result = generateSolarWire(tree);
       
       expect(result.success).toBe(true);
-      expect(result.code).toContain('[Container]');
       expect(result.code).toContain('"Inside container"');
     });
     it('should generate table element', () => {
