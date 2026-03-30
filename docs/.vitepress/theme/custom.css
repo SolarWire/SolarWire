@@ -1,0 +1,490 @@
+:root {
+  --vp-c-brand: #A8B1FF;
+  --vp-c-brand-light: #BEC5FF;
+  --vp-c-brand-lighter: #D4D9FF;
+  --vp-c-brand-dark: #8B96E8;
+  --vp-c-brand-darker: #6E7BD1;
+}
+
+/* ========== Hero 动画效果 ========== */
+
+/* 渐变背景动画 */
+.VPHero {
+  position: relative;
+  overflow: hidden;
+}
+
+.VPHero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(168, 177, 255, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 70% 70%, rgba(139, 150, 232, 0.1) 0%, transparent 50%);
+  animation: gradientMove 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gradientMove {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(2%, 2%) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1%, 3%) rotate(-1deg);
+  }
+  75% {
+    transform: translate(1%, -2%) rotate(0.5deg);
+  }
+}
+
+/* 标题打字机光标效果 */
+.VPHero .name {
+  position: relative;
+  display: inline-block;
+}
+
+.VPHero .name::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  margin-left: 4px;
+  color: var(--vp-c-brand);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 标签淡入动画 */
+.VPHero .tagline {
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 按钮悬浮发光效果 */
+.VPHero .VPButton {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.VPHero .VPButton.brand {
+  background: linear-gradient(135deg, var(--vp-c-brand) 0%, var(--vp-c-brand-dark) 100%);
+  box-shadow: 0 4px 15px rgba(168, 177, 255, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.VPHero .VPButton.brand:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(168, 177, 255, 0.5);
+}
+
+.VPHero .VPButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.VPHero .VPButton:hover::before {
+  left: 100%;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(168, 177, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(168, 177, 255, 0.5);
+  }
+}
+
+/* ========== Features 卡片动画 ========== */
+
+.VPFeatures .VPFeature {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.VPFeatures .VPFeature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--vp-c-brand), var(--vp-c-brand-light), var(--vp-c-brand));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.VPFeatures .VPFeature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(168, 177, 255, 0.15);
+}
+
+.VPFeatures .VPFeature:hover::before {
+  transform: scaleX(1);
+}
+
+/* Icon 浮动动画 */
+.VPFeatures .VPFeature .icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+.VPFeatures .VPFeature:nth-child(2) .icon {
+  animation-delay: 0.5s;
+}
+
+.VPFeatures .VPFeature:nth-child(3) .icon {
+  animation-delay: 1s;
+}
+
+.VPFeatures .VPFeature:nth-child(4) .icon {
+  animation-delay: 1.5s;
+}
+
+.VPFeatures .VPFeature:nth-child(5) .icon {
+  animation-delay: 2s;
+}
+
+.VPFeatures .VPFeature:nth-child(6) .icon {
+  animation-delay: 2.5s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ========== 背景粒子效果 ========== */
+
+.VPHome::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(168, 177, 255, 0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(168, 177, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(168, 177, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 130px 80px, rgba(168, 177, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 160px 120px, rgba(168, 177, 255, 0.3), transparent);
+  background-size: 200px 150px;
+  animation: sparkle 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+@keyframes sparkle {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 200px 150px;
+  }
+}
+
+/* ========== 代码块动画 ========== */
+
+.vp-code-group .tabs label {
+  transition: all 0.2s ease;
+}
+
+.vp-code-group .tabs label:hover {
+  color: var(--vp-c-brand);
+}
+
+/* ========== 表格悬浮效果 ========== */
+
+.vp-doc table {
+  transition: all 0.3s ease;
+}
+
+.vp-doc table tr {
+  transition: all 0.2s ease;
+}
+
+.vp-doc table tr:hover {
+  background: rgba(168, 177, 255, 0.05);
+}
+
+/* ========== 滚动条美化 ========== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--vp-c-brand-light), var(--vp-c-brand));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--vp-c-brand), var(--vp-c-brand-dark));
+}
+
+/* ========== 链接悬浮效果 ========== */
+
+.vp-doc a {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.vp-doc a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--vp-c-brand), var(--vp-c-brand-light));
+  transition: width 0.3s ease;
+}
+
+.vp-doc a:hover::after {
+  width: 100%;
+}
+
+/* ========== 提示框动画 ========== */
+
+.custom-block {
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--vp-c-brand);
+}
+
+.custom-block:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(168, 177, 255, 0.1);
+}
+
+/* ========== Logo 旋转悬浮效果 ========== */
+
+.VPNavBarTitle:hover .logo {
+  animation: logoFloat 0.6s ease;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-5deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(5deg) scale(1.05);
+  }
+}
+
+/* ========== AI 打字效果 ========== */
+
+.VPHero .text {
+  background: linear-gradient(135deg, var(--vp-c-text-1) 0%, var(--vp-c-brand) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== 网格背景 ========== */
+
+.VPHome {
+  position: relative;
+}
+
+.VPHome::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(168, 177, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 177, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== 响应式布局 ========== */
+
+@media (max-width: 768px) {
+  .VPNav {
+    padding: 0 12px;
+  }
+
+  .VPNavBarTitle {
+    font-size: 16px;
+  }
+
+  .VPNavBarMenu {
+    gap: 8px;
+  }
+
+  .VPNavBarMenuLink {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .VPSidebar {
+    width: 260px;
+  }
+
+  .VPSidebarItem {
+    font-size: 13px;
+  }
+
+  .VPDoc {
+    padding: 16px 12px;
+  }
+
+  .VPDoc h1 {
+    font-size: 24px;
+  }
+
+  .VPDoc h2 {
+    font-size: 20px;
+  }
+
+  .VPDoc h3 {
+    font-size: 18px;
+  }
+
+  .VPDoc p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .VPDoc code {
+    font-size: 13px;
+  }
+
+  .VPDoc pre {
+    font-size: 12px;
+    overflow-x: auto;
+  }
+
+  .VPFooter {
+    padding: 24px 12px;
+    font-size: 12px;
+  }
+
+  .VPButton {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .VPLink {
+    font-size: 14px;
+  }
+
+  /* 移动端禁用部分动画 */
+  .VPHome::after,
+  .VPHome::before {
+    display: none;
+  }
+
+  .VPFeatures .VPFeature .icon {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .VPNav {
+    padding: 0 8px;
+  }
+
+  .VPNavBarTitle {
+    font-size: 14px;
+  }
+
+  .VPNavBarMenu {
+    gap: 4px;
+  }
+
+  .VPNavBarMenuLink {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .VPSidebar {
+    width: 240px;
+  }
+
+  .VPSidebarItem {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .VPDoc {
+    padding: 12px 8px;
+  }
+
+  .VPDoc h1 {
+    font-size: 20px;
+  }
+
+  .VPDoc h2 {
+    font-size: 18px;
+  }
+
+  .VPDoc h3 {
+    font-size: 16px;
+  }
+
+  .VPDoc p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .VPDoc code {
+    font-size: 12px;
+  }
+
+  .VPDoc pre {
+    font-size: 11px;
+    padding: 10px;
+  }
+
+  .VPFooter {
+    padding: 16px 8px;
+    font-size: 11px;
+  }
+
+  .VPButton {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}

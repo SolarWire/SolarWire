@@ -12,6 +12,8 @@ function escapeHtml(text) {
 }
 
 function wrapText(text, maxWidth, fontSize = 12) {
+  if (!text) return [];
+  const safeText = String(text);
   const lines = [];
   const avgCharWidth = fontSize * 0.65;
   const cjkCharWidth = fontSize * 1.0;
@@ -20,7 +22,11 @@ function wrapText(text, maxWidth, fontSize = 12) {
     return isCJK(char) ? cjkCharWidth : avgCharWidth;
   };
   
-  text.split('\n').forEach(paragraph => {
+  safeText.split('\n').forEach(paragraph => {
+    if (!paragraph) {
+      lines.push('');
+      return;
+    }
     if (paragraph.trim() === '') {
       lines.push('');
       return;
@@ -98,14 +104,16 @@ function wrapText(text, maxWidth, fontSize = 12) {
 
 function createRenderContext(declarations = [], sourceInput) {
   const globalDefaults = {};
-  declarations.forEach(decl => {
-    const { key, value } = decl;
-    if (['size', 'line-height', 'gap', 'r'].includes(key)) {
-      globalDefaults[key] = parseFloat(value);
-    } else if (key === 'bold') {
-      globalDefaults[key] = true;
-    } else {
-      globalDefaults[key] = value;
+  (declarations || []).forEach(decl => {
+    const { key, value } = decl || {};
+    if (key && value !== undefined) {
+      if (['size', 'line-height', 'gap', 'r'].includes(key)) {
+        globalDefaults[key] = parseFloat(value);
+      } else if (key === 'bold') {
+        globalDefaults[key] = true;
+      } else {
+        globalDefaults[key] = value;
+      }
     }
   });
   return {
@@ -205,7 +213,8 @@ function calculatePosition(context, coords) {
 }
 
 function renderRectangle(element, context) {
-  const { coordinates, attributes, content } = element;
+  const { coordinates, attributes, text, content } = element;
+  const actualContent = text || content;
   const pos = coordinates ? calculatePosition(context, coordinates) : { x: 0, y: 0 };
   const width = getNumberAttribute(attributes, context.globalDefaults, 'w', 100);
   const height = getNumberAttribute(attributes, context.globalDefaults, 'h', 40);
@@ -223,11 +232,11 @@ function renderRectangle(element, context) {
   
   let svg = `  <rect x="${pos.x}" y="${pos.y}" width="${width}" height="${height}" fill="${bg}"${radiusAttr}${borderAttr}${opacityAttr}/>`;
   
-  if (content) {
+  if (actualContent) {
     const align = getAlignAttribute(attributes, 'middle');
     const textX = align === 'middle' ? pos.x + width / 2 : align === 'end' ? pos.x + width - 10 : pos.x + 10;
     const textY = pos.y + height / 2 + size / 3;
-    svg += `\n  <text x="${textX}" y="${textY}" text-anchor="${align}" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(content)}</text>`;
+    svg += `\n  <text x="${textX}" y="${textY}" text-anchor="${align}" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(actualContent)}</text>`;
   }
   
   return {
@@ -237,7 +246,8 @@ function renderRectangle(element, context) {
 }
 
 function renderCircle(element, context) {
-  const { coordinates, attributes, content } = element;
+  const { coordinates, attributes, text, content } = element;
+  const actualContent = text || content;
   const pos = calculatePosition(context, coordinates);
   const width = getNumberAttribute(attributes, context.globalDefaults, 'w', 40);
   const height = getNumberAttribute(attributes, context.globalDefaults, 'h', 40);
@@ -257,8 +267,8 @@ function renderCircle(element, context) {
   
   let svg = `  <circle cx="${cx}" cy="${cy}" r="${radius}" fill="${bg}"${borderAttr}${opacityAttr}/>`;
   
-  if (content) {
-    svg += `\n  <text x="${cx}" y="${cy + size / 3}" text-anchor="middle" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(content)}</text>`;
+  if (actualContent) {
+    svg += `\n  <text x="${cx}" y="${cy + size / 3}" text-anchor="middle" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(actualContent)}</text>`;
   }
   
   return {
@@ -268,17 +278,19 @@ function renderCircle(element, context) {
 }
 
 function renderText(element, context) {
-  const { coordinates, attributes, content } = element;
+  const { coordinates, attributes, text, content } = element || {};
+  const actualContent = text || content;
   const pos = coordinates ? calculatePosition(context, coordinates) : { x: 0, y: 0 };
-  const c = getColorAttribute(attributes, context.globalDefaults, 'c', '#333333');
-  const size = getNumberAttribute(attributes, context.globalDefaults, 'size', 13);
-  const isBold = getBooleanAttribute(attributes, context.globalDefaults, 'bold');
+  const c = getColorAttribute(attributes || {}, context.globalDefaults, 'c', '#333333');
+  const size = getNumberAttribute(attributes || {}, context.globalDefaults, 'size', 13);
+  const isBold = getBooleanAttribute(attributes || {}, context.globalDefaults, 'bold');
+  const safeContent = actualContent || '';
   
-  const svg = `  <text x="${pos.x}" y="${pos.y + size}" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(content)}</text>`;
+  const svg = `  <text x="${pos.x}" y="${pos.y + size}" fill="${c}" font-size="${size}"${isBold ? ' font-weight="bold"' : ''}>${escapeHtml(safeContent)}</text>`;
   
   return {
     svg,
-    bounds: { x: pos.x, y: pos.y, width: content.length * size * 0.5, height: size }
+    bounds: { x: pos.x, y: pos.y, width: safeContent.length * size * 0.5, height: size }
   };
 }
 
@@ -303,7 +315,72 @@ function renderLine(element, context) {
   };
 }
 
+function renderTable(element, context, options) {
+  const { coordinates, attributes, children } = element;
+  const pos = coordinates ? calculatePosition(context, coordinates) : { x: 0, y: 0 };
+  const tableWidth = getNumberAttribute(attributes, context.globalDefaults, 'w', 400);
+  const border = getNumberAttribute(attributes, context.globalDefaults, 'border', 1);
+  const cellspacing = getNumberAttribute(attributes, context.globalDefaults, 'cellspacing', 0);
+  const cellpadding = getNumberAttribute(attributes, context.globalDefaults, 'cellpadding', 8);
+  
+  const svgParts = [];
+  let currentY = pos.y;
+  let maxY = pos.y;
+  
+  const rows = children || [];
+  const colCount = rows.length > 0 ? Math.max(...rows.map(row => (row.children || []).length)) : 0;
+  const colWidth = colCount > 0 ? tableWidth / colCount : 100;
+  
+  rows.forEach((row, rowIndex) => {
+    const rowAttrs = row.attributes || {};
+    const rowBg = getColorAttribute(rowAttrs, context.globalDefaults, 'bg', rowIndex === 0 ? '#f5f5f5' : '#ffffff');
+    const rowC = getColorAttribute(rowAttrs, context.globalDefaults, 'c', '#333333');
+    const rowSize = getNumberAttribute(rowAttrs, context.globalDefaults, 'size', 12);
+    const isBold = getBooleanAttribute(rowAttrs, context.globalDefaults, 'bold');
+    const rowHeight = 40;
+    
+    svgParts.push(`  <rect x="${pos.x}" y="${currentY}" width="${tableWidth}" height="${rowHeight}" fill="${rowBg}" stroke="#e0e0e0" stroke-width="${border}"/>`);
+    
+    const cells = row.children || [];
+    cells.forEach((cell, colIndex) => {
+      const cellAttrs = cell.attributes || {};
+      const cellX = pos.x + colIndex * colWidth;
+      const cellText = cell.text || cell.content || '';
+      const cellC = getColorAttribute(cellAttrs, context.globalDefaults, 'c', rowC);
+      const cellSize = getNumberAttribute(cellAttrs, context.globalDefaults, 'size', rowSize);
+      const cellBold = getBooleanAttribute(cellAttrs, context.globalDefaults, 'bold', isBold);
+      
+      if (colIndex > 0) {
+        svgParts.push(`  <line x1="${cellX}" y1="${currentY}" x2="${cellX}" y2="${currentY + rowHeight}" stroke="#e0e0e0" stroke-width="${border}"/>`);
+      }
+      
+      if (cellText) {
+        const textX = cellX + cellpadding;
+        const textY = currentY + rowHeight / 2 + cellSize / 3;
+        svgParts.push(`  <text x="${textX}" y="${textY}" fill="${cellC}" font-size="${cellSize}"${cellBold ? ' font-weight="bold"' : ''}>${escapeHtml(cellText)}</text>`);
+      }
+    });
+    
+    currentY += rowHeight;
+    maxY = currentY;
+  });
+  
+  const tableHeight = maxY - pos.y;
+  
+  return {
+    svg: svgParts.join('\n'),
+    bounds: { x: pos.x, y: pos.y, width: tableWidth, height: tableHeight }
+  };
+}
+
 function renderElement(element, context, options) {
+  if (!element) {
+    return {
+      svg: '',
+      bounds: { x: 0, y: 0, width: 0, height: 0 }
+    };
+  }
+  
   let result;
   
   switch (element.type) {
@@ -322,6 +399,9 @@ function renderElement(element, context, options) {
       break;
     case 'placeholder':
       result = renderRectangle(element, context);
+      break;
+    case 'table':
+      result = renderTable(element, context, options);
       break;
     default:
       result = renderRectangle(element, context);
@@ -342,6 +422,10 @@ function renderElement(element, context, options) {
 }
 
 function render(ast, options = {}) {
+  if (!ast) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300"></svg>';
+  }
+  
   const context = createRenderContext(ast.declarations, options?.sourceInput);
   const svgParts = [];
   let minX = Infinity;
@@ -363,14 +447,39 @@ function render(ast, options = {}) {
   
   const elementResults = [];
   
-  (ast.elements || []).forEach(element => {
-    const result = renderElement(element, context, renderOptions);
-    elementResults.push(result);
-    minX = Math.min(minX, result.bounds.x);
-    minY = Math.min(minY, result.bounds.y);
-    maxX = Math.max(maxX, result.bounds.x + result.bounds.width);
-    maxY = Math.max(maxY, result.bounds.y + result.bounds.height);
-  });
+  const elements = (ast || {}).elements || [];
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
+    if (!element) continue;
+    
+    if (element.type === 'table') {
+      const tableElement = { ...element, children: [] };
+      let j = i + 1;
+      while (j < elements.length && elements[j] && elements[j].type === 'table-row') {
+        const rowElement = { ...elements[j], children: [] };
+        j++;
+        while (j < elements.length && elements[j] && elements[j].type === 'text') {
+          rowElement.children.push(elements[j]);
+          j++;
+        }
+        tableElement.children.push(rowElement);
+        i = j - 1;
+      }
+      const result = renderTable(tableElement, context, renderOptions);
+      elementResults.push(result);
+      minX = Math.min(minX, result.bounds.x);
+      minY = Math.min(minY, result.bounds.y);
+      maxX = Math.max(maxX, result.bounds.x + result.bounds.width);
+      maxY = Math.max(maxY, result.bounds.y + result.bounds.height);
+    } else if (element.type !== 'table-row') {
+      const result = renderElement(element, context, renderOptions);
+      elementResults.push(result);
+      minX = Math.min(minX, result.bounds.x);
+      minY = Math.min(minY, result.bounds.y);
+      maxX = Math.max(maxX, result.bounds.x + result.bounds.width);
+      maxY = Math.max(maxY, result.bounds.y + result.bounds.height);
+    }
+  }
   
   if (minX === Infinity) {
     minX = 0;
@@ -388,7 +497,7 @@ function render(ast, options = {}) {
   let notesAreaHeight = 0;
   const extraNoteSpacing = 20;
   
-  if (showNotes && notes.length > 0) {
+  if (showNotes && notes && notes.length > 0) {
     const cardMargin = 10;
     const cardsPerRow = 2;
     const lineHeight = 22;
@@ -396,8 +505,9 @@ function render(ast, options = {}) {
     const cardWidth = (viewBoxWidth - margin * 2 - 10) / 2;
     
     const cardHeights = notes.map(note => {
+      if (!note || !note.note) return 60;
       const lines = wrapText(note.note, cardWidth - 28 - 12, 12);
-      const contentHeight = lines.length * lineHeight;
+      const contentHeight = (lines || []).length * lineHeight;
       return Math.max(60, contentHeight + cardPadding * 2);
     });
     
@@ -405,11 +515,11 @@ function render(ast, options = {}) {
     notes.forEach((_, index) => {
       const row = Math.floor(index / cardsPerRow);
       if (!rowMaxHeights[row]) rowMaxHeights[row] = 0;
-      rowMaxHeights[row] = Math.max(rowMaxHeights[row], cardHeights[index]);
+      rowMaxHeights[row] = Math.max(rowMaxHeights[row], cardHeights[index] || 60);
     });
     
-    const totalRowHeight = rowMaxHeights.reduce((sum, height) => sum + height, 0);
-    const rows = rowMaxHeights.length;
+    const totalRowHeight = (rowMaxHeights || []).reduce((sum, height) => sum + (height || 0), 0);
+    const rows = (rowMaxHeights || []).length;
     notesAreaHeight = totalRowHeight + (rows + 1) * cardMargin + extraNoteSpacing;
   }
   
