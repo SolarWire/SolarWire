@@ -55,7 +55,7 @@
 "Password" @(440,270) size=12 c=#475569
 ["••••••••"] @(440,295) w=320 h=44 bg=#ffffff b=#e2e8f0 c=#1e293b r=8
 
-["Remember me"] @(440,355) w=20 h=20 bg=#6366f1 c=#ffffff r=4
+[""] @(440,355) w=20 h=20 bg=#6366f1 c=#ffffff r=4
 "Remember me" @(468,358) size=13
 
 [] @(800,110) w=360 h=280 bg=#ffffff b=#e2e8f0 r=12
@@ -96,11 +96,11 @@
 "Data Table" @(60,450) size=16 bold c=#1e293b
 
 ## @(60,490) w=500 border=1
-  # bg=#f1f5f9 bold
-    "ID"
-    "Name"
-    "Status"
-    "Date"
+  # bg=#f1f5f9
+    "ID" bold
+    "Name" bold
+    "Status" bold
+    "Date" bold
   #
     "001"
     "Alice Brown"
