@@ -6,6 +6,16 @@
   --vp-c-brand-darker: #6E7BD1;
 }
 
+/* ========== Hero 和 Features 之间的间距 ========== */
+
+.VPHero {
+  margin-bottom: 80px;
+}
+
+.VPFeatures {
+  margin-top: 40px;
+}
+
 /* ========== Hero 动画效果 ========== */
 
 /* 渐变背景动画 */

@@ -37,6 +37,51 @@ This skill analyzes existing frontend and backend code to generate comprehensive
 
 ---
 
+## Incremental Analysis Support
+
+**⚠️ IMPORTANT: Frontend and backend code are often maintained by different teams. This skill supports incremental analysis:**
+
+### Scenario 1: Frontend Only
+
+When only frontend code is provided:
+- Generate UI wireframes and page structures
+- Document user interactions and flows
+- Infer API requirements from frontend calls
+- Mark backend sections as `[To be confirmed]`
+
+### Scenario 2: Backend Only
+
+When only backend code is provided:
+- Document API endpoints and data models
+- Extract business logic and validation rules
+- Infer UI requirements from API responses
+- Mark frontend sections as `[To be confirmed]`
+
+### Scenario 3: Full Stack
+
+When both frontend and backend code are provided:
+- Generate complete PRD with all sections
+- Cross-reference frontend calls with backend endpoints
+- Validate consistency between UI and API
+
+### Merging Incremental PRDs
+
+When a new codebase is provided for an existing PRD:
+
+```
+1. Check if `.solarwire/[requirement-name]/solarwire-prd.md` exists
+2. Ask user: "Found existing PRD. Do you want to:
+   - Merge new analysis into existing PRD
+   - Create a new PRD version
+   - Overwrite existing PRD"
+3. Merge strategy:
+   - Frontend analysis → Update Page Details section
+   - Backend analysis → Update API Reference and Data Models sections
+   - Mark resolved `[To be confirmed]` sections
+```
+
+---
+
 ## Workflow
 
 ### Phase 1: Codebase Discovery
