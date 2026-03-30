@@ -613,15 +613,18 @@ select:hover{
 }
 
 .btn-primary{
-  background: #A8B1FF;
-  border-color: #A8B1FF;
+  background: linear-gradient(135deg, #A8B1FF 0%, #8B96E8 100%);
+  border-color: transparent;
   color: #1a1a2e;
   font-weight: 600;
+  box-shadow: 0 4px 15px rgba(168, 177, 255, 0.3);
 }
 
 .btn-primary:hover{
-  background: #8B96E8;
-  border-color: #8B96E8;
+  background: linear-gradient(135deg, #8B96E8 0%, #6E7BD1 100%);
+  border-color: transparent;
+  box-shadow: 0 6px 25px rgba(168, 177, 255, 0.5);
+  transform: translateY(-1px);
 }
 
 .btn:disabled{

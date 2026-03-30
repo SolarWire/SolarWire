@@ -4,7 +4,10 @@
   "description": "A Markdown-style DSL for UI wireframes",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/core/*",
+    "packages/apps/*",
+    "packages/ai/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",

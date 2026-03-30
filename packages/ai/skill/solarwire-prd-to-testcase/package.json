@@ -1,0 +1,22 @@
+{
+  "name": "solarwire-prd-to-testcase-skill",
+  "version": "1.0.0",
+  "description": "SolarWire PRD to Test Case Generator Skill - Generate test case Excel from PRD documents",
+  "main": "generate-testcases.js",
+  "bin": {
+    "solarwire-testcase": "./generate-testcases.js"
+  },
+  "scripts": {
+    "testcase": "node generate-testcases.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "keywords": [
+    "solarwire",
+    "prd",
+    "test-case",
+    "testing"
+  ],
+  "license": "MIT"
+}

@@ -9,7 +9,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@solarwire/parser": "1.6.0",
-    "@solarwire/renderer-svg": "1.6.0"
+    "@solarwire/parser": "*",
+    "@solarwire/renderer-svg": "*"
   }
 }
