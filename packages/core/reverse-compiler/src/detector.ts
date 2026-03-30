@@ -174,7 +174,7 @@ function isSelect(tagName: string | undefined, role: string | undefined): boolea
 }
 
 function isTextarea(tagName: string | undefined, role: string | undefined): boolean {
-  return tagName === 'textarea' || role === 'textbox';
+  return tagName === 'textarea';
 }
 
 function isImage(tagName: string | undefined, el: Record<string, unknown>): boolean {
@@ -196,7 +196,7 @@ function isDivider(tagName: string | undefined): boolean {
 function isLink(tagName: string | undefined, el: Record<string, unknown>): boolean {
   if (tagName === 'a') {
     const href = el.href || el['xlink:href'];
-    return href !== undefined;
+    return href !== undefined && href !== '' && href !== null;
   }
   return false;
 }

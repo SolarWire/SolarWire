@@ -250,21 +250,19 @@ function generateTableElement(
   indent: number,
   warnings: ConversionWarning[]
 ): string {
-  const indentStr = '  '.repeat(indent);
   const attrs = generateAttributes(element, options);
-
-  let code = `${indentStr}##${attrs}`;
+  const lines: string[] = [`##${attrs}`];
 
   if (element.children && element.children.length > 0) {
     for (const child of element.children) {
-      const childCode = generateElementCode(child, options, indent + 1, warnings);
+      const childCode = generateElementCode(child, options, 0, warnings);
       if (childCode) {
-        code += `\n${childCode}`;
+        lines.push(childCode);
       }
     }
   }
 
-  return code;
+  return lines.join('\n');
 }
 
 function generateTableLayout(
@@ -377,9 +375,7 @@ function generateAttributes(
 
   if (options.includePositions && element.position) {
     const pos = element.position;
-    if (pos.x !== 0 || pos.y !== 0) {
-      attrs.push(`@(${pos.x},${pos.y})`);
-    }
+    attrs.push(`@(${pos.x},${pos.y})`);
   }
 
   if (!isText) {
@@ -412,13 +408,6 @@ function generateAttributes(
 
   if (attrs.length === 0) {
     return '';
-  }
-
-  const hasPosition = attrs.some(a => a.startsWith('@'));
-  const otherAttrs = attrs.filter(a => !a.startsWith('@'));
-
-  if (hasPosition && otherAttrs.length > 0) {
-    return ` ${attrs[0]} ${otherAttrs.join(' ')}`;
   }
 
   return ` ${attrs.join(' ')}`;

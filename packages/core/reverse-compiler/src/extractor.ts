@@ -213,10 +213,13 @@ function extractNumberValue(
 }
 
 function parsePixelValue(value: string): number | null {
-  const match = value.match(/^([\d.]+)(px)?$/);
+  const match = value.match(/^(-?[\d.]+)(px)?$/);
   if (match) {
     const num = parseFloat(match[1]);
-    return isNaN(num) ? null : num;
+    if (isNaN(num) || num < 0) {
+      return null;
+    }
+    return num;
   }
   return null;
 }

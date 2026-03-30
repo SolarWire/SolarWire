@@ -160,7 +160,8 @@ function calculateRelativePosition(
   globalBounds: LayoutAnalysisResult['globalBounds'],
   targetWidth: number
 ): UIPosition {
-  const scaleX = targetWidth / globalBounds.width;
+  const safeWidth = Math.max(1, globalBounds.width);
+  const scaleX = targetWidth / safeWidth;
 
   return {
     x: Math.round((position.x - globalBounds.minX) * scaleX),
@@ -179,9 +180,9 @@ function simplifyPositions(
     if (row.length < 2) continue;
 
     const totalWidth = row.reduce((sum, el) => sum + el.position.width, 0);
-    const gaps = (row.length - 1) * minGap;
     const availableWidth = row[row.length - 1].position.x + row[row.length - 1].position.width - row[0].position.x;
-    const gapSize = (availableWidth - totalWidth) / (row.length - 1);
+    const gapCount = row.length - 1;
+    const gapSize = gapCount > 0 ? (availableWidth - totalWidth) / gapCount : 0;
 
     let currentX = row[0].position.x;
     for (const element of row) {

@@ -399,32 +399,30 @@ const examples = [
 
 "+5 more" @(1080,312) c=#64748b size=12
 
-[] @(40,420) w=540 h=340 bg=#ffffff b=#e2e8f0 r=12
+[] @(40,420) w=540 h=200 bg=#ffffff b=#e2e8f0 r=12
 "Data Table" @(60,450) size=16 bold c=#1e293b
 
-[] @(60,490) w=500 h=40 bg=#f1f5f9 r=8
-"ID" @(80,510) size=12 bold c=#475569
-"Name" @(160,510) size=12 bold c=#475569
-"Status" @(300,510) size=12 bold c=#475569
-"Date" @(420,510) size=12 bold c=#475569
-
-[] @(60,530) w=500 h=40 bg=#ffffff
-"001" @(80,550) size=12 c=#64748b
-"Alice Brown" @(160,550) size=12 c=#1e293b
-["Active"] @(300,540) w=70 h=24 bg=#dcfce7 c=#166534 r=4 size=11
-"2024-03-15" @(420,550) size=12 c=#64748b
-
-[] @(60,570) w=500 h=40 bg=#fafafa
-"002" @(80,590) size=12 c=#64748b
-"Bob Smith" @(160,590) size=12 c=#1e293b
-["Pending"] @(300,580) w=70 h=24 bg=#fef3c7 c=#92400e r=4 size=11
-"2024-03-14" @(420,590) size=12 c=#64748b
-
-[] @(60,610) w=500 h=40 bg=#ffffff
-"003" @(80,630) size=12 c=#64748b
-"Carol White" @(160,630) size=12 c=#1e293b
-["Inactive"] @(300,620) w=70 h=24 bg=#f1f5f9 c=#64748b r=4 size=11
-"2024-03-10" @(420,630) size=12 c=#64748b
+## @(60,490) w=500 border=1
+  # bg=#f1f5f9 bold
+    "ID"
+    "Name"
+    "Status"
+    "Date"
+  #
+    "001"
+    "Alice Brown"
+    "Active"
+    "2024-03-15"
+  # bg=#fafafa
+    "002"
+    "Bob Smith"
+    "Pending"
+    "2024-03-14"
+  #
+    "003"
+    "Carol White"
+    "Inactive"
+    "2024-03-10"
 
 [] @(600,420) w=560 h=340 bg=#ffffff b=#e2e8f0 r=12
 "Status & Indicators" @(620,450) size=16 bold c=#1e293b
@@ -535,7 +533,7 @@ function loadExample(example) {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 64px);
-  background: #1e1e1e;
+  background: var(--vp-c-bg);
 }
 
 .toolbar {
@@ -543,8 +541,8 @@ function loadExample(example) {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: #252526;
-  border-bottom: 1px solid #3c3c3c;
+  background: var(--vp-c-bg-alt);
+  border-bottom: 1px solid var(--vp-c-divider);
   flex-shrink: 0;
 }
 
@@ -563,7 +561,7 @@ function loadExample(example) {
 .title {
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: var(--vp-c-text-1);
 }
 
 select {
@@ -634,10 +632,14 @@ select:focus{
 
 .btn-icon {
   width: 36px;
-  padding: 8px 0;
-  text-align: center;
-  font-size: 18px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
   font-weight: bold;
+  line-height: 1;
   border-radius: 50%;
 }
 
@@ -663,7 +665,7 @@ select:focus{
 }
 
 .zoom-level {
-  color: #ccc;
+  color: var(--vp-c-text-2);
   font-size: 12px;
   min-width: 40px;
   text-align: center;
@@ -686,7 +688,7 @@ select:focus{
 
 .resizer{
   width: 6px;
-  background: #3c3c3c;
+  background: var(--vp-c-divider);
   cursor: col-resize;
   flex-shrink: 0;
   transition: background 0.2s ease;
@@ -698,12 +700,12 @@ select:focus{
 
 .panel-header{
   padding: 8px 16px;
-  background: #252526;
-  color: #ccc;
+  background: var(--vp-c-bg-alt);
+  color: var(--vp-c-text-2);
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  border-bottom: 1px solid #3c3c3c;
+  border-bottom: 1px solid var(--vp-c-divider);
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
@@ -712,15 +714,15 @@ select:focus{
 
 .hint {
   font-weight: normal;
-  color: #888;
+  color: var(--vp-c-text-3);
   font-size: 11px;
 }
 
 .code-editor{
   flex: 1;
   padding: 16px;
-  background: #1e1e1e;
-  color: #d4d4d4;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
   border: none;
   resize: none;
   font-family: 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace;
@@ -732,11 +734,11 @@ select:focus{
 }
 
 .code-editor:focus{
-  background: #1a1a1a;
+  background: var(--vp-c-bg-alt);
 }
 
 .code-editor::placeholder{
-  color: #666;
+  color: var(--vp-c-text-3);
 }
 
 .preview-content{
