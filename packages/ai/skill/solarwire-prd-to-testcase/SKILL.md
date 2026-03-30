@@ -1080,16 +1080,56 @@ For each test case, ensure:
 - **测试数据**: Exact values to input
 - **预期结果**: Observable, verifiable outcomes
 
-### Step 5: Organize by Module
+### Step 5: Write Test Cases to NDJSON File
 
-Group test cases by page name (`!title` attribute).
+Write all test cases to `.solarwire/[requirement-name]/.testcases.ndjson` in JSON Lines format.
+
+**File Format**: Each line is a complete JSON object representing one test case.
+
+```json
+{"id":"TC-001","module":"登录页面","name":"Login按钮-点击操作-验证并提交登录","type":"功能测试","precondition":"1. 已打开登录页面\n2. 已注册测试账号","steps":"1. 在用户名输入框输入：test@example.com\n2. 在密码输入框输入：Test@123\n3. 点击登录按钮","testData":"用户名：test@example.com\n密码：Test@123","expected":"1. 登录成功，页面跳转到首页\n2. 顶部导航栏显示用户头像","priority":"P0","related":"US-001","boundary":"","exception":"","remark":""}
+{"id":"TC-002","module":"登录页面","name":"Login按钮-成功处理-Token保存验证","type":"功能测试","precondition":"1. 已打开登录页面","steps":"1. 输入有效用户名和密码\n2. 点击登录按钮\n3. 打开浏览器开发者工具查看 Local Storage","testData":"用户名：test@example.com","expected":"Local Storage 中存在 auth_token 字段","priority":"P0","related":"US-001","boundary":"","exception":"","remark":""}
+```
+
+**Important**:
+- Each test case must be on a single line (no line breaks within JSON)
+- Use `\n` for line breaks within field values
+- All 13 fields must be present (empty strings for optional fields)
 
 ### Step 6: Generate Excel
 
-Create Excel file with:
-- Sheet 1: All test cases with complete details
-- Sheet 2: Grouped by module
-- Sheet 3: Statistics
+Run the pre-built script to generate Excel:
+
+```bash
+node .trae/skills/solarwire-prd-to-testcase/lib/generate-excel.js --output .solarwire/[requirement-name]/test-cases.xlsx
+```
+
+The script will:
+1. Read `.testcases.ndjson` from the output directory
+2. Generate Excel with 3 sheets (Summary, By Module, Statistics)
+3. Automatically delete the `.testcases.ndjson` file
+
+**Result**: Only `test-cases.xlsx` remains in the output directory.
+
+---
+
+## Test Case JSON Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| id | string | Yes | Test case ID (TC-XXX format) |
+| module | string | Yes | Module/page name (from !title) |
+| name | string | Yes | Test case name |
+| type | string | Yes | Test type (功能测试/UI测试/边界测试/异常测试) |
+| precondition | string | Yes | Prerequisites (use \n for multiple) |
+| steps | string | Yes | Test steps (use \n for multiple) |
+| testData | string | No | Test data values |
+| expected | string | Yes | Expected results (use \n for multiple) |
+| priority | string | Yes | Priority (P0/P1/P2) |
+| related | string | No | Related requirement ID |
+| boundary | string | No | Boundary values |
+| exception | string | No | Exception scenario |
+| remark | string | No | Additional notes |
 
 ---
 

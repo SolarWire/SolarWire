@@ -350,8 +350,248 @@ node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
 | `<table>` | `## @(x,y) w=500 border=1` |
 | `<hr>` | `-- @(x1,y1)->(x2,y2) b=#F2F2F2` |
 | `<div class="card">` | `("Card Title") @(x,y) w=300 h=200` |
+| Timeline/Stepper | Convert to table or list (see below) |
+| Progress bar | Show as text with percentage `"Progress: 60%"` |
 
-### Layout Inference Rules
+---
+
+## Mock Data Generation
+
+**⚠️ CRITICAL: Always generate realistic mock data, never leave fields empty**
+
+### Why Mock Data Matters
+
+Frontend code often:
+- Uses components that display data
+- Shows loading states while waiting for backend
+- Displays lists/tables with dynamic data
+
+**When reverse engineering, generate mock data that represents:**
+- Typical data patterns
+- Edge cases (long text, special characters)
+- Empty states with meaningful placeholders
+
+### Mock Data Rules
+
+| Element Type | Mock Data Strategy |
+|--------------|-------------------|
+| **User names** | Use realistic names: "John Doe", "张三", "田中太郎" |
+| **Emails** | Use realistic emails: "john@example.com" |
+| **Dates** | Use realistic dates: "2024-01-15", "2024-01-15 14:30" |
+| **Status** | Use meaningful values: "Active", "正常", "有効" |
+| **Numbers** | Use realistic values: "¥1,234.00", "100 items" |
+| **IDs** | Use realistic IDs: "USR-001", "202401150001" |
+| **Descriptions** | Use meaningful text: "This is a sample description..." |
+| **Empty states** | Use meaningful placeholders: "No data", "暂无数据" |
+
+### Table Mock Data Example
+
+**❌ Bad (Empty/Placeholder):**
+```solarwire
+## @(100,50) w=500 border=1
+  # bg=#F2F2F2
+    "ID"
+    "Name"
+    "Status"
+  #
+    ""
+    ""
+    ""
+```
+
+**✅ Good (Realistic Mock Data):**
+```solarwire
+## @(100,50) w=500 border=1 note="User list table
+1. Data source
+   - User list data from User Management module
+2. Field descriptions
+   - ID: Unique user identifier
+   - Name: User display name
+   - Status: 1=Active, 0=Disabled"
+  # bg=#F2F2F2 bold
+    "ID"
+    "Name"
+    "Status"
+  # bg=#FAFAFA
+    "USR-001"
+    "John Doe"
+    "Active"
+  #
+    "USR-002"
+    "张三"
+    "Active"
+  # bg=#FAFAFA
+    "USR-003"
+    "田中太郎"
+    "Disabled"
+```
+
+### Form Mock Data Example
+
+**❌ Bad (Empty):**
+```solarwire
+[""] @(100,50) w=200 h=40
+```
+
+**✅ Good (With Placeholder):**
+```solarwire
+["Enter your email..."] @(100,50) w=200 h=40 c=#AAAAAA
+```
+
+---
+
+## Complex UI Pattern Conversion
+
+### Timeline/Stepper → List (Preferred)
+
+**Frontend Timeline/Stepper code:**
+```jsx
+<Steps current={1}>
+  <Step title="Submitted" description="2024-01-15 10:00" />
+  <Step title="Under Review" description="2024-01-15 14:30" />
+  <Step title="Approved" description="Pending" />
+</Steps>
+```
+
+**Convert to Table:**
+```solarwire
+## @(100,50) w=400 border=1 note="Approval timeline
+1. Data source
+   - Approval history from Workflow module
+2. Field descriptions
+   - Step: Approval stage name
+   - Status: Current status
+   - Time: Action timestamp"
+  # bg=#F2F2F2 bold
+    "Step"
+    "Status"
+    "Time"
+  # bg=#E6F7FF
+    "Submitted"
+    "✓ Completed"
+    "2024-01-15 10:00"
+  # bg=#E6F7FF
+    "Under Review"
+    "● In Progress"
+    "2024-01-15 14:30"
+  #
+    "Approved"
+    "○ Pending"
+    "-"
+```
+
+**Or Convert to List:**
+```solarwire
+"Approval Timeline" @(100,50) bold
+
+"1. Submitted" @(100,80)
+"   ✓ Completed - 2024-01-15 10:00" @(100,100) c=#52C41A
+
+"2. Under Review" @(100,130)
+"   ● In Progress - 2024-01-15 14:30" @(100,150) c=#1890FF
+
+"3. Approved" @(100,180)
+"   ○ Pending" @(100,200) c=#AAAAAA
+```
+
+### Progress Bar → Text with Percentage
+
+**Frontend Progress Bar:**
+```jsx
+<Progress percent={60} />
+```
+
+**Convert to Text:**
+```solarwire
+"Upload Progress: 60%" @(100,50)
+["████████████░░░░░░░░"] @(100,70) w=200 h=10 bg=#1890FF
+```
+
+### Loading State → Placeholder with Note
+
+**Frontend Loading:**
+```jsx
+{isLoading ? <Skeleton /> : <DataList data={data} />}
+```
+
+**Convert to Placeholder with Note:**
+```solarwire
+["Loading data..."] @(100,50) w=200 h=40 c=#AAAAAA note="Loading state
+1. Display condition
+   - Show while fetching data from backend
+2. Behavior
+   - Auto-hide when data loaded
+   - Show actual data list on success"
+```
+
+### Component Reference → Note with Description
+
+**Frontend Component:**
+```jsx
+<UserCard user={selectedUser} />
+```
+
+**Convert to Card with Note:**
+```solarwire
+("User Card") @(100,50) w=300 h=150 note="User information card
+1. Data source
+   - Selected user data from User Management module
+2. Display fields
+   - Avatar: User profile image
+   - Name: User display name
+   - Email: User email address
+   - Department: User department name"
+```
+
+---
+
+## Complex Table Recognition
+
+### UI Component Library Tables
+
+| Library | Table Detection Pattern |
+|---------|----------------------|
+| Ant Design | `<Table columns={columns} dataSource={data} />` |
+| Element UI | `<el-table :data="tableData">` |
+| AG Grid | `<ag-grid :rowData="gridData">` |
+| Material UI | `<el-table :data="tableData">` |
+
+### Detection Rules
+
+```javascript
+// Detect table by tag
+if (tagName === 'TABLE' || tagName === 'EL-TABLE' || tagName === 'AG-GRID') {
+  return 'table';
+}
+
+// Detect by class names
+if (className.includes('table') || className.includes('grid') || className.includes('list')) {
+  return 'table';
+}
+
+// Detect by data-* attributes
+if (attributes['data-source'] || attributes['data'] || attributes['row-data']) {
+  return 'table';
+}
+```
+
+---
+
+## Frontend-Backend Data Mapping
+
+When analyzing frontend code, infer backend data requirements:
+
+| Frontend Pattern | Backend Requirement | Mock Data |
+|------------------|---------------------|-----------|
+| `{user.name}` | User API - name field | "John Doe" |
+| `{items.map(...)}` | List API - array response | Generate 3-5 items |
+| `{data.total}` | Pagination API - total count | "100" |
+| `{item.status === 'active'}` | Status field with enum | "active", "inactive" |
+| `{new Date(item.created)}` | Date field | "2024-01-15" |
+
+---
+
+## Incremental Analysis Support
 
 When analyzing code, infer reasonable positions:
 

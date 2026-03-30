@@ -1,0 +1,10 @@
+{
+  "name": "solarwire-prd-to-testcase-skill",
+  "version": "1.0.0",
+  "description": "SolarWire PRD to Test Case Generator Skill",
+  "main": "lib/generate-excel.js",
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "license": "MIT"
+}
