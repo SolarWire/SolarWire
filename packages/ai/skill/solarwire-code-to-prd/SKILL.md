@@ -494,6 +494,136 @@ Frontend code often:
 "   ○ Pending" @(100,200) c=#AAAAAA
 ```
 
+### Complex Timeline with Notes and Logs
+
+**Frontend Timeline with rich data:**
+```jsx
+<Timeline>
+  <Timeline.Item color="green">
+    <p>Submitted by John</p>
+    <p>2024-01-15 10:00</p>
+    <p>Note: Initial submission</p>
+  </Timeline.Item>
+  <Timeline.Item color="blue">
+    <p>Under Review by Manager</p>
+    <p>2024-01-15 14:30</p>
+    <p>Note: Need more documents</p>
+    <p>Attachment: doc.pdf</p>
+  </Timeline.Item>
+  <Timeline.Item>
+    <p>Approved</p>
+    <p>Pending</p>
+  </Timeline.Item>
+</Timeline>
+```
+
+**Convert to Detailed List:**
+```solarwire
+"Approval Timeline" @(100,50) bold
+
+"1. Submitted" @(100,80) c=#52C41A
+"   By: John Doe" @(100,100)
+"   Time: 2024-01-15 10:00" @(100,120)
+"   Note: Initial submission with all required documents" @(100,140) c=#666666
+
+"2. Under Review" @(100,180) c=#1890FF
+"   By: Manager Wang" @(100,200)
+"   Time: 2024-01-15 14:30" @(100,220)
+"   Note: Additional documents required for verification" @(100,240) c=#666666
+"   Attachment: financial_report_2024.pdf" @(100,260) c=#1890FF
+
+"3. Approved" @(100,300) c=#AAAAAA
+"   Status: Pending" @(100,320)
+"   Estimated: 2024-01-16" @(100,340) c=#AAAAAA
+```
+
+**Or Convert to Detailed Table:**
+```solarwire
+## @(100,50) w=600 border=1 note="Approval timeline with details
+1. Data source
+   - Approval history from Workflow module
+   - User operation logs from Audit module
+2. Field descriptions
+   - Step: Approval stage name
+   - Operator: User who performed the action
+   - Time: Action timestamp
+   - Note: Additional comments or remarks
+   - Attachment: Related documents or files"
+  # bg=#F2F2F2 bold
+    "Step"
+    "Operator"
+    "Time"
+    "Note"
+    "Attachment"
+  # bg=#E6FFEA
+    "Submitted"
+    "John Doe"
+    "2024-01-15 10:00"
+    "Initial submission"
+    "-"
+  # bg=#E6F7FF
+    "Under Review"
+    "Manager Wang"
+    "2024-01-15 14:30"
+    "Need more documents"
+    "financial_report.pdf"
+  #
+    "Approved"
+    "-"
+    "Pending"
+    "-"
+    "-"
+```
+
+### Operation Log Timeline
+
+**Frontend Operation Log:**
+```jsx
+<LogList>
+  <LogItem action="create" user="John" time="2024-01-15 10:00">
+    Created new request #REQ-001
+  </LogItem>
+  <LogItem action="edit" user="John" time="2024-01-15 11:00">
+    Updated description
+  </LogItem>
+  <LogItem action="submit" user="John" time="2024-01-15 14:00">
+    Submitted for approval
+  </LogItem>
+</LogList>
+```
+
+**Convert to Operation Log Table:**
+```solarwire
+## @(100,50) w=700 border=1 note="Operation log
+1. Data source
+   - Operation logs from Audit module
+2. Field descriptions
+   - Time: Operation timestamp
+   - User: User who performed the operation
+   - Action: Operation type (create/edit/delete/submit/approve/reject)
+   - Details: Operation description"
+  # bg=#F2F2F2 bold
+    "Time"
+    "User"
+    "Action"
+    "Details"
+  # bg=#FAFAFA
+    "2024-01-15 10:00"
+    "John Doe"
+    "Create"
+    "Created new request #REQ-001"
+  #
+    "2024-01-15 11:00"
+    "John Doe"
+    "Edit"
+    "Updated description field"
+  # bg=#FAFAFA
+    "2024-01-15 14:00"
+    "John Doe"
+    "Submit"
+    "Submitted for approval to Manager Wang"
+```
+
 ### Progress Bar → Text with Percentage
 
 **Frontend Progress Bar:**
