@@ -3,7 +3,7 @@
   "displayName": "SolarWire Support",
   "description": "SolarWire language support and preview - A lightweight DSL for UI wireframes",
   "version": "1.0.0",
-  "publisher": "solarwire-team",
+  "publisher": "SolarWire",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",

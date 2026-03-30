@@ -3,7 +3,7 @@ import { UIElementType, UIElement, ElementDetectorResult } from './types';
 const BUTTON_TAGS = ['button', 'a'];
 const INPUT_TAGS = ['input', 'textarea', 'select'];
 const TEXT_TAGS = ['p', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'label', 'strong', 'em', 'b', 'i'];
-const CONTAINER_TAGS = ['div', 'section', 'article', 'main', 'aside', 'header', 'footer', 'nav'];
+const CONTAINER_TAGS = ['div', 'section', 'article', 'main', 'aside', 'header', 'footer', 'nav', 'form', 'ul', 'ol', 'li'];
 const TABLE_TAGS = ['table'];
 const TABLE_ROW_TAGS = ['tr'];
 const TABLE_CELL_TAGS = ['td', 'th'];

@@ -14,7 +14,7 @@ Online playground is under development. For now, use the methods below.
 
 ### Option 1: VSCode Extension
 
-1. Install the [SolarWire extension](https://marketplace.visualstudio.com/items?itemName=solarwire.solarwire) from VS Code Marketplace
+1. Install the [SolarWire Support](https://marketplace.visualstudio.com/items?itemName=SolarWire.solarwire-support) extension from VS Code Marketplace
 2. Open a `.solarwire` file or a Markdown file
 3. Start writing SolarWire code!
 

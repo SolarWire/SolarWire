@@ -42,6 +42,8 @@
 - ✅ Hover information for documentation
 - ✅ Export to SVG and PNG
 
+> Search for "SolarWire Support" in VS Code Marketplace to install.
+
 ---
 
 ## Syntax
