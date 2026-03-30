@@ -567,64 +567,94 @@ function loadExample(example) {
 }
 
 select {
-  padding: 6px 12px;
-  background: #3c3c3c;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 4px;
+  padding: 8px 16px;
+  background: transparent;
+  color: #A8B1FF;
+  border: 1px solid #A8B1FF;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 select:hover{
-  background: #4a4a4a;
+  background: rgba(168, 177, 255, 0.1);
+  border-color: #8B96E8;
+}
+
+select:focus{
+  outline: none;
+  border-color: #8B96E8;
+  box-shadow: 0 0 0 3px rgba(168, 177, 255, 0.2);
 }
 
 .checkbox {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #ccc;
+  gap: 8px;
+  color: #A8B1FF;
   font-size: 14px;
   cursor: pointer;
   user-select: none;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.checkbox:hover{
+  background: rgba(168, 177, 255, 0.1);
+  border-color: rgba(168, 177, 255, 0.3);
+}
+
+.checkbox input[type="checkbox"] {
+  accent-color: #A8B1FF;
+  width: 16px;
+  height: 16px;
 }
 
 .btn {
-  padding: 6px 12px;
-  background: #3c3c3c;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 4px;
+  padding: 8px 16px;
+  background: transparent;
+  color: #A8B1FF;
+  border: 1px solid #A8B1FF;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .btn:hover{
-  background: #4a4a4a;
+  background: rgba(168, 177, 255, 0.1);
+  border-color: #8B96E8;
+  color: #BEC5FF;
 }
 
 .btn-icon {
-  width: 32px;
-  padding: 6px 0;
+  width: 36px;
+  padding: 8px 0;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+  border-radius: 50%;
 }
 
 .btn-primary{
   background: linear-gradient(135deg, #A8B1FF 0%, #8B96E8 100%);
-  border-color: transparent;
-  color: #1a1a2e;
+  border: none;
+  color: #ffffff;
   font-weight: 600;
   box-shadow: 0 4px 15px rgba(168, 177, 255, 0.3);
+  border-radius: 20px;
 }
 
 .btn-primary:hover{
   background: linear-gradient(135deg, #8B96E8 0%, #6E7BD1 100%);
-  border-color: transparent;
   box-shadow: 0 6px 25px rgba(168, 177, 255, 0.5);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  color: #ffffff;
 }
 
 .btn:disabled{
