@@ -1,9 +1,9 @@
 ---
 name: "solarwire-prd"
-description: "Generate complete PRD documents with SolarWire wireframes, Mermaid diagrams, and SVG exports. v2.0 - Enhanced with brainstorming best practices: project context exploration, incremental validation, spec self-review, and user review gates."
+description: "Generate complete PRD documents with SolarWire wireframes, Mermaid diagrams, and SVG exports. Invoke when user wants to create a PRD, product requirements document, or detailed feature specification."
 ---
 
-# SolarWire PRD Generator v2.0
+# SolarWire PRD Generator
 
 ## Configuration
 
@@ -23,37 +23,14 @@ This skill generates complete Product Requirements Documents (PRD), including:
 
 ## Workflow
 
-### Phase 0: Exploration & Preparation
-
-**Goal: Understand project context and scope before collecting requirements**
-
-**Step 0: Explore Project Context**
-- Check existing code files (if any)
-- Check existing documentation (if any)
-- Check recent git commits (if any)
-- Understand project background and goals
-
-**Step 1: Scope Check**
-- Determine if project needs to be decomposed into multiple sub-projects
-- If too large, help user decompose and select first sub-project
-- Decomposition criteria:
-  - >5 independent modules → needs decomposition
-  - >10 pages → needs decomposition
-  - Multiple independent business flows → needs decomposition
-
-**Step 2: Multiple Approaches Comparison (Optional)**
-- Provide 2-3 design approaches
-- Each with trade-off analysis
-- Recommend one approach
-
----
-
 ### Phase 1: Requirements Collection
 
 **Goal: Confirm user requirements step by step, don't rush to generate**
 
-**Step 3: Product Type Confirmation**
 ```
+Great! I'll help you create a PRD document. Let's confirm the requirements step by step:
+
+**Step 1: Product Type**
 What type of application is this?
 - 📱 Mobile App
 - 💻 Web Client
@@ -63,8 +40,10 @@ What type of application is this?
 Please select or describe your product type.
 ```
 
-**Step 4: Core Features Confirmation**
+### Phase 2: Feature Confirmation
+
 ```
+**Step 2: Core Features**
 What core features/pages does this product need?
 
 For example:
@@ -76,8 +55,31 @@ For example:
 ...
 ```
 
-**Step 5: Multi-language Confirmation**
+### Phase 3: Detailed Requirements
+
 ```
+**Step 3: Detailed Requirements Confirmation**
+
+Here's my understanding of the requirements:
+
+**Product Type**: [Type]
+**Core Pages**:
+1. [Page 1] - [Brief description]
+2. [Page 2] - [Brief description]
+3. ...
+
+**Special Requirements**:
+- [Requirement 1]
+- [Requirement 2]
+
+Is this understanding correct? Any adjustments or additions needed?
+```
+
+### Phase 3.5: Multi-language Requirements
+
+```
+**Step 3.5: Multi-language Support Confirmation**
+
 Does this project require multi-language support?
 
 If yes:
@@ -86,7 +88,7 @@ If yes:
 - The default language will be set based on your primary language.
 
 If no:
-- All notes will be written in default language only.
+- All notes will be written in the default language only.
 - No i18n information will be added to any elements.
 ```
 
@@ -113,230 +115,9 @@ If no:
 - Decorative elements
 - Icons
 
----
+### Phase 4: Generate Output
 
-### Phase 2: Requirements Validation
-
-**Step 6: Requirements Summary**
-```
-Here's my understanding of requirements:
-
-**Product Type**: [Type]
-**Core Pages**:
-1. [Page 1] - [Brief description]
-2. [Page 2] - [Brief description]
-3. ...
-
-**Multi-language**: [Yes/No + Languages]
-
-**Special Requirements**:
-- [Requirement 1]
-- [Requirement 2]
-
-Is this understanding correct? Any adjustments or additions needed?
-```
-
-**Step 7: Requirements Confirmation Gate**
-- User MUST confirm requirements
-- If adjustments needed, go back to Phase 1
-
----
-
-### Phase 3: Generate & Quality
-
-**Step 8: Generate PRD**
-- Generate complete PRD document
-- Save to `.solarwire/[project-name]/solarwire-prd.md`
-
-**Step 9: Spec Self-Review**
-
-#### Check 1: Placeholder Scan
-```
-Check items:
-- Any "TBD", "To Be Determined", "待定"
-- Any "TODO", "待完成"
-- Incomplete sections
-- Vague requirement descriptions
-
-If found:
-- Fix or clarify immediately
-- No placeholders allowed
-```
-
-#### Check 2: Internal Consistency
-```
-Check items:
-- Product type matches page design
-- Core features list matches page details
-- Multi-language rules are consistent throughout document
-- Color standards are used consistently
-- Font standards are used consistently
-
-If contradictions found:
-- Priority: Page details > Feature list > Product type
-- Unify standards
-```
-
-#### Check 3: Scope Check
-```
-Check items:
-- Focused on implementable scope
-- Not too many independent subsystems
-- Doesn't need decomposition
-
-Criteria:
-- If >5 independent modules → needs decomposition
-- If >10 pages → needs decomposition
-- If multiple independent business flows → needs decomposition
-
-If needs decomposition:
-- Go back to Phase 0 Step 1
-- Help user decompose and select first sub-project
-```
-
-#### Check 4: Ambiguity Check
-```
-Check items:
-- Requirements with two possible interpretations
-- Vague business rules (e.g., "appropriate", "reasonable")
-- Undefined terms
-
-If ambiguity found:
-- Choose one interpretation and make it explicit
-- Add term definitions to Appendix
-- Clarify business rules (e.g., "appropriate permissions" → "read-only permissions")
-
-**Note: Visual ambiguity is allowed**
-- Visual descriptions like "appropriate spacing", "reasonable layout" don't need quantification
-- But functional requirements must be clear (e.g., "user can edit" not "user might be able to edit")
-```
-
-**Fix Principle:**
-- Fix all issues immediately, no need to re-review
-- Proceed to Step 10 after fixing
-
-**Step 10: User Review Gate**
-```
-✅ PRD generated and passed self-review
-
-**File Location:** `.solarwire/[project-name]/solarwire-prd.md`
-
-**Includes:**
-- Product Overview (1.1-1.4)
-- Feature Scope (2.1-2.2)
-- Business Flow (3.1-3.2)
-- Page Design (4.1-5.x)
-- Non-functional Requirements (6.1-6.3)
-- Appendix (7.1-7.2)
-
-**Please review:**
-1. Completeness - Any missing features?
-2. Accuracy - Any misunderstandings?
-3. Page Design - Matches expectations?
-4. Business Logic - Correct?
-
-**Review Method:**
-- Edit directly in file
-- Or tell me what needs adjustment
-
-**After review approval, I will:**
-- Generate SVGs for all pages (with notes and without notes)
-- Complete entire PRD generation process
-
-Please start reviewing, let me know if you have any questions.
-```
-
-**User Review Gate Rules:**
-- MUST wait for user to explicitly confirm "ok" or "no problem"
-- If user requests changes, go back to Step 8 to regenerate PRD
-- If user only needs minor adjustments, can fix before Step 11
-
----
-
-### Phase 4: Output
-
-**Step 11: Generate SVG**
-- Run `node generate-svg.js .solarwire/[project-name]/solarwire-prd.md`
-- Generate SVGs with notes and without notes
-
----
-
-## Multiple Approaches Comparison
-
-**Trigger Conditions:**
-- When project has multiple viable design approaches
-- When user is uncertain about implementation approach
-- When trade-offs need to be weighed
-
-**Approach Format:**
-```
-For [feature/module], I've analyzed 3 implementation approaches:
-
-**Approach A: [Approach Name]**
-- Description: [Brief description]
-- Pros:
-  - [Pro 1]
-  - [Pro 2]
-- Cons:
-  - [Con 1]
-  - [Con 2]
-
-**Approach B: [Approach Name]**
-- Description: [Brief description]
-- Pros:
-  - [Pro 1]
-  - [Pro 2]
-- Cons:
-  - [Con 1]
-  - [Con 2]
-
-**Approach C: [Approach Name]**
-- Description: [Brief description]
-- Pros:
-  - [Pro 1]
-  - [Pro 2]
-- Cons:
-  - [Con 1]
-  - [Con 2]
-
-**My Recommendation: Approach [X]**
-- Reason: [Recommendation reason]
-
-Which approach would you like to choose?
-```
-
-**Use Cases:**
-- Login method (password/third-party login/hybrid)
-- Data storage (local/cloud/hybrid)
-- Navigation structure (top/sidebar/bottom)
-
----
-
-## Complete Checklist
-
-You MUST complete each step in order:
-
-**Phase 0: Exploration & Preparation**
-1. [ ] Explore project context (code, docs, commits)
-2. [ ] Scope check (needs decomposition?)
-3. [ ] Multiple approaches comparison (optional)
-
-**Phase 1: Requirements Collection**
-4. [ ] Product type confirmation
-5. [ ] Core features confirmation
-6. [ ] Multi-language confirmation
-
-**Phase 2: Requirements Validation**
-7. [ ] Requirements summary
-8. [ ] Requirements confirmation gate (user MUST confirm)
-
-**Phase 3: Generate & Quality**
-9. [ ] Generate PRD
-10. [ ] Spec self-review (4 checks)
-11. [ ] User review gate (user MUST review)
-
-**Phase 4: Output**
-12. [ ] Generate SVG
+After confirming requirements, generate documents with the following structure:
 
 ---
 
@@ -361,7 +142,7 @@ You MUST complete each step in order:
 
 **Naming Convention:**
 - Root directory: `.solarwire` (at project root)
-- Requirement folder: Based on requirement/project name (e.g., `user-login-system/`, `order-management/`)
+- Requirement folder: Based on the requirement/project name (e.g., `user-login-system/`, `order-management/`)
 - PRD file: Always named `solarwire-prd.md`
 - SVG files: Based on the `!title` attribute in each solarwire code block
   - Format: `[title-value]-with-notes.svg` and `[title-value]-without-notes.svg`
@@ -425,7 +206,7 @@ cp -r SolarWire/packages/core/renderer-svg/dist/* solarwire-prd/lib/renderer-svg
 [Description of target user groups]
 
 ### 1.3 Core Value
-[Core value provided to users by product]
+[Core value provided to users by the product]
 
 ### 1.4 User Stories
 
@@ -508,7 +289,7 @@ sequenceDiagram
 
 ### 5.1 [Page Name]
 
-**Page Overview**: [One sentence describing core functionality of page]
+**Page Overview**: [One sentence describing the core functionality of the page]
 
 ```solarwire
 !title="[Page Name]"
@@ -544,7 +325,7 @@ sequenceDiagram
    - Min length: 6 characters, Max: 32 characters
    - Must contain letters and numbers
 2. Interaction
-   - Show/hide toggle icon on right"
+   - Show/hide toggle icon on the right"
 
 [""] @(100,400) w=16 h=16 note="Remember me checkbox
 1. Behavior
@@ -751,7 +532,7 @@ Text Y = Target_Y + (Target_Height - Line_Height) / 2 + Baseline_Adjustment
 !bg=#F9FAFB
 !r=0
 
-// Container Rectangle - Represents screen/device boundary, placed at beginning
+// Container Rectangle - Represents screen/device boundary, placed at the beginning
 [] @(0,0) w=375 h=812 bg=#FFFFFF
 
 // Page content...
@@ -796,8 +577,8 @@ Text Y = Target_Y + (Target_Height - Line_Height) / 2 + Baseline_Adjustment
 - All edge cases and error handling examples
 
 **⚠️ Important:**
-- SKILL.md contains **rules** (what must be included)
-- EXAMPLES.md contains **examples** (how to write it)
+- SKILL.md contains the **rules** (what must be included)
+- EXAMPLES.md contains the **examples** (how to write it)
 - Always follow rules in SKILL.md, use EXAMPLES.md for reference
 
 ---
@@ -844,7 +625,7 @@ Third level: -- or -
    - Minimum 6 characters, maximum 32 characters
    - Must contain both letters and numbers
 2. Interaction
-   - Show/hide toggle icon on right
+   - Show/hide toggle icon on the right
    - Validate format on blur
    - Display error on format failure: 'Invalid password format'
 3. Special notes
@@ -954,7 +735,7 @@ Describe directly in note, no separate wireframe needed.
 | Principle | Description |
 |-----------|-------------|
 | **Necessity** | Only write for meaningful elements, avoid over-documentation |
-| **Completeness** | Fully describe element, cover all aspects |
+| **Completeness** | Fully describe the element, cover all aspects |
 | **Single Responsibility** | Only describe current element; affected elements document in their own notes |
 | **Organization** | Use standard format, clear hierarchy |
 | **Self-explanatory** | Element definition should be clear, no need for secondary explanation |
@@ -1010,7 +791,7 @@ Describe directly in note, no separate wireframe needed.
 
 | Mistake | Problem | Solution |
 |---------|---------|----------|
-| Missing Permission Control | No visibility/disabled rules | Add who can see/use element |
+| Missing Permission Control | No visibility/disabled rules | Add who can see/use the element |
 | Incomplete Error Handling | Only generic "show error" | List all error types: validation, network, server, timeout, permission |
 | Missing Data Source Details | Just "User data" | Add module, filters, sort, permission |
 | Wrong First Line | "[Primary Button]" | Use functional description: "Login button" |
@@ -1020,7 +801,7 @@ Describe directly in note, no separate wireframe needed.
 
 ##### 5.5 Data Format Specifications
 
-**When describing data display, always specify format rules:**
+**When describing data display, always specify the format rules:**
 
 **Date/Time Formats:**
 
@@ -1079,7 +860,7 @@ Always describe status values with their visual representation:
 | Sizes | "Width 100px", "Height 40px" |
 | Spacing | "Margin 16px", "Padding 8px" |
 | Border | "Border radius 8px" |
-| Shadows | "Box shadow 0.2px 4px" |
+| Shadows | "Box shadow 0 2px 4px" |
 | Animations | "Fade in 0.3s" |
 | Technical details | "API: /api/login", "Database: user_id" |
 
@@ -1240,7 +1021,7 @@ Each page/tab/modal needs to generate two SVG files:
 - Use SolarWire renderer to convert solarwire code blocks in `.md` to SVG
 - Ensure all elements use syntax supported by existing rules
 - SVG dimensions match container rectangle dimensions
-- Output path: Same directory as `solarwire-prd.md` file (the requirement folder)
+- Output path: Same directory as the `solarwire-prd.md` file (the requirement folder)
 
 ---
 
@@ -1254,6 +1035,7 @@ Each page/tab/modal needs to generate two SVG files:
 !size=13          // Default font size
 !bg=#F9FAFB       // Background color
 !r=0              // Default border radius
+
 ```
 
 ### Basic Elements
@@ -1268,7 +1050,7 @@ Each page/tab/modal needs to generate two SVG files:
 | `<url>` | Real image | `<https://example.com/logo.png> @(100,50) w=40` |
 | `--` | Divider line | `-- @(0,100)->(400,100)` |
 | `##` | Table container | `## @(100,50) w=500 border=1` |
-| `#` | Table row (MUST be inside `##`) | ` # bg=#F9FAFB` |
+| `#` | Table row (MUST be inside `##`) | `  # bg=#F9FAFB` |
 
 ### Table Syntax (Indentation Required)
 
@@ -1321,7 +1103,7 @@ Each page/tab/modal needs to generate two SVG files:
 **⚠️ Table Note Rules:**
 - **Table-level note**: Add `note` attribute to the table element `##` for overall table description
 - **Row-level note**: `note` attribute is **NOT supported** on table rows `#`
-- If you need to describe a table, put all information in the table-level note
+- If you need to describe the table, put all information in the table-level note
 
 ### Common Attributes
 
@@ -1409,14 +1191,14 @@ Each page/tab/modal needs to generate two SVG files:
 ### Page Presentation Rules
 
 | Scenario | Handling |
-|-----------|----------|
+|----------|----------|
 | New page | Draw all elements completely, including navigation, menu, etc. |
 | Redesign page | Redraw completely |
-| Minor changes to existing page | Mark only changed parts on original wireframe; existing parts not modified or explained |
+| Minor changes to existing page | Mark only the changed parts on original wireframe; existing parts not modified or explained |
 | New content on existing page | Add new elements to original wireframe |
 
 **Completeness Requirements:**
-- Pages must show all elements completely, including navigation, menu and common parts
+- Pages must show all elements completely, including navigation, menu, and common parts
 - Within the same requirement, common parts already explained in other pages do not need to be repeated
 - Ensure developers have a clear concept of relative element positions on each page
 
@@ -1622,7 +1404,7 @@ Each page/tab/modal needs to generate two SVG files:
 1. **Confirm Requirements Step by Step** - Don't rush to generate, fully understand requirements first
 2. **Notes Describe Function and Business Logic** - Focus on behavior and logic, avoid visual details and technical implementation
 3. **Not Every Element Needs a Note** - Skip notes for visual elements; common sense exemption for back button, close button, page selector, number stepper
-4. **First Line Defines Element** - Note first line must describe what element is (e.g., "Login button"), not element type (e.g., "[Primary Button]")
+4. **First Line Defines Element** - Note first line must describe what the element is (e.g., "Login button"), not element type (e.g., "[Primary Button]")
 5. **Note Structure Required** - First line: element definition; First level: numbered (1. 2. 3.); Second level: dash (-); Third level: double dash (--)
 6. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
 7. **No Brackets for Attributes** - Write directly `w=100 h=40`
