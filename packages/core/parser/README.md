@@ -4,28 +4,16 @@ Parser for SolarWire DSL, built with Peggy (PEG.js).
 
 ## Installation
 
-### Install root project dependencies
+Install from GitHub:
 
 ```bash
-cd SolarWire
-npm install
+npm install github:SolarWire/SolarWire#v1.6.1
 ```
-
-## Build
-
-```bash
-cd packages/parser
-npm run build
-```
-
-This will:
-1. Generate parser.js from grammar.pegjs using Peggy
-2. Compile TypeScript source to dist directory
 
 ## Usage
 
-```typescript
-import { parse } from '@solarwire/parser';
+```javascript
+const { parse } = require('solarwire');
 
 const ast = parse(`
 !title="My Wireframe"

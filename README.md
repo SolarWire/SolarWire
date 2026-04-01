@@ -187,10 +187,16 @@ All text has a default `line-height` of `22px`.
 
 ### Installation
 
+Install from GitHub:
+
 ```bash
-git clone https://github.com/your-username/solarwire.git
-cd solarwire
-npm install
+npm install github:SolarWire/SolarWire#v1.6.1
+```
+
+Or install the latest version:
+
+```bash
+npm install github:SolarWire/SolarWire
 ```
 
 ### Run the example
@@ -204,9 +210,9 @@ This will show you the complete feature demo.
 
 ### Use the parser and renderer
 
-```typescript
-import { parse } from '@solarwire/parser';
-import { render } from '@solarwire/renderer-svg';
+```javascript
+const { parse } = require('solarwire');
+const { render } = require('solarwire/renderer-svg');
 
 const code = `
 !title="My Wireframe"
@@ -322,6 +328,12 @@ SolarWire/
 ---
 
 ## Version History
+
+### v1.6.1 (2026-04-01)
+- ✅ **Row-level attributes** - 添加完整的表格行级属性支持：`bg`, `c`, `size`, `bold`, `italic`, `align`
+- ✅ **Align attribute** - 实现 `align` 属性对齐功能（左/中/右）
+- ✅ **Git distribution** - 切换到 Git 分发方式
+- ✅ **Cleanup** - 移除 npm 发布相关配置，删除旧文件
 
 ### v1.6.0 (2026-03-27)
 - ✅ **Improved error messages** - 所有错误信息现在包含上下文代码片段和精确的错误位置标记

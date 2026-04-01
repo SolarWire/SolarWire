@@ -4,25 +4,17 @@ SVG renderer for SolarWire DSL.
 
 ## Installation
 
-### Install root project dependencies
+Install from GitHub:
 
 ```bash
-cd SolarWire
-npm install
-```
-
-## Build
-
-```bash
-cd packages/renderer-svg
-npm run build
+npm install github:SolarWire/SolarWire#v1.6.1
 ```
 
 ## Usage
 
-```typescript
-import { parse } from '@solarwire/parser';
-import { render } from '@solarwire/renderer-svg';
+```javascript
+const { parse } = require('solarwire');
+const { render } = require('solarwire/renderer-svg');
 
 const ast = parse(`
   ["Login"] w=200 h=60
