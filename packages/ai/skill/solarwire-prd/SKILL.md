@@ -293,9 +293,9 @@ sequenceDiagram
 
 ```solarwire
 !title="[Page Name]"
-!c=#333333
+!c=#111827
 !size=13
-!bg=#F2F2F2
+!bg=#E5E7EB
 !r=0
 
 // Container Rectangle
@@ -309,7 +309,7 @@ sequenceDiagram
 "User Login" @(100,150) size=24 bold
 
 "Username" @(100,220)
-["Enter phone or email"] @(100,245) w=300 h=44 bg=#FFFFFF b=#F2F2F2 note="Username input
+["Enter phone or email"] @(100,245) w=300 h=44 bg=#FFFFFF b=#E5E7EB note="Username input
 1. Input rules
    - Supports phone number or email
    - Automatically trims leading/trailing spaces
@@ -319,7 +319,7 @@ sequenceDiagram
    - Error message: 'Please enter a valid phone number or email'"
 
 "Password" @(100,310)
-["Enter password"] @(100,335) w=300 h=44 bg=#FFFFFF b=#F2F2F2 note="Password input
+["Enter password"] @(100,335) w=300 h=44 bg=#FFFFFF b=#E5E7EB note="Password input
 1. Input rules
    - Password displayed as dots
    - Min length: 6 characters, Max: 32 characters
@@ -327,17 +327,17 @@ sequenceDiagram
 2. Interaction
    - Show/hide toggle icon on the right"
 
-["Remember Me"] @(100,400) w=16 h=16 note="Remember me checkbox
+[""] @(100,400) w=16 h=16 note="Remember me checkbox
 1. Behavior
    - When checked: Stay logged in for 7 days
    - Unchecked by default"
 "Remember Me" @(124,402)
 
-"Forgot Password?" @(320,400) c=#1890FF note="Forgot password link
+"Forgot Password?" @(320,400) c=#3B82F6 note="Forgot password link
 1. Click action
    - Navigate to password recovery page"
 
-["Login"] @(100,450) w=300 h=48 bg=#1890FF c=#FFFFFF size=16 note="Login button
+["Login"] @(100,450) w=300 h=48 bg=#3B82F6 c=#FFFFFF size=16 note="Login button
 1. Click action
    - Validate username and password
 2. Success handling
@@ -349,7 +349,7 @@ sequenceDiagram
 4. Disabled conditions
    - Disabled when username or password is empty"
 
-"Or login with" @(160,530) c=#AAAAAA
+"Or login with" @(160,530) c=#9CA3AF
 
 [?"WeChat Work"] @(120,560) w=40 h=40 note="WeChat Work login
 1. Click action
@@ -407,13 +407,13 @@ sequenceDiagram
 
 **Correct Example:**
 ```solarwire
-["Login"] @(100,50) w=100 h=40 bg=#1890FF c=#FFFFFF note="Submit login form"
+["Login"] @(100,50) w=100 h=40 bg=#3B82F6 c=#FFFFFF note="Submit login form"
 "Username" @(100,100)
 (("Avatar")) @(100,150) w=40  // Circle with text - MUST use double quotes
 ```
 
-**Incorrect Example:**
-```solarwire
+**Incorrect Examples:**
+```
 ["Login"]                    // ❌ No coordinates
 ["Login"] [w=100 h=40]       // ❌ Attributes in brackets
 ["Login"] @(100,50) w=100    // ❌ Missing height
@@ -436,14 +436,14 @@ sequenceDiagram
 
 | Scenario | Recommended Element | Example |
 |----------|---------------------|---------|
-| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#1890FF c=#FFFFFF` |
-| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#FFFFFF b=#F2F2F2` |
+| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#3B82F6 c=#FFFFFF` |
+| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#FFFFFF b=#E5E7EB` |
 | Cards/Containers | Rounded Rectangle `()` | `("User Info Card") @(100,50) w=300 h=200` |
-| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#F2F2F2 c=#AAAAAA` |
-| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#F2F2F2` |
+| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#E5E7EB c=#6B7280` |
+| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#E5E7EB` |
 | Labels/Text | Plain Text `""` | `"Username" @(100,50)` |
-| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA` |
-| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#F2F2F2` |
+| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#FFFFFF b=#E5E7EB c=#9CA3AF` |
+| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#E5E7EB` |
 | Data Tables | Table `##` | `## @(100,50) w=500 border=1` |
 
 **⚠️ CRITICAL: Text Content Syntax**
@@ -461,6 +461,53 @@ sequenceDiagram
 - ❌ Using placeholder `[?]` for buttons (use `["Button Text"]` instead)
 - ❌ Using rectangle `[]` for plain labels (use `"Label"` instead)
 - ❌ Overcrowding elements - use 10px spacing
+
+#### 2.5 Coordinate System
+
+**Anchor Point Rule:**
+All elements use the **top-left corner** as the coordinate anchor point `@(x,y)`.
+
+**Visual Explanation:**
+```
+     (x,y) ← anchor point
+       ┌─────────────────┐
+       │                 │
+       │    Element      │ h (height)
+       │                 │
+       └─────────────────┘
+              w (width)
+```
+
+**Text Alignment Calculation:**
+
+When aligning text with other elements (like labels inside buttons), the text Y coordinate is NOT the center of the target element.
+
+| Standard | Value |
+|----------|-------|
+| Default font size | 13px |
+| Default line height | 22px |
+| Text baseline offset | ~7px from top |
+
+**Alignment Formula:**
+```
+Text Y = Target_Y + (Target_Height - Line_Height) / 2 + Baseline_Adjustment
+```
+
+**Examples:**
+
+```solarwire
+// Button with centered text
+["Submit"] @(100,100) w=100 h=40 bg=#3B82F6 c=#FFFFFF
+
+// Label above input field - aligned with input
+"Username" @(100,175)  // 10px gap from input top
+["Enter username"] @(100,200) w=280 h=40 bg=#FFFFFF b=#E5E7EB
+
+// Text inside button (if needed separately)
+// Button: Y=100, Height=40, Center=120
+// Text Y ≈ 100 + (40-22)/2 + adjustment ≈ 109
+"Submit" @(120,109) c=#FFFFFF  // Centered inside button
+```
 
 #### 3. Page Organization Rules
 
@@ -480,9 +527,9 @@ sequenceDiagram
 
 ```solarwire
 !title="Page Name"
-!c=#333333
+!c=#111827
 !size=13
-!bg=#F2F2F2
+!bg=#F9FAFB
 !r=0
 
 // Container Rectangle - Represents screen/device boundary, placed at the beginning
@@ -507,6 +554,32 @@ sequenceDiagram
 #### 5. Note Writing Guidelines
 
 **Core Principle: Notes describe functional behavior and business logic, not visual details or technical implementation**
+
+---
+
+##### 0. When to Read EXAMPLES.md
+
+**📖 Read `EXAMPLES.md` when you encounter:**
+
+| Scenario | What to Look Up |
+|----------|-----------------|
+| Writing complex button notes | "Button with Permission Control", "Batch Operations", "Form Submission" |
+| Writing input field notes | "Input Field with Validation", "Search Bar with Filters", "Data Linkage" |
+| Writing data table notes | "Data Table", "Table with Actions Column" |
+| Writing statistics notes | "Statistics Card", "Calculated Field" |
+| Writing navigation notes | "Pagination Component" |
+| Handling special states | "Loading States", "Empty State Handling" |
+| Unsure about note quality | "Common Mistakes" section |
+
+**📖 EXAMPLES.md contains:**
+- Complete note examples for each element type
+- Good vs Bad comparisons
+- All edge cases and error handling examples
+
+**⚠️ Important:**
+- SKILL.md contains the **rules** (what must be included)
+- EXAMPLES.md contains the **examples** (how to write it)
+- Always follow rules in SKILL.md, use EXAMPLES.md for reference
 
 ---
 
@@ -584,21 +657,9 @@ Must include:
 - Disabled conditions
 - Special handling (debounce, throttle, etc.)
 
-**Example:**
-```solarwire
-["Login"] @(100,50) w=100 h=40 note="Login button
-1. Click action
-   - Validate username and password
-   - Submit login request if validation passes
-2. Success handling
-   - Save login state
-   - Redirect to homepage
-3. Failure handling
-   - Display error: 'Invalid username or password'
-   - Clear password field
-4. Disabled conditions
-   - Disabled when username or password is empty"
-```
+> 📖 See EXAMPLES.md: "Button with Permission Control", "Batch Operations", "Form Submission"
+
+---
 
 **Elements with Logic:**
 
@@ -608,57 +669,64 @@ Must include:
 - Validation rules
 - State transitions
 
-**Example:**
-```solarwire
-["Batch Delete"] @(200,50) w=100 h=36 note="Batch delete button
-1. Visibility conditions
-   - Show when ≥ 1 items selected
-   - Hide when no items selected
-2. Click action
-   - Show confirmation: 'Delete N selected items?'
-   - Execute batch delete on confirmation"
-```
+---
 
 **Data Display Elements:**
 
+Must include ALL of the following sections:
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| **1. Data source** | ✅ Required | Where data comes from, filtering conditions, sorting rules |
+| **2. Display rules** | ✅ Required | Field meanings, formats, empty value handling |
+| **3. Business rules** | Optional | Status mappings, conditional display, calculations |
+| **4. Sorting/Filtering** | Optional | If applicable, describe sorting and filtering behavior |
+
+> 📖 See EXAMPLES.md: "Data Table", "Table with Actions Column", "Statistics Card", "Status Badge"
+
+---
+
+**Input Fields:**
+
 Must include:
-- **Data source**: Module, page, or operation (NOT API/technical details); include formula if calculated
-- **Display fields and rules**: Field meanings, formats, special handling
-- **Sorting rules**: Default sort, sortable fields
+- Input rules (format, length, allowed characters)
+- Validation (required, format check, error messages)
+- Business rules (unique check, duplicate check)
 
-**Example:**
-```solarwire
-## @(100,50) w=500 border=1 note="User list table
-1. Data source
-   - User list data from User Management module
-   - Default sort: creation time descending
-2. Field descriptions
-   - ID: Unique user identifier
-   - Username: Display nickname, show 'Not set' if empty
-   - Status: 1='Active', 0='Disabled', disabled shown in red
-   - Created: Format as YYYY-MM-DD HH:mm
-3. Sorting rules
-   - Support sorting by username and created time"
-```
+> 📖 See EXAMPLES.md: "Input Field with Validation", "Search Bar with Filters", "Data Linkage"
 
-**Calculated field example:**
-```solarwire
-"Total: ¥1,234.00" @(100,50) note="Order total amount
-1. Data source
-   - Formula: Sum of item amounts + Shipping - Discount
-   - Item amount = Unit price × Quantity"
-```
+---
+
+**Dropdowns/Selects:**
+
+Must include:
+- Data source (options source, static or dynamic)
+- Display rules (default, selected, options list)
+- Business rules (required, default value, dependencies)
+
+> 📖 See EXAMPLES.md: "Dropdown Options", "Data Linkage (Cascading Select)"
+
+---
+
+**Empty State Handling:**
+
+| Data Type | Empty Display | Example |
+|-----------|---------------|---------|
+| Text | '-' or 'Not set' | "Contact: -" |
+| Number | '0' or '--' | "Amount: ¥ --" |
+| Date | '-' or 'Not specified' | "Last login: -" |
+| Status | Default status | "Status: Pending" |
+| List/Table | Empty state message | "No data available" |
+
+> 📖 See EXAMPLES.md: "Empty State Handling", "Loading States"
+
+---
 
 **Tooltip/Toast:**
 
 Describe directly in note, no separate wireframe needed.
 
-**Example:**
-```solarwire
-["?"] @(100,50) w=16 h=16 note="Help icon
-1. Tooltip content
-   - Hover to show: 'Supports phone number or email login'"
-```
+> 📖 See EXAMPLES.md: "Tooltip/Toast Examples"
 
 ---
 
@@ -672,6 +740,112 @@ Describe directly in note, no separate wireframe needed.
 | **Organization** | Use standard format, clear hierarchy |
 | **Self-explanatory** | Element definition should be clear, no need for secondary explanation |
 | **Business-focused** | Describe business logic, avoid technical implementation details |
+
+---
+
+##### 5.3 Required Content by Element Type (Quick Reference)
+
+> 📖 For complete examples, see EXAMPLES.md
+
+**Buttons/Actions:**
+- ✅ Permission control
+- ✅ Click action
+- ✅ Success handling
+- ✅ Failure handling (all error types)
+- Optional: Disabled conditions, Loading state
+
+**Input Fields:**
+- ✅ Input rules (format, length, allowed characters)
+- ✅ Validation (required, format check, error messages)
+- Optional: Display rules, Business rules
+
+**Data Tables:**
+- ✅ Data source (module, filters, default sort)
+- ✅ Display rules (field formats, empty handling, status colors)
+- ✅ Actions column (available actions, visibility, permissions)
+- Optional: Sorting/Filtering, Pagination, Row behavior
+
+**Search/Filter:**
+- ✅ Input rules
+- ✅ Search behavior (debounce, trigger, clear)
+- ✅ Search scope (fields, match type)
+- ✅ No results handling
+
+**Dropdowns/Selects:**
+- ✅ Data source (options source)
+- ✅ Display rules (default, selected, options list)
+- Optional: Business rules, Loading behavior
+
+**Forms:**
+- ✅ Pre-submission validation
+- ✅ Submission state (loading, disabled, double-click protection)
+- ✅ Success handling
+- ✅ Failure handling (all error types)
+- Optional: Retry mechanism
+
+---
+
+##### 5.4 Common Mistakes in Note Writing
+
+> 📖 For detailed examples, see EXAMPLES.md "Common Mistakes" section
+
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Missing Permission Control | No visibility/disabled rules | Add who can see/use the element |
+| Incomplete Error Handling | Only generic "show error" | List all error types: validation, network, server, timeout, permission |
+| Missing Data Source Details | Just "User data" | Add module, filters, sort, permission |
+| Wrong First Line | "[Primary Button]" | Use functional description: "Login button" |
+| Visual Details in Note | "Blue background, 14px font" | Remove, these are shown in wireframe |
+
+---
+
+##### 5.5 Data Format Specifications
+
+**When describing data display, always specify the format rules:**
+
+**Date/Time Formats:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Date only | YYYY-MM-DD | 2024-01-25 |
+| Date with time | YYYY-MM-DD HH:mm | 2024-01-25 14:30 |
+| Full datetime | YYYY-MM-DD HH:mm:ss | 2024-01-25 14:30:45 |
+| Relative time | Within X days show relative | "3 days ago", "Just now" |
+| Time only | HH:mm | 14:30 |
+
+**Number Formats:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Integer | With thousand separators | 1,234 |
+| Decimal | 2 decimal places | 1,234.56 |
+| Currency | With symbol and separators | ¥1,234.56 |
+| Percentage | With % symbol | 68.5% |
+| Large numbers | Abbreviated | 1.23万, 1.5M |
+
+**Text Formats:**
+
+| Type | Handling | Example |
+|------|----------|---------|
+| Long text | Truncate with ellipsis | "Long text content..." |
+| Phone | Mask sensitive digits | 138****8000 |
+| Email | Show full or truncate | zhang@example.com |
+| ID | Partial mask | 110***********1234 |
+
+**Status/Tag Display:**
+
+Always describe status values with their visual representation:
+
+```solarwire
+"跟进中" @(100,50) note="Lead status
+1. Display rules
+   - Status values with visual style:
+     - 待分配: Gray tag (#D1D5DB background)
+     - 跟进中: Blue tag (#3B82F6 background)
+     - 已转化: Green tag (#22C55E background)
+     - 无效: Red tag (#EF4444 background)
+   - All tags: White text, rounded corners, 4px padding"
+```
 
 ---
 
@@ -800,7 +974,7 @@ Use compact format with language names declared once:
 ##### 8. Examples: Good vs Bad Notes
 
 **❌ Bad Note (Visual details + element type label):**
-```solarwire
+```
 ["Login"] @(100,50) w=100 h=40 note="[Primary Button]
 - Blue background, white text
 - Border radius 8px
@@ -823,7 +997,7 @@ Use compact format with language names declared once:
 
 **✅ No Note Needed (Visual element):**
 ```solarwire
--- @(0,100)->(400,100) b=#F2F2F2
+-- @(0,100)->(400,100) b=#E5E7EB
 ```
 
 ---
@@ -857,10 +1031,11 @@ Each page/tab/modal needs to generate two SVG files:
 
 ```solarwire
 !title="Page Title"
-!c=#333333        // Default text color
+!c=#111827        // Default text color
 !size=13          // Default font size
-!bg=#F2F2F2       // Background color
+!bg=#F9FAFB       // Background color
 !r=0              // Default border radius
+
 ```
 
 ### Basic Elements
@@ -875,7 +1050,7 @@ Each page/tab/modal needs to generate two SVG files:
 | `<url>` | Real image | `<https://example.com/logo.png> @(100,50) w=40` |
 | `--` | Divider line | `-- @(0,100)->(400,100)` |
 | `##` | Table container | `## @(100,50) w=500 border=1` |
-| `#` | Table row (MUST be inside `##`) | `  # bg=#F2F2F2` |
+| `#` | Table row (MUST be inside `##`) | `  # bg=#F9FAFB` |
 
 ### Table Syntax (Indentation Required)
 
@@ -889,7 +1064,7 @@ Each page/tab/modal needs to generate two SVG files:
    - Column 1: Description
    - Column 2: Description
    - Column 3: Description"
-  # bg=#F2F2F2                  // Header row (indented 2 spaces)
+  # bg=#F9FAFB                  // Header row (indented 2 spaces)
     "Column 1"                  // Cell (indented 4 spaces)
     "Column 2"
     "Column 3"
@@ -897,7 +1072,7 @@ Each page/tab/modal needs to generate two SVG files:
     "Data 1"                    // Cell (indented 4 spaces)
     "Data 2"
     "Data 3"
-  # bg=#FAFAFA                  // Alternating row color
+  # bg=#F9FAFB                  // Alternating row color
     "Data 4"
     "Data 5"
     "Data 6"
@@ -920,6 +1095,11 @@ Each page/tab/modal needs to generate two SVG files:
 - Only supported attributes for rows: `bg`, `c`, `size`, `bold`, `italic`, `align`
 - Only supported attributes for cells: `bg`, `c`, `size`, `bold`, `italic`, `align`, `colspan`, `rowspan`
 
+**⚠️ Table Cell Content Format:**
+- **Use `[""]` (rectangle) for cell content** - text will be centered in the cell
+- **Avoid `""` (plain text) for cells** - text will stick to the top-left corner
+- Example: `["John Doe"]` ✅ (centered) vs `"John Doe"` ❌ (top-left aligned)
+
 **⚠️ Table Note Rules:**
 - **Table-level note**: Add `note` attribute to the table element `##` for overall table description
 - **Row-level note**: `note` attribute is **NOT supported** on table rows `#`
@@ -930,9 +1110,9 @@ Each page/tab/modal needs to generate two SVG files:
 | Attribute | Description | Example |
 |-----------|-------------|---------|
 | `w` `h` | Width, Height | `w=100 h=40` |
-| `bg` | Background color | `bg=#1890FF` |
-| `c` | Text color | `c=#FFFFFF` or `c=#333333` |
-| `b` | Border color | `b=#F2F2F2` |
+| `bg` | Background color | `bg=#3B82F6` |
+| `c` | Text color | `c=#FFFFFF` or `c=#111827` |
+| `b` | Border color | `b=#E5E7EB` |
 | `r` | Border radius | `r=8` |
 | `size` | Font size | `size=16` |
 | `bold` | Bold text | `bold` |
@@ -962,13 +1142,13 @@ Each page/tab/modal needs to generate two SVG files:
    - ID: Unique user identifier
    - Name: User display name
    - Actions: Edit and delete operations"
-  # bg=#F2F2F2 c=#333333 bold      // Header row
-    "ID"
-    "Name"
-    "Actions" colspan=2            // Merge 2 columns for actions
-  # bg=#FAFAFA                     // Data row: alternating color
-    "1"
-    "John Doe"
+  # bg=#F9FAFB c=#111827 bold      // Header row
+    ["ID"]
+    ["Name"]
+    ["Actions"] colspan=2            // Merge 2 columns for actions
+  # bg=#F9FAFB                     // Data row: alternating color
+    ["1"]
+    ["John Doe"]
     ["Edit"]                       // Each button in separate cell
     ["Delete"]
 ```
@@ -987,8 +1167,8 @@ Each page/tab/modal needs to generate two SVG files:
    - Example: `["Login"]` instead of `["Button"]`
 
 2. **Proper Visual Hierarchy**
-   - Primary buttons: Colored background (`bg=#1890FF c=#FFFFFF`)
-   - Secondary buttons: Border only (`bg=#FFFFFF b=#F2F2F2`)
+   - Primary buttons: Colored background (`bg=#3B82F6 c=#FFFFFF`)
+   - Secondary buttons: Border only (`bg=#FFFFFF b=#E5E7EB`)
    - Important elements should be larger/prominent
 
 3. **Appropriate Element Types**
@@ -1030,17 +1210,29 @@ Each page/tab/modal needs to generate two SVG files:
 | Field naming | Use common, user-friendly language; self-explanatory |
 | Auxiliary explanation | When field name cannot be self-explanatory, explain via Tooltip, etc. |
 
-### Color Standards
+### Color Standards (Tailwind CSS)
 
-| Purpose | Color | Usage |
-|---------|-------|-------|
-| Normal text | `#333333` | Labels, content text |
-| Secondary text | `#AAAAAA` | Placeholder, descriptions |
-| Borders/Lines | `#F2F2F2` | Dividers, borders |
-| Background | `#FFFFFF` | Page background |
-| Alternating row | `#FAFAFA` | Table alternating row background |
-| Primary elements | `#1890FF` | Primary buttons, links, selected state |
-| Warning/Error | `#D9001B` | Error messages, warnings |
+**All colors follow Tailwind CSS design system for modern, consistent UI.**
+
+| Purpose | Tailwind | Hex | Usage |
+|---------|----------|-----|-------|
+| Primary text | gray-900 | `#111827` | Labels, headings, content |
+| Secondary text | gray-500 | `#6B7280` | Descriptions, helper text |
+| Tertiary text | gray-400 | `#9CA3AF` | Placeholder, timestamps |
+| Page background | gray-50 | `#F9FAFB` | Page background |
+| Card background | white | `#FFFFFF` | Cards, panels |
+| Alternating row | gray-50 | `#F9FAFB` | Table alternating rows |
+| Borders/Lines | gray-200 | `#E5E7EB` | Dividers, borders |
+| Primary action | blue-500 | `#3B82F6` | Primary buttons, links |
+| Primary light | blue-50 | `#EFF6FF` | Hover, selected background |
+| Success | green-500 | `#22C55E` | Success states, positive |
+| Success light | green-50 | `#F0FDF4` | Success background |
+| Warning | amber-500 | `#F59E0B` | Warnings, attention |
+| Warning light | amber-50 | `#FFFBEB` | Warning background |
+| Error | red-500 | `#EF4444` | Errors, destructive |
+| Error light | red-50 | `#FEF2F2` | Error background |
+| Info | sky-500 | `#0EA5E9` | Information, tips |
+| Info light | sky-50 | `#F0F9FF` | Info background |
 
 ### Spacing Standards
 
@@ -1062,9 +1254,9 @@ Each page/tab/modal needs to generate two SVG files:
 
 ```solarwire
 !title="Page Title"
-!c=#333333        // Default text color
+!c=#111827        // gray-900: Default text color
 !size=13          // Default font size
-!bg=#F2F2F2       // Page background color
+!bg=#F9FAFB       // gray-50: Page background color
 !r=0              // Default border radius
 ```
 
@@ -1091,95 +1283,7 @@ Each page/tab/modal needs to generate two SVG files:
 | Tooltip | Describe directly in note | Simple text hint, no interaction |
 | Toast | Describe directly in note | Simple message, auto-dismiss |
 
-### Example: Modal Reference in Page Note
-
-```solarwire
-["Delete"] @(100,50) w=80 h=36 note="Delete button
-1. Click action
-   - Show delete confirmation modal (see 'Delete Confirmation Modal' wireframe)
-   - Execute delete on confirmation
-2. Success handling
-   - Display Toast: 'Deleted successfully'
-   - Refresh list data"
-```
-
-### Example: Separate Modal Wireframe
-
-```solarwire
-!title="Delete Confirmation Modal"
-!c=#333333
-!size=13
-!bg=#F2F2F2
-
-// Modal container
-[] @(0,0) w=400 h=200 bg=#FFFFFF
-
-// Modal title
-"Confirm Delete" @(160,20) size=16 bold
-
-// Modal content
-"Are you sure you want to delete this item? This action cannot be undone." @(20,70) c=#333333
-
-// Action buttons
-["Cancel"] @(100,140) w=80 h=36 bg=#FFFFFF b=#F2F2F2
-["Confirm"] @(220,140) w=80 h=36 bg=#D9001B c=#FFFFFF
-```
-
-### Example: Clean Login Form
-
-```solarwire
-!title="Login"
-!c=#333333
-!size=13
-!bg=#F2F2F2
-
-// Container
-[] @(0,0) w=400 h=600 bg=#FFFFFF
-
-// Header
-"Welcome Back" @(100,80) size=24 bold
-"Please sign in to continue" @(100,115) c=#AAAAAA
-
-// Form
-"Email" @(50,180)
-["Enter your email"] @(50,205) w=300 h=44 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA
-
-"Password" @(50,280)
-["Enter password"] @(50,305) w=300 h=44 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA
-
-["Remember me"] @(50,370) w=16 h=16 note="Remember me checkbox
-1. Behavior
-   - When checked: Stay logged in for 7 days
-   - Unchecked by default"
-"Remember me" @(74,372)
-
-["Sign In"] @(50,420) w=300 h=48 bg=#1890FF c=#FFFFFF size=16 note="Sign in button
-1. Click action
-   - Validate email and password
-2. Success handling
-   - Save login state
-   - Redirect to homepage
-3. Failure handling
-   - Display error: 'Invalid credentials'
-4. Disabled conditions
-   - Disabled when email or password is empty"
-
-"Don't have an account?" @(115,500) c=#AAAAAA
-"Sign up" @(270,500) c=#1890FF note="Sign up link
-1. Click action
-   - Navigate to registration page"
-```
-
-### Common Mistakes to Avoid
-
-| Mistake | Wrong | Correct |
-|---------|-------|---------|
-| Generic labels | `["Button"]` | `["Sign In"]` |
-| Missing placeholder | `[""]` | `["Enter email..."]` |
-| Wrong element type | `"Submit"` (text) | `["Submit"]` (button) |
-| Text without quotes | `((Avatar))` | `(("Avatar"))` |
-| Overcrowding | Elements too close | 10px spacing |
-| Wrong colors | `bg=#3498db` | `bg=#1890FF` |
+> 📖 See EXAMPLES.md: "Modal Examples" for complete modal wireframe examples
 
 ---
 
@@ -1309,8 +1413,9 @@ Each page/tab/modal needs to generate two SVG files:
 10. **Separate Modals/States/Tabs** - Each independent view in separate code block; all modals must have separate wireframe
 11. **Table Row Must Be Inside Table** - Row element `#` CANNOT exist independently, MUST be inside table container `##`
 12. **Table Child Element Restrictions** - Rows and cells CANNOT have coordinates `@(x,y)`, width `w`, height `h`, or border `b`; only support style attributes (`bg`, `c`, `size`, `bold`, `italic`, `align`, `colspan`, `rowspan`)
-13. **Container Rectangle Required** - First element of each page is white background container
-14. **Generate Dual SVG Versions** - With notes and without notes versions
-15. **Color Standards** - Use unified colors: #333333 (text), #AAAAAA (secondary), #F2F2F2 (border), #FFFFFF (bg), #FAFAFA (alternating row), #1890FF (primary), #D9001B (error)
-16. **Font Standards** - Font size 13px, line height 22px
-17. **i18n Only When Confirmed** - Add multi-language support ONLY when user explicitly confirms; if not confirmed, absolutely NO i18n information; if confirmed, ALL meaningful elements MUST include i18n translations using full language names (English, 中文, 日本語)
+13. **Table Cell Content Format** - Use `[""]` (rectangle) for cell content to center text; avoid `""` (plain text) which sticks to top-left corner
+14. **Container Rectangle Required** - First element of each page is white background container
+15. **Generate Dual SVG Versions** - With notes and without notes versions
+16. **Color Standards (Tailwind CSS)** - Use unified colors: #111827 (text), #6B7280 (secondary), #E5E7EB (border), #FFFFFF (bg), #F9FAFB (alternating row), #3B82F6 (primary), #EF4444 (error)
+17. **Font Standards** - Font size 13px, line height 22px
+18. **i18n Only When Confirmed** - Add multi-language support ONLY when user explicitly confirms; if not confirmed, absolutely NO i18n information; if confirmed, ALL meaningful elements MUST include i18n translations using full language names (English, 中文, 日本語)

@@ -7,6 +7,12 @@ description: "Reverse engineers frontend and backend code into complete PRD docu
 
 This skill analyzes existing frontend and backend code to generate comprehensive PRD documents with SolarWire wireframes.
 
+## Configuration
+
+- **Output Directory**: `.solarwire` (modify here if needed)
+
+---
+
 ## Overview
 
 **Core Capability**: Read and understand the entire codebase, then reverse engineer into structured PRD documents.
@@ -206,34 +212,50 @@ Follow the exact PRD structure from `solarwire-prd` skill:
 [Inferred from main features]
 
 ### 1.4 User Stories
-[Generated from user interactions found in code]
+
+| ID | User Story | Acceptance Criteria | Priority |
+|----|------------|---------------------|----------|
+| US-001 | As a [role], I want to [action], so that [benefit] | - Given [context], when [action], then [result] | P0 |
 
 ---
 
 ## 2. Feature Scope
 
 ### 2.1 Feature List
-[Generated from pages/components and API endpoints]
+| Module | Feature | Priority | Description |
+|--------|---------|----------|-------------|
+| [Module 1] | [Feature 1] | P0 | [Description] |
 
 ### 2.2 Feature Boundary
-[Inferred from what is implemented vs not]
+- Included: [List included features]
+- Not Included: [List excluded features]
 
 ---
 
 ## 3. Business Flow
 
 ### 3.1 Core Business Flowchart
-[Generated from user interaction flows]
+```mermaid
+flowchart TD
+    A[Start] --> B[Step 1]
+```
 
 ### 3.2 Interaction Sequence Diagram
-[Generated from frontend-backend interactions]
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend
+```
 
 ---
 
 ## 4. Page Design
 
 ### 4.1 Page List
-[Generated from frontend routes/pages]
+| Page Name | Page Type | Description |
+|-----------|-----------|-------------|
+| [Page 1] | Main Page | [Description] |
 
 ---
 
@@ -245,7 +267,16 @@ Follow the exact PRD structure from `solarwire-prd` skill:
 
 ## 6. Non-functional Requirements
 
-[Inferred from codebase patterns]
+### 6.1 Performance Requirements
+- Page load time: < 2 seconds
+- API response time: < 500ms
+
+### 6.2 Security Requirements
+- [List security requirements]
+
+### 6.3 Compatibility Requirements
+- Browsers: Chrome 90+, Safari 14+
+- Mobile: iOS 14+, Android 10+
 
 ---
 
@@ -279,9 +310,17 @@ Follow the exact PRD structure from `solarwire-prd` skill:
 └── ...                                  # More requirement folders
 ```
 
+**Naming Convention:**
+- Root directory: `.solarwire` (at project root)
+- Requirement folder: Based on the requirement/project name
+- PRD file: Always named `solarwire-prd.md`
+- SVG files: Based on the `!title` attribute in each solarwire code block
+
 ---
 
 ## SVG Generation
+
+This skill is **fully portable**. All dependencies are bundled in the `lib` directory.
 
 After generating the PRD markdown file, run the SVG generation script:
 
@@ -296,13 +335,27 @@ node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
   - `[page-name]-without-notes.svg` - Clean wireframe only
 - Save files to the same directory as the markdown file
 
+**Updating Dependencies:**
+
+If you need to update the bundled dependencies:
+
+```bash
+# Build the latest parser and renderer
+cd SolarWire/packages/core/parser && npm run build
+cd SolarWire/packages/core/renderer-svg && npm run build
+
+# Copy to skill lib directory
+cp -r SolarWire/packages/core/parser/dist/* solarwire-code-to-prd/lib/parser/
+cp -r SolarWire/packages/core/renderer-svg/dist/* solarwire-code-to-prd/lib/renderer-svg/
+```
+
 ---
 
 ## SolarWire Wireframe Specifications
 
-**CRITICAL: Follow all SolarWire syntax rules from `solarwire-prd` skill**
+### Core Principles (Must Strictly Follow)
 
-### Core Syntax Rules
+#### 1. Syntax Rules
 
 ```
 1. All elements must have coordinates @(x,y)
@@ -311,18 +364,44 @@ node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
 4. Attribute order: Content → Coordinates → Size → Other attributes → note
 ```
 
-### Element Selection Principles
+**Correct Example:**
+```solarwire
+["Login"] @(100,50) w=100 h=40 bg=#3B82F6 c=#FFFFFF note="Submit login form"
+"Username" @(100,100)
+(("Avatar")) @(100,150) w=40
+```
+
+**Incorrect Example:**
+```solarwire
+["Login"]                    // ❌ No coordinates
+["Login"] [w=100 h=40]       // ❌ Attributes in brackets
+["Login"] @(100,50) w=100    // ❌ Missing height
+((Avatar)) @(100,50) w=40    // ❌ Text without double quotes
+```
+
+**⚠️ IMPORTANT: All text content MUST be wrapped in double quotes `""`**
+
+| Element | Correct | Incorrect |
+|---------|---------|-----------|
+| Rectangle | `["Button"]` | `[Button]` |
+| Circle | `(("Avatar"))` | `((Avatar))` |
+| Rounded | `("Card")` | `(Card)` |
+| Plain Text | `"Label"` | `Label` |
+
+#### 2. Element Selection Principles
+
+**Choose appropriate element types based on actual UI components:**
 
 | Scenario | Recommended Element | Example |
 |----------|---------------------|---------|
-| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#1890FF c=#FFFFFF` |
-| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#FFFFFF b=#F2F2F2` |
+| Primary Buttons | Rectangle `[]` with background color | `["Login"] @(100,50) w=100 h=40 bg=#3B82F6 c=#FFFFFF` |
+| Secondary Buttons | Rectangle `[]` with border | `["Cancel"] @(220,50) w=80 h=40 bg=#FFFFFF b=#E5E7EB` |
 | Cards/Containers | Rounded Rectangle `()` | `("User Info Card") @(100,50) w=300 h=200` |
-| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#F2F2F2 c=#AAAAAA` |
-| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#F2F2F2` |
+| Avatars | Circle with placeholder | `(("A")) @(100,50) w=40 bg=#E5E7EB c=#6B7280` |
+| Icon Buttons | Circle with icon text | `(("?")) @(100,50) w=32 h=32 bg=#E5E7EB` |
 | Labels/Text | Plain Text `""` | `"Username" @(100,50)` |
-| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA` |
-| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#F2F2F2` |
+| Input Fields | Rectangle with placeholder | `["Enter username..."] @(100,50) w=280 h=40 bg=#FFFFFF b=#E5E7EB c=#9CA3AF` |
+| Dividers | Line `--` | `-- @(0,100)->(400,100) b=#E5E7EB` |
 | Data Tables | Table `##` | `## @(100,50) w=500 border=1` |
 
 **Common Mistakes to Avoid:**
@@ -332,12 +411,58 @@ node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
 - ❌ Using rectangle `[]` for plain labels (use `"Label"` instead)
 - ❌ Overcrowding elements - use 10px spacing
 
-### Element Mapping
+#### 3. Page Organization Rules
+
+**Each SolarWire code block handles only one independent view:**
+
+| Situation | Handling Method | Example |
+|-----------|-----------------|---------|
+| Modals/Dialogs | Separate SolarWire fragment | `## Login Failed Modal` + independent code block |
+| Different Page States | Separate fragment for each state | `## Login Page - Loading State`, `## Login Page - Error State` |
+| Tab Switching | Separate fragment for each tab | `## Settings Page - Basic Info Tab`, `## Settings Page - Security Tab` |
+
+**Do not mix multiple view states in one code block.**
+
+#### 4. Container Rectangle Requirements
+
+**Every page must have a container rectangle:**
+
+```solarwire
+!title="Page Name"
+!c=#111827
+!size=13
+!bg=#F9FAFB
+!r=0
+
+// Container Rectangle - Represents screen/device boundary
+[] @(0,0) w=375 h=812 bg=#FFFFFF
+
+// Page content...
+```
+
+**Container Rectangle Specifications:**
+- Place at the beginning of the code block
+- Use `[]` rectangle (don't display text content)
+- `bg=#FFFFFF` white background
+- Dimensions by scenario:
+  - Mobile: `w=375 h=812` (iPhone X) or `w=390 h=844` (iPhone 12+)
+  - Web: `w=1440 h=900` or as needed
+  - Admin Dashboard: `w=1920 h=1080`
+
+**Container Size Principle: Container must contain all child elements**
+
+**Forbidden: Child elements extending beyond parent container boundaries.**
+
+---
+
+## Element Mapping from Code
+
+### Frontend Code to SolarWire Element
 
 | Frontend Code | SolarWire Element |
 |---------------|-------------------|
 | `<button>Submit</button>` | `["Submit"] @(x,y) w=100 h=40` |
-| `<input type="text" placeholder="Enter...">` | `["Enter..."] @(x,y) w=200 h=40 c=#AAAAAA` |
+| `<input type="text" placeholder="Enter...">` | `["Enter..."] @(x,y) w=200 h=40 c=#9CA3AF` |
 | `<input type="password">` | `["••••••"] @(x,y) w=200 h=40` |
 | `<input type="checkbox">` | `[☑ "Label"] @(x,y)` |
 | `<input type="radio">` | `[○ "Label"] @(x,y)` |
@@ -345,13 +470,13 @@ node generate-svg.js .solarwire/[requirement-name]/solarwire-prd.md
 | `<textarea>` | `["Multi-line text..."] @(x,y) w=300 h=100` |
 | `<h1>Title</h1>` | `"Title" @(x,y) size=24 bold` |
 | `<p>Text</p>` | `"Text" @(x,y)` |
-| `<a href="...">Link</a>` | `"Link" @(x,y) c=#1890FF` |
-| `<img alt="Logo">` | `[🖼 "Logo"] @(x,y) w=100 h=100` |
+| `<a href="...">Link</a>` | `"Link" @(x,y) c=#3B82F6` |
+| `<img alt="Logo">` | `[?"Logo"] @(x,y) w=100 h=100` |
 | `<table>` | `## @(x,y) w=500 border=1` |
-| `<hr>` | `-- @(x1,y1)->(x2,y2) b=#F2F2F2` |
+| `<hr>` | `-- @(x1,y1)->(x2,y2) b=#E5E7EB` |
 | `<div class="card">` | `("Card Title") @(x,y) w=300 h=200` |
-| Timeline/Stepper | Convert to table or list (see below) |
-| Progress bar | Show as text with percentage `"Progress: 60%"` |
+| Timeline/Stepper | Convert to table or list |
+| Progress bar | Show as text with percentage |
 
 ---
 
@@ -389,7 +514,7 @@ Frontend code often:
 **❌ Bad (Empty/Placeholder):**
 ```solarwire
 ## @(100,50) w=500 border=1
-  # bg=#F2F2F2
+  # bg=#F9FAFB
     "ID"
     "Name"
     "Status"
@@ -408,11 +533,11 @@ Frontend code often:
    - ID: Unique user identifier
    - Name: User display name
    - Status: 1=Active, 0=Disabled"
-  # bg=#F2F2F2 bold
+  # bg=#F9FAFB bold
     "ID"
     "Name"
     "Status"
-  # bg=#FAFAFA
+  # bg=#F9FAFA
     "USR-001"
     "John Doe"
     "Active"
@@ -420,29 +545,17 @@ Frontend code often:
     "USR-002"
     "张三"
     "Active"
-  # bg=#FAFAFA
+  # bg=#EFF6FF
     "USR-003"
     "田中太郎"
     "Disabled"
-```
-
-### Form Mock Data Example
-
-**❌ Bad (Empty):**
-```solarwire
-[""] @(100,50) w=200 h=40
-```
-
-**✅ Good (With Placeholder):**
-```solarwire
-["Enter your email..."] @(100,50) w=200 h=40 c=#AAAAAA
 ```
 
 ---
 
 ## Complex UI Pattern Conversion
 
-### Timeline/Stepper → List (Preferred)
+### Timeline/Stepper → Table or List
 
 **Frontend Timeline/Stepper code:**
 ```jsx
@@ -462,7 +575,7 @@ Frontend code often:
    - Step: Approval stage name
    - Status: Current status
    - Time: Action timestamp"
-  # bg=#F2F2F2 bold
+  # bg=#F9FAFB bold
     "Step"
     "Status"
     "Time"
@@ -488,140 +601,10 @@ Frontend code often:
 "   ✓ Completed - 2024-01-15 10:00" @(100,100) c=#52C41A
 
 "2. Under Review" @(100,130)
-"   ● In Progress - 2024-01-15 14:30" @(100,150) c=#1890FF
+"   ● In Progress - 2024-01-15 14:30" @(100,150) c=#3B82F6
 
 "3. Approved" @(100,180)
-"   ○ Pending" @(100,200) c=#AAAAAA
-```
-
-### Complex Timeline with Notes and Logs
-
-**Frontend Timeline with rich data:**
-```jsx
-<Timeline>
-  <Timeline.Item color="green">
-    <p>Submitted by John</p>
-    <p>2024-01-15 10:00</p>
-    <p>Note: Initial submission</p>
-  </Timeline.Item>
-  <Timeline.Item color="blue">
-    <p>Under Review by Manager</p>
-    <p>2024-01-15 14:30</p>
-    <p>Note: Need more documents</p>
-    <p>Attachment: doc.pdf</p>
-  </Timeline.Item>
-  <Timeline.Item>
-    <p>Approved</p>
-    <p>Pending</p>
-  </Timeline.Item>
-</Timeline>
-```
-
-**Convert to Detailed List:**
-```solarwire
-"Approval Timeline" @(100,50) bold
-
-"1. Submitted" @(100,80) c=#52C41A
-"   By: John Doe" @(100,100)
-"   Time: 2024-01-15 10:00" @(100,120)
-"   Note: Initial submission with all required documents" @(100,140) c=#666666
-
-"2. Under Review" @(100,180) c=#1890FF
-"   By: Manager Wang" @(100,200)
-"   Time: 2024-01-15 14:30" @(100,220)
-"   Note: Additional documents required for verification" @(100,240) c=#666666
-"   Attachment: financial_report_2024.pdf" @(100,260) c=#1890FF
-
-"3. Approved" @(100,300) c=#AAAAAA
-"   Status: Pending" @(100,320)
-"   Estimated: 2024-01-16" @(100,340) c=#AAAAAA
-```
-
-**Or Convert to Detailed Table:**
-```solarwire
-## @(100,50) w=600 border=1 note="Approval timeline with details
-1. Data source
-   - Approval history from Workflow module
-   - User operation logs from Audit module
-2. Field descriptions
-   - Step: Approval stage name
-   - Operator: User who performed the action
-   - Time: Action timestamp
-   - Note: Additional comments or remarks
-   - Attachment: Related documents or files"
-  # bg=#F2F2F2 bold
-    "Step"
-    "Operator"
-    "Time"
-    "Note"
-    "Attachment"
-  # bg=#E6FFEA
-    "Submitted"
-    "John Doe"
-    "2024-01-15 10:00"
-    "Initial submission"
-    "-"
-  # bg=#E6F7FF
-    "Under Review"
-    "Manager Wang"
-    "2024-01-15 14:30"
-    "Need more documents"
-    "financial_report.pdf"
-  #
-    "Approved"
-    "-"
-    "Pending"
-    "-"
-    "-"
-```
-
-### Operation Log Timeline
-
-**Frontend Operation Log:**
-```jsx
-<LogList>
-  <LogItem action="create" user="John" time="2024-01-15 10:00">
-    Created new request #REQ-001
-  </LogItem>
-  <LogItem action="edit" user="John" time="2024-01-15 11:00">
-    Updated description
-  </LogItem>
-  <LogItem action="submit" user="John" time="2024-01-15 14:00">
-    Submitted for approval
-  </LogItem>
-</LogList>
-```
-
-**Convert to Operation Log Table:**
-```solarwire
-## @(100,50) w=700 border=1 note="Operation log
-1. Data source
-   - Operation logs from Audit module
-2. Field descriptions
-   - Time: Operation timestamp
-   - User: User who performed the operation
-   - Action: Operation type (create/edit/delete/submit/approve/reject)
-   - Details: Operation description"
-  # bg=#F2F2F2 bold
-    "Time"
-    "User"
-    "Action"
-    "Details"
-  # bg=#FAFAFA
-    "2024-01-15 10:00"
-    "John Doe"
-    "Create"
-    "Created new request #REQ-001"
-  #
-    "2024-01-15 11:00"
-    "John Doe"
-    "Edit"
-    "Updated description field"
-  # bg=#FAFAFA
-    "2024-01-15 14:00"
-    "John Doe"
-    "Submit"
-    "Submitted for approval to Manager Wang"
+"   ○ Pending" @(100,200) c=#9CA3AF
 ```
 
 ### Progress Bar → Text with Percentage
@@ -634,7 +617,7 @@ Frontend code often:
 **Convert to Text:**
 ```solarwire
 "Upload Progress: 60%" @(100,50)
-["████████████░░░░░░░░"] @(100,70) w=200 h=10 bg=#1890FF
+["████████████░░░░░░░░"] @(100,70) w=200 h=10 bg=#3B82F6
 ```
 
 ### Loading State → Placeholder with Note
@@ -646,31 +629,12 @@ Frontend code often:
 
 **Convert to Placeholder with Note:**
 ```solarwire
-["Loading data..."] @(100,50) w=200 h=40 c=#AAAAAA note="Loading state
+["Loading data..."] @(100,50) w=200 h=40 c=#9CA3AF note="Loading state
 1. Display condition
    - Show while fetching data from backend
 2. Behavior
    - Auto-hide when data loaded
    - Show actual data list on success"
-```
-
-### Component Reference → Note with Description
-
-**Frontend Component:**
-```jsx
-<UserCard user={selectedUser} />
-```
-
-**Convert to Card with Note:**
-```solarwire
-("User Card") @(100,50) w=300 h=150 note="User information card
-1. Data source
-   - Selected user data from User Management module
-2. Display fields
-   - Avatar: User profile image
-   - Name: User display name
-   - Email: User email address
-   - Department: User department name"
 ```
 
 ---
@@ -684,7 +648,7 @@ Frontend code often:
 | Ant Design | `<Table columns={columns} dataSource={data} />` |
 | Element UI | `<el-table :data="tableData">` |
 | AG Grid | `<ag-grid :rowData="gridData">` |
-| Material UI | `<el-table :data="tableData">` |
+| Material UI | `<Table>...</Table>` |
 
 ### Detection Rules
 
@@ -721,45 +685,39 @@ When analyzing frontend code, infer backend data requirements:
 
 ---
 
-## Incremental Analysis Support
+## Note Writing Guidelines
 
-When analyzing code, infer reasonable positions:
-
-```
-1. Container Size
-   - Mobile: w=375 h=812
-   - Web: w=1440 h=900
-   - Admin: w=1920 h=1080
-
-2. Element Spacing
-   - Vertical: 10px between elements
-   - Horizontal: 10px between related elements
-   - Form groups: 50-60px vertical spacing
-
-3. Element Sizes
-   - Buttons: h=40-48px, w=80-300px
-   - Inputs: h=40-44px, w=200-400px
-   - Labels: h=22px (line height)
-   - Tables: row h=40-48px
-
-4. Colors
-   - Primary: #1890FF
-   - Error: #D9001B
-   - Success: #52C41A
-   - Warning: #FAAD14
-   - Text: #333333
-   - Secondary: #AAAAAA
-   - Border: #F2F2F2
-   - Background: #FFFFFF
-```
-
-### Note Generation Rules
-
-**Core Principle: notes describe functional behavior and business logic, not visual details or technical implementation**
+**Core Principle: Notes describe functional behavior and business logic, not visual details or technical implementation**
 
 ---
 
-#### 1. When to Write Notes
+##### 0. When to Read EXAMPLES.md
+
+**📖 Read `EXAMPLES.md` when you encounter:**
+
+| Scenario | What to Look Up |
+|----------|-----------------|
+| Writing complex button notes | "Button with Permission Control", "Batch Operations", "Form Submission" |
+| Writing input field notes | "Input Field with Validation", "Search Bar with Filters", "Data Linkage" |
+| Writing data table notes | "Data Table", "Table with Actions Column" |
+| Writing statistics notes | "Statistics Card", "Calculated Field" |
+| Writing navigation notes | "Pagination Component" |
+| Handling special states | "Loading States", "Empty State Handling" |
+| Unsure about note quality | "Common Mistakes" section |
+
+**📖 EXAMPLES.md contains:**
+- Complete note examples for each element type
+- Good vs Bad comparisons
+- All edge cases and error handling examples
+
+**⚠️ Important:**
+- SKILL.md contains the **rules** (what must be included)
+- EXAMPLES.md contains the **examples** (how to write it)
+- Always follow rules in SKILL.md, use EXAMPLES.md for reference
+
+---
+
+### 1. When to Write Notes
 
 **Write notes for:**
 - Interactive elements (buttons, links, etc.)
@@ -779,9 +737,7 @@ When analyzing code, infer reasonable positions:
 - Page selector
 - Number stepper/incrementer
 
----
-
-#### 2. Note Structure Format
+### 2. Note Structure Format
 
 **Format Rules:**
 ```
@@ -806,9 +762,7 @@ Third level: -- or -
    - Lock account for 15 minutes after 5 consecutive errors"
 ```
 
----
-
-#### 3. First Line: Element Definition
+### 3. First Line: Element Definition
 
 **The first line of a note MUST define what this element is (functional description, NOT element type).**
 
@@ -819,9 +773,7 @@ Third level: -- or -
 | `User data table` | `[Data Table]` |
 | `Submit form button` | `[Primary Button]` |
 
----
-
-#### 4. Content Requirements by Element Type
+### 4. Content Requirements by Element Type
 
 **Interactive/Operational Elements:**
 
@@ -830,6 +782,22 @@ Must include:
 - Success/failure handling
 - Disabled conditions
 - Special handling (debounce, throttle, etc.)
+
+**Example:**
+```solarwire
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+   - Submit login request if validation passes
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid username or password'
+   - Clear password field
+4. Disabled conditions
+   - Disabled when username or password is empty"
+```
 
 **Elements with Logic:**
 
@@ -841,14 +809,141 @@ Must include:
 
 **Data Display Elements:**
 
-Must include:
-- **Data source**: Module, page, or operation (NOT API/technical details); include formula if calculated
-- **Display fields and rules**: Field meanings, formats, special handling
-- **Sorting rules**: Default sort, sortable fields
+Must include ALL of the following sections:
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| **1. Data source** | ✅ Required | Where data comes from, filtering conditions, sorting rules |
+| **2. Display rules** | ✅ Required | Field meanings, formats, empty value handling |
+| **3. Business rules** | Optional | Status mappings, conditional display, calculations |
+| **4. Sorting/Filtering** | Optional | If applicable, describe sorting and filtering behavior |
+
+> 📖 See EXAMPLES.md: "Data Table", "Table with Actions Column", "Statistics Card", "Status Badge"
+
+**Example:**
+```solarwire
+## @(100,50) w=500 border=1 note="User list table
+1. Data source
+   - User list data from User Management module
+   - Default sort: creation time descending
+2. Field descriptions
+   - ID: Unique user identifier
+   - Username: Display nickname, show 'Not set' if empty
+   - Status: 1='Active', 0='Disabled', disabled shown in red
+   - Created: Format as YYYY-MM-DD HH:mm
+3. Sorting rules
+   - Support sorting by username and created time"
+```
 
 ---
 
-#### 5. Content Forbidden in Notes
+**Input Fields:**
+
+Must include:
+- Input rules (format, length, allowed characters)
+- Validation (required, format check, error messages)
+- Business rules (unique check, duplicate check)
+
+> 📖 See EXAMPLES.md: "Input Field with Validation", "Search Bar with Filters", "Data Linkage"
+
+---
+
+**Dropdowns/Selects:**
+
+Must include:
+- Data source (options source, static or dynamic)
+- Display rules (default, selected, options list)
+- Business rules (required, default value, dependencies)
+
+> 📖 See EXAMPLES.md: "Dropdown Options", "Data Linkage (Cascading Select)"
+
+---
+
+**Empty State Handling:**
+
+| Data Type | Empty Display | Example |
+|-----------|---------------|---------|
+| Text | '-' or 'Not set' | "Contact: -" |
+| Number | '0' or '--' | "Amount: ¥ --" |
+| Date | '-' or 'Not specified' | "Last login: -" |
+| Status | Default status | "Status: Pending" |
+| List/Table | Empty state message | "No data available" |
+
+> 📖 See EXAMPLES.md: "Empty State Handling", "Loading States"
+
+---
+
+**Tooltip/Toast:**
+
+Describe directly in note, no separate wireframe needed.
+
+> 📖 See EXAMPLES.md: "Tooltip/Toast Examples"
+
+### 5.5 Common Mistakes in Note Writing
+
+> 📖 For detailed examples, see EXAMPLES.md "Common Mistakes" section
+
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Missing Permission Control | No visibility/disabled rules | Add who can see/use the element |
+| Incomplete Error Handling | Only generic "show error" | List all error types: validation, network, server, timeout, permission |
+| Missing Data Source Details | Just "User data" | Add module, filters, sort, permission |
+| Wrong First Line | "[Primary Button]" | Use functional description: "Login button" |
+| Visual Details in Note | "Blue background, 14px font" | Remove, these are shown in wireframe |
+
+---
+
+### 5.6 Data Format Specifications
+
+**When describing data display, always specify the format rules:**
+
+**Date/Time Formats:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Date only | YYYY-MM-DD | 2024-01-25 |
+| Date with time | YYYY-MM-DD HH:mm | 2024-01-25 14:30 |
+| Full datetime | YYYY-MM-DD HH:mm:ss | 2024-01-25 14:30:45 |
+| Relative time | Within X days show relative | "3 days ago", "Just now" |
+| Time only | HH:mm | 14:30 |
+
+**Number Formats:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Integer | With thousand separators | 1,234 |
+| Decimal | 2 decimal places | 1,234.56 |
+| Currency | With symbol and separators | ¥1,234.56 |
+| Percentage | With % symbol | 68.5% |
+| Large numbers | Abbreviated | 1.23万, 1.5M |
+
+**Text Formats:**
+
+| Type | Handling | Example |
+|------|----------|---------|
+| Long text | Truncate with ellipsis | "Long text content..." |
+| Phone | Mask sensitive digits | 138****8000 |
+| Email | Show full or truncate | zhang@example.com |
+| ID | Partial mask | 110***********1234 |
+
+**Status/Tag Display:**
+
+Always describe status values with their visual representation:
+
+```solarwire
+"跟进中" @(100,50) note="Lead status
+1. Display rules
+   - Status values with visual style:
+     - 待分配: Gray tag (#D1D5DB background)
+     - 跟进中: Blue tag (#3B82F6 background)
+     - 已转化: Green tag (#22C55E background)
+     - 无效: Red tag (#EF4444 background)
+   - All tags: White text, rounded corners, 4px padding"
+```
+
+---
+
+### 5.7 Content Forbidden in Notes
 
 **NEVER include:**
 
@@ -870,7 +965,69 @@ Must include:
 
 ---
 
-#### 6. Generate Notes from Code Analysis
+### 5.5 Common Mistakes in Note Writing
+
+> 📖 For detailed examples, see EXAMPLES.md "Common Mistakes" section
+
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Missing Permission Control | No visibility/disabled rules | Add who can see/use the element |
+| Incomplete Error Handling | Only generic "show error" | List all error types: validation, network, server, timeout, permission |
+| Missing Data Source Details | Just "User data" | Add module, filters, sort, permission |
+| Wrong First Line | "[Primary Button]" | Use functional description: "Login button" |
+| Visual Details in Note | "Blue background, 14px font" | Remove, these are shown in wireframe |
+
+---
+
+### 5.6 Data Format Specifications
+
+**When describing data display, always specify the format rules:**
+
+**Date/Time Formats:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Date only | YYYY-MM-DD | 2024-01-25 |
+| Date with time | YYYY-MM-DD HH:mm | 2024-01-25 14:30 |
+| Full datetime | YYYY-MM-DD HH:mm:ss | 2024-01-25 14:30:45 |
+| Relative time | Within X days show relative | "3 days ago", "Just now" |
+| Time only | HH:mm | 14:30 |
+
+**Number Formats:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Integer | With thousand separators | 1,234 |
+| Decimal | 2 decimal places | 1,234.56 |
+| Currency | With symbol and separators | ¥1,234.56 |
+| Percentage | With % symbol | 68.5% |
+| Large numbers | Abbreviated | 1.23万, 1.5M |
+
+**Text Formats:**
+
+| Type | Handling | Example |
+|------|----------|---------|
+| Long text | Truncate with ellipsis | "Long text content..." |
+| Phone | Mask sensitive digits | 138****8000 |
+| Email | Show full or truncate | zhang@example.com |
+| ID | Partial mask | 110***********1234 |
+
+**Status/Tag Display:**
+
+Always describe status values with their visual representation:
+
+```solarwire
+"跟进中" @(100,50) note="Lead status
+1. Display rules
+   - Status values with visual style:
+     - 待分配: Gray tag (#D1D5DB background)
+     - 跟进中: Blue tag (#3B82F6 background)
+     - 已转化: Green tag (#22C55E background)
+     - 无效: Red tag (#EF4444 background)
+   - All tags: White text, rounded corners, 4px padding"
+```
+
+### 6. Generate Notes from Code Analysis
 
 | Code Pattern | Note Content |
 |--------------|--------------|
@@ -881,32 +1038,373 @@ Must include:
 | `errorMessage` state | "Error handling - Display: [message]" |
 | API call in handler | "API - Call [endpoint] on [action]" |
 
+### 7. Examples: Good vs Bad Notes
+
+**❌ Bad Note (Visual details + element type label):**
+```solarwire
+["Login"] @(100,50) w=100 h=40 note="[Primary Button]
+- Blue background, white text
+- Border radius 8px
+- API: POST /api/auth/login"
+```
+
+**✅ Good Note (Functional behavior):**
+```solarwire
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid credentials'
+4. Disabled conditions
+   - Disabled when username or password is empty"
+```
+
 ---
 
 ## Multi-language (i18n) Support
 
 **⚠️ CRITICAL: Only add i18n when user explicitly confirms multi-language support is needed**
 
-When i18n is confirmed, use this format:
+**If user does NOT need multi-language:**
+- Do NOT add any i18n information to any element
+- Write notes in the user's primary language only
 
-```markdown
-**Page Name:** `Login`
+**If user confirms multi-language support:**
+- ALL meaningful text elements MUST include i18n translations
+- Use full language names (e.g., "English", "中文", "日本語") instead of language codes
+- Default language is based on user's primary language
 
-**i18n:**
-- `login.title`: "Welcome Back"
-- `login.email`: "Email"
-- `login.password`: "Password"
-- `login.remember`: "Remember me"
-- `login.submit`: "Sign In"
-```
-
-In wireframe, use i18n keys:
+### i18n Format for Single Text Element
 
 ```solarwire
-"{login.title}" @(600,200) size=24 bold
-"{login.email}" @(520,320)
-["{login.email.placeholder}"] @(520,345) w=400 h=44
+["Login"] @(100,50) w=100 h=40 note="Login button
+1. Click action
+   - Validate username and password
+2. i18n: English=Login, 中文=登录, 日本語=ログイン"
 ```
+
+**Format:** `i18n: Language1=Text1, Language2=Text2, Language3=Text3`
+
+### i18n Format for Table with Multiple Fields
+
+```solarwire
+## @(100,50) w=600 border=1 note="User list table
+1. Data source
+   - User list data from User Management module
+2. Fields (i18n: English/中文/日本語)
+   - ID: Unique user identifier [ID/ID/ID]
+   - Name: User display name [Name/用户名/ユーザー名]
+   - Status: 1=Active, 0=Disabled [Status/状态/ステータス]
+     - Values: Active/正常/有効, Disabled/禁用/無効
+   - Created: Account creation time [Created/创建时间/作成日時]
+   - Actions: View and edit operations [Actions/操作/操作]
+3. Buttons (i18n: English/中文/日本語)
+   - View [View/查看/表示]
+   - Edit [Edit/编辑/編集]
+   - Delete [Delete/删除/削除]"
+```
+
+### i18n Format for Dropdown Options
+
+```solarwire
+["Select status"] @(100,50) w=200 h=36 note="Status dropdown
+1. Options (i18n: English/中文/日本語)
+   - All [All/全部/すべて]
+   - Active [Active/正常/有効]
+   - Disabled [Disabled/禁用/無効]
+2. Default: All"
+```
+
+---
+
+## Syntax Quick Reference
+
+### Document-level Declarations
+
+```solarwire
+!title="Page Title"
+!c=#111827        // gray-900: Default text color
+!size=13          // Default font size
+!bg=#F9FAFB       // gray-50: Page background color
+!r=0              // Default border radius
+```
+
+### Basic Elements
+
+| Symbol | Usage | Example |
+|--------|-------|---------|
+| `[]` | Button, input field, container | `["Confirm"] @(100,50) w=80 h=36` |
+| `()` | Card, rounded container | `("Tip Card") @(100,50) w=200 h=100` |
+| `(())` | Avatar, circular icon | `(("Avatar")) @(100,50) w=40` |
+| `""` | Plain text, label | `"Username" @(100,50)` |
+| `[?]` | Icon placeholder | `[?"Search"] @(100,50) w=32 h=32` |
+| `<url>` | Real image | `<https://example.com/logo.png> @(100,50) w=40` |
+| `--` | Divider line | `-- @(0,100)->(400,100)` |
+| `##` | Table container | `## @(100,50) w=500 border=1` |
+| `#` | Table row (MUST be inside `##`) | `  # bg=#F9FAFB` |
+
+### Table Syntax (Indentation Required)
+
+```solarwire
+## @(x,y) w=width border=1 note="Data table
+1. Data source
+   - Data from relevant module
+2. Field descriptions
+   - Column 1: Description
+   - Column 2: Description"
+  # bg=#F2F2F2                  // Header row (indented 2 spaces)
+    "Column 1"                  // Cell (indented 4 spaces)
+    "Column 2"
+    "Column 3"
+  #                             // Data row (indented 2 spaces)
+    "Data 1"                    // Cell (indented 4 spaces)
+    "Data 2"
+    "Data 3"
+```
+
+**⚠️ Indentation Rules:**
+- Table `##` - No indentation
+- Row `#` - 2 spaces indentation
+- Cell content - 4 spaces indentation
+
+**⚠️ CRITICAL: Table Row Must Be Inside Table**
+- Row element `#` **CANNOT exist independently** - it MUST be inside a table container `##`
+- A row without a parent table is **invalid syntax**
+
+**⚠️ Table Child Element Restrictions:**
+- Row `#` and cells **CANNOT have coordinates** `@(x,y)` - positions are determined by table structure
+- Row `#` and cells **CANNOT have width/height** `w` `h` - sizes are determined by table container
+- Row `#` and cells **CANNOT have border** `b` or `border` - border is set on table container `##`
+- Only supported attributes for rows: `bg`, `c`, `size`, `bold`, `italic`, `align`
+- Only supported attributes for cells: `bg`, `c`, `size`, `bold`, `italic`, `align`, `colspan`, `rowspan`
+
+**⚠️ Table Cell Content Format:**
+- **Use `[""]` (rectangle) for cell content** - text will be centered in the cell
+- **Avoid `""` (plain text) for cells** - text will stick to the top-left corner
+- Example: `["John Doe"]` ✅ (centered) vs `"John Doe"` ❌ (top-left aligned)
+
+**⚠️ Table Note Rules:**
+- **Table-level note**: Add `note` attribute to the table element `##` for overall table description
+- **Row-level note**: `note` attribute is **NOT supported** on table rows `#`
+- If you need to describe the table, put all information in the table-level note
+
+### Common Attributes
+
+| Attribute | Description | Example |
+|-----------|-------------|---------|
+| `w` `h` | Width, Height | `w=100 h=40` |
+| `bg` | Background color | `bg=#3B82F6` |
+| `c` | Text color | `c=#FFFFFF` or `c=#111827` |
+| `b` | Border color | `b=#E5E7EB` |
+| `r` | Border radius | `r=8` |
+| `size` | Font size | `size=16` |
+| `bold` | Bold text | `bold` |
+| `opacity` | Element opacity (0-1) | `opacity=0.5` |
+| `colspan` | Column span for table cells | `colspan=2` |
+| `rowspan` | Row span for table cells | `rowspan=2` |
+| `note` | Functional description | `note="Click to submit form"` |
+
+---
+
+## Color Standards (Tailwind CSS)
+
+**All colors follow Tailwind CSS design system for modern, consistent UI.**
+
+| Purpose | Tailwind | Hex | Usage |
+|---------|----------|-----|-------|
+| Primary text | gray-900 | `#111827` | Labels, headings, content |
+| Secondary text | gray-500 | `#6B7280` | Descriptions, helper text |
+| Tertiary text | gray-400 | `#9CA3AF` | Placeholder, timestamps |
+| Page background | gray-50 | `#F9FAFB` | Page background |
+| Card background | white | `#FFFFFF` | Cards, panels |
+| Alternating row | gray-50 | `#F9FAFB` | Table alternating rows |
+| Borders/Lines | gray-200 | `#E5E7EB` | Dividers, borders |
+| Primary action | blue-500 | `#3B82F6` | Primary buttons, links |
+| Primary light | blue-50 | `#EFF6FF` | Hover, selected background |
+| Success | green-500 | `#22C55E` | Success states, positive |
+| Success light | green-50 | `#F0FDF4` | Success background |
+| Warning | amber-500 | `#F59E0B` | Warnings, attention |
+| Warning light | amber-50 | `#FFFBEB` | Warning background |
+| Error | red-500 | `#EF4444` | Errors, destructive |
+| Error light | red-50 | `#FEF2F2` | Error background |
+| Info | sky-500 | `#0EA5E9` | Information, tips |
+| Info light | sky-50 | `#F0F9FF` | Info background |
+
+---
+
+## Spacing Standards
+
+| Rule | Value |
+|------|-------|
+| Element spacing | 10px (unified) |
+| Font size | 13px |
+| Line height | 22px |
+
+---
+
+## Scenario Specifications
+
+### Mobile App
+
+**Characteristics:**
+- Narrow canvas (375-430px)
+- Vertical layout, bottom navigation
+- Touch-friendly large buttons (min 44x44px)
+
+**Container Size:** `w=375 h=812` (iPhone X) or `w=390 h=844` (iPhone 12+)
+
+**Element Sizes:**
+- Button height: 44-56px
+- Input field height: 44-52px
+- Text size: 13px (default), 18-22px (titles)
+- Element spacing: 10px (unified), Page margins: 16-24px
+
+### Web Client
+
+**Characteristics:**
+- Wide canvas (1200-1440px)
+- Horizontal layout, top navigation
+- Moderate button/input sizes
+
+**Container Size:** `w=1440 h=900`
+
+**Element Sizes:**
+- Button height: 36-48px, width: min 80px
+- Input field height: 36-44px, width: 200-400px
+- Text size: 13px (default), 18-24px (titles)
+- Element spacing: 10px (unified), Page margins: 24-48px
+
+### Admin Dashboard
+
+**Characteristics:**
+- Very wide canvas (1440-1920px)
+- Fixed left sidebar (200-280px)
+- Data-intensive (tables, charts, cards)
+- Many action buttons
+
+**Container Size:** `w=1920 h=1080`
+
+**Element Sizes:**
+- Button height: 32-40px
+- Input field height: 32-36px
+- Table row height: 40-48px
+- Sidebar width: 200-280px
+- Text size: 13px (default), 16-20px (titles)
+- Element spacing: 10px (unified), Page margins: 24-32px
+
+---
+
+## Modal Presentation Rules
+
+**All modals MUST have a separate SolarWire wireframe, not just a simple description in a note.**
+
+### Modal Types
+
+| Type | Description |
+|------|------|
+| Confirmation modal | Delete confirmation, operation confirmation, etc. |
+| Form modal | Create, edit, etc. |
+| Information modal | Detail view, etc. |
+| Alert modal | Success, failure, warning, etc. |
+
+### Modal vs Tooltip/Toast
+
+| Type | Handling | Description |
+|------|----------|-------------|
+| Modal | Separate SolarWire wireframe | Complete UI, interactions, action buttons |
+| Tooltip | Describe directly in note | Simple text hint, no interaction |
+| Toast | Describe directly in note | Simple message, auto-dismiss |
+
+### Example: Modal Reference in Page Note
+
+```solarwire
+["Delete"] @(100,50) w=80 h=36 note="Delete button
+1. Click action
+   - Show delete confirmation modal (see 'Delete Confirmation Modal' wireframe)
+   - Execute delete on confirmation
+2. Success handling
+   - Display Toast: 'Deleted successfully'
+   - Refresh list data"
+```
+
+### Example: Separate Modal Wireframe
+
+```solarwire
+!title="Delete Confirmation Modal"
+!c=#111827
+!size=13
+!bg=#F9FAFB
+
+// Modal container
+[] @(0,0) w=400 h=200 bg=#FFFFFF
+
+// Modal title
+"Confirm Delete" @(160,20) size=16 bold
+
+// Modal content
+"Are you sure you want to delete this item? This action cannot be undone." @(20,70) c=#111827
+
+// Action buttons
+["Cancel"] @(100,140) w=80 h=36 bg=#FFFFFF b=#E5E7EB
+["Confirm"] @(220,140) w=80 h=36 bg=#EF4444 c=#FFFFFF
+```
+
+---
+
+## Creating Clean, Realistic Wireframes
+
+**Goal: Wireframes should look like actual UI, clean and professional**
+
+### Key Principles
+
+1. **Use Realistic Placeholder Content**
+   - Use actual placeholder text, not generic labels
+   - Example: `["Enter your email..."]` instead of `["Input"]`
+
+2. **Proper Visual Hierarchy**
+   - Primary buttons: Colored background (`bg=#3B82F6 c=#FFFFFF`)
+   - Secondary buttons: Border only (`bg=#FFFFFF b=#E5E7EB`)
+
+3. **Appropriate Element Types**
+   - Buttons → Rectangle `[]` with text
+   - Cards → Rounded rectangle `()`
+   - Avatars → Circle with letter `(("A"))`
+   - Labels → Plain text `""`
+
+4. **Consistent Spacing**
+   - Element spacing: 10px (unified)
+   - Group related elements together
+
+5. **Clean Layout**
+   - Don't overcrowd elements
+   - Use dividers `--` to separate sections
+   - Container rectangle should contain all elements
+
+---
+
+## SVG Output Specifications
+
+### Generation Requirements
+
+Each page/tab/modal needs to generate two SVG files:
+
+1. **With Notes Version** (`[page-name]-with-notes.svg`)
+   - Contains note descriptions for all elements
+   - For requirements review and development reference
+
+2. **Without Notes Version** (`[page-name]-without-notes.svg`)
+   - Displays only wireframe elements
+   - For design reference and presentation
+
+### SVG Rendering Specifications
+
+- Use SolarWire renderer to convert solarwire code blocks in `.md` to SVG
+- Ensure all elements use syntax supported by existing rules
+- SVG dimensions match container rectangle dimensions
+- Output path: Same directory as the `solarwire-prd.md` file
 
 ---
 
@@ -961,179 +1459,6 @@ my-app/
 7. **Read User.ts** → Extract user data model
 8. **Read Session.ts** → Extract session data model
 
-### Output: Generated PRD
-
-```markdown
-# User Management System - Product Requirements Document
-
-## Document Information
-| Project Name | User Management System |
-|-------------|------------------------|
-| Version | v1.0 |
-| Created Date | 2024-01-15 |
-| Author | Generated from codebase |
-
----
-
-## 1. Product Overview
-
-### 1.1 Product Background
-A web-based user management system with authentication and user administration capabilities.
-
-### 1.2 Target Users
-- Administrators: Full access to user management
-- Regular Users: Access to personal profile
-
-### 1.3 Core Value
-Secure user authentication and efficient user administration.
-
-### 1.4 User Stories
-
-| ID | User Story | Acceptance Criteria | Priority |
-|----|------------|---------------------|----------|
-| US-001 | As a user, I want to log in, so that I can access the system | - Given valid credentials, when I submit, then I'm redirected to dashboard | P0 |
-| US-002 | As an admin, I want to view users, so that I can manage them | - Given I'm logged in as admin, when I visit users page, then I see user list | P0 |
-
----
-
-## 2. Feature Scope
-
-### 2.1 Feature List
-| Module | Feature | Priority | Description |
-|--------|---------|----------|-------------|
-| Authentication | Login | P0 | User authentication with email/password |
-| Authentication | Session | P0 | Session management with remember me |
-| User Management | User List | P0 | View and search users |
-| User Management | User Actions | P1 | Edit, delete users |
-
----
-
-## 3. Business Flow
-
-### 3.1 Authentication Flow
-```mermaid
-flowchart TD
-    A[Login Page] --> B{Valid Credentials?}
-    B -->|Yes| C[Create Session]
-    B -->|No| D[Show Error]
-    C --> E[Redirect to Dashboard]
-    D --> A
-```
-
----
-
-## 4. Page Design
-
-### 4.1 Page List
-| Page Name | Page Type | Description |
-|-----------|-----------|-------------|
-| Login | Main Page | User authentication |
-| Dashboard | Main Page | System overview |
-| Users | Main Page | User management |
-
----
-
-## 5. Page Details
-
-### 5.1 Login Page
-
-**Page Overview**: User authentication page with email/password login
-
-```solarwire
-!title="Login"
-!c=#333333
-!size=13
-!bg=#F2F2F2
-
-[] @(0,0) w=1440 h=900 bg=#FFFFFF
-
-"Welcome Back" @(600,200) size=24 bold
-"Please sign in to continue" @(580,235) c=#AAAAAA
-
-"Email" @(520,320)
-["Enter your email"] @(520,345) w=400 h=44 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA note="Email input
-1. Input rules
-   - Valid email format required
-   - Max length: 100 characters
-2. Validation
-   - Error: 'Please enter a valid email'"
-
-"Password" @(520,420)
-["Enter password"] @(520,445) w=400 h=44 bg=#FFFFFF b=#F2F2F2 c=#AAAAAA note="Password input
-1. Input rules
-   - Min 6 characters
-   - Displayed as dots
-2. Interaction
-   - Show/hide toggle on right"
-
-[☑ "Remember me"] @(520,520) note="Remember me checkbox
-1. Behavior
-   - Checked: Session valid for 7 days
-   - Unchecked: Session expires on browser close"
-
-["Sign In"] @(520,590) w=400 h=48 bg=#1890FF c=#FFFFFF size=16 note="Sign in button
-1. Click action
-   - Validate email and password
-   - Call POST /api/auth/login
-2. Success handling
-   - Store session token
-   - Redirect to dashboard
-3. Failure handling
-   - Display: 'Invalid credentials'
-   - Clear password field
-4. Disabled conditions
-   - Disabled when email or password is empty"
-```
-
----
-
-## 6. Non-functional Requirements
-
-### 6.1 Performance Requirements
-- Page load time: < 2 seconds
-- API response time: < 500ms
-
-### 6.2 Security Requirements
-- Password hashing: bcrypt
-- Session: JWT with 7-day expiry
-- HTTPS required
-
----
-
-## 7. Appendix
-
-### 7.1 API Reference
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | /api/auth/login | User login | No |
-| POST | /api/auth/logout | User logout | Yes |
-| GET | /api/users | Get user list | Admin |
-| GET | /api/users/:id | Get user detail | Admin |
-| PUT | /api/users/:id | Update user | Admin |
-| DELETE | /api/users/:id | Delete user | Admin |
-
-### 7.2 Data Models
-
-**User Model:**
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| id | string | Yes | Unique identifier |
-| email | string | Yes | User email |
-| password | string | Yes | Hashed password |
-| name | string | No | Display name |
-| role | enum | Yes | 'admin' or 'user' |
-| createdAt | datetime | Yes | Creation time |
-
-**Session Model:**
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| id | string | Yes | Session ID |
-| userId | string | Yes | User reference |
-| token | string | Yes | JWT token |
-| expiresAt | datetime | Yes | Expiry time |
-```
-
 ---
 
 ## Important Reminders
@@ -1148,3 +1473,19 @@ flowchart TD
 8. **Generate Wireframes** - Create SolarWire for every page/component
 9. **Add Notes** - Document functionality from code analysis
 10. **Output to .solarwire** - Save PRD to `.solarwire/[project-name]/solarwire-prd.md`
+11. **Notes Describe Function and Business Logic** - Focus on behavior and logic, avoid visual details and technical implementation
+12. **Not Every Element Needs a Note** - Skip notes for visual elements; common sense exemption for back button, close button, page selector
+13. **First Line Defines Element** - Note first line must describe what the element is
+14. **Note Structure Required** - First line: element definition; First level: numbered (1. 2. 3.); Second level: dash (-)
+15. **Coordinates Must Be Complete** - Every element must have `@(x,y)`
+16. **No Brackets for Attributes** - Write directly `w=100 h=40`
+17. **Choose Elements Reasonably** - Buttons use rectangles, labels use text, only icons use placeholders
+18. **Layout Close to Reality** - Wireframes should reflect actual page structure with 10px spacing
+19. **Separate Modals/States/Tabs** - Each independent view in separate code block; all modals must have separate wireframe
+20. **Table Row Must Be Inside Table** - Row element `#` CANNOT exist independently, MUST be inside table container `##`
+21. **Table Child Element Restrictions** - Rows and cells CANNOT have coordinates, width, height, or border
+22. **Container Rectangle Required** - First element of each page is white background container
+23. **Generate Dual SVG Versions** - With notes and without notes versions
+24. **Color Standards (Tailwind CSS)** - Use unified colors: #111827 (text), #6B7280 (secondary), #9CA3AF (tertiary), #E5E7EB (border), #FFFFFF (bg), #F9FAFB (alternating row), #3B82F6 (primary), #EF4444 (error), #22C55E (success)
+25. **Font Standards** - Font size 13px, line height 22px
+26. **i18n Only When Confirmed** - Add multi-language support ONLY when user explicitly confirms; if not confirmed, absolutely NO i18n information

@@ -442,9 +442,16 @@ function renderTableElement(
     const cellWidth = colWidth * data.colspan;
     const cellHeight = data.rowspan * rowHeight;
     
-    const cellBg = getColorAttribute(data.cell.attributes, context.globalDefaults, 'bg', '#ffffff');
-    const cellBorder = getColorAttribute(data.cell.attributes, context.globalDefaults, 'b', '#333333');
-    const cellStrokeWidth = getNumberAttribute(data.cell.attributes, context.globalDefaults, 's', 1);
+    const rowAttributes = (rows[data.row] as any).attributes || {};
+    
+    const cellBg = getColorAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'bg', '#ffffff');
+    const cellBorder = getColorAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'b', '#333333');
+    const cellStrokeWidth = getNumberAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 's', 1);
+    const cellColor = getColorAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'c', '#000000');
+    const cellFontSize = getNumberAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'size', 12);
+    const cellBold = getBooleanAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'bold');
+    const cellItalic = getBooleanAttribute({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'italic');
+    const cellAlign = getAlignAttribute({ ...rowAttributes, ...data.cell.attributes }, 'start');
     
     svgParts.push(`<rect x="${cellX}" y="${cellY}" width="${cellWidth}" height="${cellHeight}" fill="${cellBg}" stroke="${cellBorder}" stroke-width="${cellStrokeWidth}"/>`);
     
@@ -453,6 +460,14 @@ function renderTableElement(
     modifiedCell.attributes = { ...modifiedCell.attributes };
     modifiedCell.attributes['w'] = cellWidth.toString();
     modifiedCell.attributes['h'] = cellHeight.toString();
+    modifiedCell.attributes['bg'] = cellBg;
+    modifiedCell.attributes['b'] = 'transparent';
+    modifiedCell.attributes['s'] = '0';
+    modifiedCell.attributes['c'] = cellColor;
+    modifiedCell.attributes['size'] = cellFontSize.toString();
+    if (cellBold) modifiedCell.attributes['bold'] = 'true';
+    if (cellItalic) modifiedCell.attributes['italic'] = 'true';
+    modifiedCell.attributes['align'] = cellAlign === 'start' ? 'l' : cellAlign === 'middle' ? 'c' : 'r';
     
     const result = renderChild(modifiedCell as any, cellContext);
     svgParts.push(result.svg);
@@ -561,9 +576,10 @@ function renderTableRow(
     }
     
     if (colspan > 1 || rowspan > 1) {
-      const cellBg = getColorAttribute(cell.attributes, context.globalDefaults, 'bg', '#ffffff');
-      const cellBorder = getColorAttribute(cell.attributes, context.globalDefaults, 'b', '#333333');
-      const cellStrokeWidth = getNumberAttribute(cell.attributes, context.globalDefaults, 's', 1);
+      const mergedAttrs = { ...rowDefaults, ...cell.attributes };
+      const cellBg = getColorAttribute(mergedAttrs, context.globalDefaults, 'bg', '#ffffff');
+      const cellBorder = getColorAttribute(mergedAttrs, context.globalDefaults, 'b', '#333333');
+      const cellStrokeWidth = getNumberAttribute(mergedAttrs, context.globalDefaults, 's', 1);
       
       svgParts.push(`<rect x="${renderX}" y="${pos.y}" width="${cellWidth}" height="${cellHeight}" fill="${cellBg}" stroke="${cellBorder}" stroke-width="${cellStrokeWidth}"/>`);
     }

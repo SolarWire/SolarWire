@@ -2,8 +2,9 @@
 .vscode-test/**
 src/**
 **/*.ts
+!lib/**/*.d.ts
 **/*.map
 **/node_modules/**
-solarwire-*.vsix
-solarwire-support-*.vsix
+*.vsix
 .gitignore
+tsconfig.json

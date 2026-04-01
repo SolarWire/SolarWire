@@ -364,15 +364,31 @@ function renderTableElement(element, context, pos, renderChild) {
         const cellY = pos.y + data.row * rowHeight;
         const cellWidth = colWidth * data.colspan;
         const cellHeight = data.rowspan * rowHeight;
-        const cellBg = (0, context_1.getColorAttribute)(data.cell.attributes, context.globalDefaults, 'bg', '#ffffff');
-        const cellBorder = (0, context_1.getColorAttribute)(data.cell.attributes, context.globalDefaults, 'b', '#333333');
-        const cellStrokeWidth = (0, context_1.getNumberAttribute)(data.cell.attributes, context.globalDefaults, 's', 1);
+        const rowAttributes = rows[data.row].attributes || {};
+        const cellBg = (0, context_1.getColorAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'bg', '#ffffff');
+        const cellBorder = (0, context_1.getColorAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'b', '#333333');
+        const cellStrokeWidth = (0, context_1.getNumberAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 's', 1);
+        const cellColor = (0, context_1.getColorAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'c', '#000000');
+        const cellFontSize = (0, context_1.getNumberAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'size', 12);
+        const cellBold = (0, context_1.getBooleanAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'bold');
+        const cellItalic = (0, context_1.getBooleanAttribute)({ ...rowAttributes, ...data.cell.attributes }, context.globalDefaults, 'italic');
+        const cellAlign = (0, context_1.getAlignAttribute)({ ...rowAttributes, ...data.cell.attributes }, 'start');
         svgParts.push(`<rect x="${cellX}" y="${cellY}" width="${cellWidth}" height="${cellHeight}" fill="${cellBg}" stroke="${cellBorder}" stroke-width="${cellStrokeWidth}"/>`);
         const cellContext = (0, context_1.createChildContext)(context, cellX, cellY);
         const modifiedCell = { ...data.cell };
         modifiedCell.attributes = { ...modifiedCell.attributes };
         modifiedCell.attributes['w'] = cellWidth.toString();
         modifiedCell.attributes['h'] = cellHeight.toString();
+        modifiedCell.attributes['bg'] = cellBg;
+        modifiedCell.attributes['b'] = 'transparent';
+        modifiedCell.attributes['s'] = '0';
+        modifiedCell.attributes['c'] = cellColor;
+        modifiedCell.attributes['size'] = cellFontSize.toString();
+        if (cellBold)
+            modifiedCell.attributes['bold'] = 'true';
+        if (cellItalic)
+            modifiedCell.attributes['italic'] = 'true';
+        modifiedCell.attributes['align'] = cellAlign === 'start' ? 'l' : cellAlign === 'middle' ? 'c' : 'r';
         const result = renderChild(modifiedCell, cellContext);
         svgParts.push(result.svg);
     });
@@ -453,9 +469,10 @@ function renderTableRow(element, context, pos, renderChild) {
             cellHeight *= rowspan;
         }
         if (colspan > 1 || rowspan > 1) {
-            const cellBg = (0, context_1.getColorAttribute)(cell.attributes, context.globalDefaults, 'bg', '#ffffff');
-            const cellBorder = (0, context_1.getColorAttribute)(cell.attributes, context.globalDefaults, 'b', '#333333');
-            const cellStrokeWidth = (0, context_1.getNumberAttribute)(cell.attributes, context.globalDefaults, 's', 1);
+            const mergedAttrs = { ...rowDefaults, ...cell.attributes };
+            const cellBg = (0, context_1.getColorAttribute)(mergedAttrs, context.globalDefaults, 'bg', '#ffffff');
+            const cellBorder = (0, context_1.getColorAttribute)(mergedAttrs, context.globalDefaults, 'b', '#333333');
+            const cellStrokeWidth = (0, context_1.getNumberAttribute)(mergedAttrs, context.globalDefaults, 's', 1);
             svgParts.push(`<rect x="${renderX}" y="${pos.y}" width="${cellWidth}" height="${cellHeight}" fill="${cellBg}" stroke="${cellBorder}" stroke-width="${cellStrokeWidth}"/>`);
         }
         svgParts.push(result.svg);

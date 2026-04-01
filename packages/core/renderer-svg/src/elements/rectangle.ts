@@ -46,14 +46,34 @@ export function renderRectangle(
   if (element.text) {
     const lines = element.text.split('\n');
     const lineHeight = getNumberAttribute(element.attributes, context.globalDefaults, 'line-height', 22);
-    const textX = pos.x + w / 2;
+    const padding = 8;
+    
+    let textX: number;
+    let textAnchor: string;
+    
+    switch (align) {
+      case 'start':
+        textX = pos.x + padding;
+        textAnchor = 'start';
+        break;
+      case 'end':
+        textX = pos.x + w - padding;
+        textAnchor = 'end';
+        break;
+      case 'middle':
+      default:
+        textX = pos.x + w / 2;
+        textAnchor = 'middle';
+        break;
+    }
+    
     const textY = pos.y + h / 2 - ((lines.length - 1) * lineHeight) / 2 + fontSize / 2 - 2;
     
     let fontStyle = '';
     if (bold) fontStyle += 'font-weight="bold" ';
     if (italic) fontStyle += 'font-style="italic" ';
     
-    svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="middle" fill="${c}" font-size="${fontSize}" ${fontStyle}>`);
+    svgParts.push(`<text x="${textX}" y="${textY}" text-anchor="${textAnchor}" fill="${c}" font-size="${fontSize}" ${fontStyle}>`);
     
     lines.forEach((line, i) => {
       if (i === 0) {

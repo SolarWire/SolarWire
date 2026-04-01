@@ -142,10 +142,10 @@ vite.config.ts.timestamp-*
 plan/
 
 # VSCode extension files
-packages/vscode-extension/lib/
-packages/vscode-extension/*.vsix
-packages/vscode-extension/test-render.js
-packages/vscode-extension/.vscode/
+packages/apps/vscode-extension/lib/
+packages/apps/vscode-extension/*.vsix
+packages/apps/vscode-extension/test-render.js
+packages/apps/vscode-extension/.vscode/
 
 # Compiled TypeScript output
 **/dist/
@@ -157,3 +157,6 @@ packages/parser/src/parser.js
 
 # Debug files - temporary files for debugging
 debug/
+
+# npm configuration with tokens
+.npmrc

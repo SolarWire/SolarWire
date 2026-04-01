@@ -1,8 +1,24 @@
 {
   "name": "solarwire",
-  "version": "1.6.0",
-  "description": "A Markdown-style DSL for UI wireframes",
+  "version": "1.6.1",
+  "description": "SolarWire DSL - A lightweight, Markdown-style DSL for UI wireframes",
   "private": true,
+  "main": "packages/core/parser/dist/index.js",
+  "types": "packages/core/parser/dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./packages/core/parser/dist/index.d.ts",
+      "default": "./packages/core/parser/dist/index.js"
+    },
+    "./parser": {
+      "types": "./packages/core/parser/dist/index.d.ts",
+      "default": "./packages/core/parser/dist/index.js"
+    },
+    "./renderer-svg": {
+      "types": "./packages/core/renderer-svg/dist/index.d.ts",
+      "default": "./packages/core/renderer-svg/dist/index.js"
+    }
+  },
   "workspaces": [
     "packages/*",
     "packages/core/*",
@@ -13,7 +29,20 @@
     "build": "npm run build --workspaces",
     "test": "npm test --workspaces"
   },
-  "keywords": ["solarwire", "wireframe", "dsl"],
-  "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "author": "SolarWire",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SolarWire/SolarWire.git"
+  },
+  "keywords": [
+    "solarwire",
+    "wireframe",
+    "dsl",
+    "ui",
+    "design"
+  ],
+  "dependencies": {
+    "peggy": "^4.0.2"
+  }
 }

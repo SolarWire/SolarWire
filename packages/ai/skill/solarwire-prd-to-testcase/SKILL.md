@@ -1080,34 +1080,58 @@ For each test case, ensure:
 - **测试数据**: Exact values to input
 - **预期结果**: Observable, verifiable outcomes
 
-### Step 5: Write Test Cases to NDJSON File
+### Step 5: Generate Test Cases in Batches
 
-Write all test cases to `.solarwire/[requirement-name]/.testcases.ndjson` in JSON Lines format.
+**IMPORTANT**: To avoid context overflow, generate test cases in batches of 10.
 
-**File Format**: Each line is a complete JSON object representing one test case.
+#### Step 5.1: Initialize
+
+```bash
+node .trae/skills/solarwire-prd-to-testcase/lib/generate-excel.js create --output .solarwire/[requirement-name]/test-cases.xlsx
+```
+
+#### Step 5.2: Append Test Cases (Repeat for Each Batch)
+
+For each batch of 10 test cases, run:
+
+```bash
+node .trae/skills/solarwire-prd-to-testcase/lib/generate-excel.js append-batch --file .solarwire/[requirement-name]/test-cases.xlsx --data '[{...}, {...}, ...]'
+```
+
+**Batch Processing Strategy**:
+1. Process PRD section by section (User Stories → Features → Flows → Pages)
+2. For each page, generate test cases from notes
+3. After generating 10 test cases, immediately call `append-batch`
+4. Continue with next batch
+5. Repeat until all test cases are generated
+
+**Example Batch Data** (10 test cases per batch):
 
 ```json
-{"id":"TC-001","module":"登录页面","name":"Login按钮-点击操作-验证并提交登录","type":"功能测试","precondition":"1. 已打开登录页面\n2. 已注册测试账号","steps":"1. 在用户名输入框输入：test@example.com\n2. 在密码输入框输入：Test@123\n3. 点击登录按钮","testData":"用户名：test@example.com\n密码：Test@123","expected":"1. 登录成功，页面跳转到首页\n2. 顶部导航栏显示用户头像","priority":"P0","related":"US-001","boundary":"","exception":"","remark":""}
-{"id":"TC-002","module":"登录页面","name":"Login按钮-成功处理-Token保存验证","type":"功能测试","precondition":"1. 已打开登录页面","steps":"1. 输入有效用户名和密码\n2. 点击登录按钮\n3. 打开浏览器开发者工具查看 Local Storage","testData":"用户名：test@example.com","expected":"Local Storage 中存在 auth_token 字段","priority":"P0","related":"US-001","boundary":"","exception":"","remark":""}
+[
+  {"id":"TC-001","module":"登录页面","name":"Login按钮-点击操作-验证并提交登录","type":"功能测试","precondition":"1. 已打开登录页面\n2. 已注册测试账号","steps":"1. 在用户名输入框输入：test@example.com\n2. 在密码输入框输入：Test@123\n3. 点击登录按钮","testData":"用户名：test@example.com\n密码：Test@123","expected":"1. 登录成功，页面跳转到首页\n2. 顶部导航栏显示用户头像","priority":"P0","related":"US-001","boundary":"","exception":"","remark":""},
+  {"id":"TC-002","module":"登录页面","name":"Login按钮-成功处理-Token保存验证","type":"功能测试","precondition":"1. 已打开登录页面","steps":"1. 输入有效用户名和密码\n2. 点击登录按钮\n3. 打开浏览器开发者工具查看 Local Storage","testData":"用户名：test@example.com","expected":"Local Storage 中存在 auth_token 字段","priority":"P0","related":"US-001","boundary":"","exception":"","remark":""}
+]
 ```
 
 **Important**:
-- Each test case must be on a single line (no line breaks within JSON)
+- Each batch should contain exactly 10 test cases (or fewer for the last batch)
+- All 13 fields must be present in each test case
 - Use `\n` for line breaks within field values
-- All 13 fields must be present (empty strings for optional fields)
+- After each `append-batch`, the script reports total count
 
-### Step 6: Generate Excel
+### Step 6: Finalize Excel
 
-Run the pre-built script to generate Excel:
+After all test cases are appended, generate the final Excel:
 
 ```bash
-node .trae/skills/solarwire-prd-to-testcase/lib/generate-excel.js --output .solarwire/[requirement-name]/test-cases.xlsx
+node .trae/skills/solarwire-prd-to-testcase/lib/generate-excel.js finalize --file .solarwire/[requirement-name]/test-cases.xlsx
 ```
 
 The script will:
-1. Read `.testcases.ndjson` from the output directory
+1. Read all appended test cases
 2. Generate Excel with 3 sheets (Summary, By Module, Statistics)
-3. Automatically delete the `.testcases.ndjson` file
+3. Automatically clean up temporary files
 
 **Result**: Only `test-cases.xlsx` remains in the output directory.
 

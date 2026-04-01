@@ -4,40 +4,58 @@ const fs = require('fs');
 const path = require('path');
 const ExcelJS = require('exceljs');
 
+const TEMP_FILE = '.testcases-temp.ndjson';
+
 function parseArgs() {
-  const args = {};
+  const args = { command: '', params: {} };
   const argv = process.argv.slice(2);
   
-  for (let i = 0; i < argv.length; i++) {
-    if (argv[i] === '--output' && argv[i + 1]) {
-      args.output = argv[i + 1];
-      i++;
+  if (argv.length === 0) {
+    return args;
+  }
+  
+  args.command = argv[0];
+  
+  for (let i = 1; i < argv.length; i++) {
+    if (argv[i].startsWith('--')) {
+      const key = argv[i].substring(2);
+      if (i + 1 < argv.length && !argv[i + 1].startsWith('--')) {
+        args.params[key] = argv[i + 1];
+        i++;
+      } else {
+        args.params[key] = true;
+      }
     }
   }
   
   return args;
 }
 
-function findInputFile(outputPath) {
-  const outputDir = path.dirname(outputPath);
-  const inputFile = path.join(outputDir, '.testcases.ndjson');
-  
-  if (fs.existsSync(inputFile)) {
-    return inputFile;
-  }
-  
-  return null;
+function getTempFilePath(outputPath) {
+  const dir = path.dirname(outputPath);
+  return path.join(dir, TEMP_FILE);
 }
 
-function readTestCases(inputFile) {
-  const content = fs.readFileSync(inputFile, 'utf-8');
+function appendToTemp(dir, data) {
+  const tempFile = path.join(dir, TEMP_FILE);
+  const lines = data.map(tc => JSON.stringify(tc)).join('\n') + '\n';
+  fs.appendFileSync(tempFile, lines, 'utf-8');
+}
+
+function readTestCases(dir) {
+  const tempFile = path.join(dir, TEMP_FILE);
+  
+  if (!fs.existsSync(tempFile)) {
+    return [];
+  }
+  
+  const content = fs.readFileSync(tempFile, 'utf-8');
   const lines = content.trim().split('\n').filter(line => line.trim());
   
   return lines.map(line => {
     try {
       return JSON.parse(line);
     } catch (e) {
-      console.error(`Failed to parse line: ${line.substring(0, 50)}...`);
       return null;
     }
   }).filter(tc => tc !== null);
@@ -79,21 +97,11 @@ function calculateStats(testCases, modules) {
   return stats;
 }
 
-async function createExcel(testCases, outputPath) {
+async function createWorkbook() {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = 'SolarWire PRD to TestCase';
   workbook.created = new Date();
-  
-  const modules = groupByModule(testCases);
-  const stats = calculateStats(testCases, modules);
-  
-  await createSummarySheet(workbook, testCases);
-  await createModuleSheet(workbook, modules);
-  await createStatsSheet(workbook, stats);
-  
-  await workbook.xlsx.writeFile(outputPath);
-  
-  return stats;
+  return workbook;
 }
 
 async function createSummarySheet(workbook, testCases) {
@@ -240,44 +248,139 @@ async function createStatsSheet(workbook, stats) {
   }
 }
 
-async function main() {
-  const args = parseArgs();
-  
-  if (!args.output) {
-    console.error('Usage: node generate-excel.js --output <output-path>');
-    console.error('Example: node generate-excel.js --output .solarwire/my-project/test-cases.xlsx');
+async function commandCreate(params) {
+  if (!params.output) {
+    console.error('Error: --output parameter required');
     process.exit(1);
   }
   
-  const inputFile = findInputFile(args.output);
+  const dir = path.dirname(params.output);
+  const tempFile = path.join(dir, TEMP_FILE);
   
-  if (!inputFile) {
-    console.error(`Error: Cannot find .testcases.ndjson in the output directory`);
-    console.error(`Expected: ${path.join(path.dirname(args.output), '.testcases.ndjson')}`);
+  if (fs.existsSync(tempFile)) {
+    fs.unlinkSync(tempFile);
+  }
+  
+  console.log(`Created temp file: ${tempFile}`);
+  console.log('Ready to append test cases.');
+}
+
+async function commandAppendBatch(params) {
+  if (!params.file) {
+    console.error('Error: --file parameter required');
     process.exit(1);
   }
   
-  console.log(`Reading test cases from: ${inputFile}`);
+  if (!params.data) {
+    console.error('Error: --data parameter required');
+    process.exit(1);
+  }
   
-  const testCases = readTestCases(inputFile);
+  const dir = path.dirname(params.file);
+  
+  let testCases;
+  try {
+    testCases = JSON.parse(params.data);
+    if (!Array.isArray(testCases)) {
+      testCases = [testCases];
+    }
+  } catch (e) {
+    console.error('Error: Invalid JSON data');
+    process.exit(1);
+  }
+  
+  appendToTemp(dir, testCases);
+  
+  const currentCount = readTestCases(dir).length;
+  console.log(`Appended ${testCases.length} test cases. Total: ${currentCount}`);
+}
+
+async function commandFinalize(params) {
+  if (!params.file) {
+    console.error('Error: --file parameter required');
+    process.exit(1);
+  }
+  
+  const dir = path.dirname(params.file);
+  const tempFile = path.join(dir, TEMP_FILE);
+  
+  const testCases = readTestCases(dir);
   
   if (testCases.length === 0) {
-    console.error('Error: No valid test cases found');
+    console.error('Error: No test cases found');
     process.exit(1);
   }
   
-  console.log(`Found ${testCases.length} test cases`);
-  console.log(`Generating Excel: ${args.output}`);
+  console.log(`Generating Excel with ${testCases.length} test cases...`);
   
-  const stats = await createExcel(testCases, args.output);
+  const modules = groupByModule(testCases);
+  const stats = calculateStats(testCases, modules);
   
-  fs.unlinkSync(inputFile);
-  console.log(`Cleaned up: ${inputFile}`);
+  const workbook = await createWorkbook();
+  await createSummarySheet(workbook, testCases);
+  await createModuleSheet(workbook, modules);
+  await createStatsSheet(workbook, stats);
   
+  await workbook.xlsx.writeFile(params.file);
+  
+  fs.unlinkSync(tempFile);
+  
+  console.log(`\nExcel generated: ${params.file}`);
   console.log('\n=== Statistics ===');
   console.log(`Total: ${stats.total}`);
   console.log(`P0: ${stats.p0}, P1: ${stats.p1}, P2: ${stats.p2}`);
   console.log('\nDone!');
+}
+
+function printUsage() {
+  console.log(`
+Usage: node generate-excel.js <command> [options]
+
+Commands:
+  create              Create a new Excel file (initialize temp storage)
+  append-batch        Append a batch of test cases
+  finalize            Generate final Excel and clean up
+
+Options:
+  create:
+    --output <path>   Output Excel file path
+
+  append-batch:
+    --file <path>     Excel file path (to determine directory)
+    --data <json>     JSON array of test cases
+
+  finalize:
+    --file <path>     Excel file path to generate
+
+Examples:
+  # Step 1: Create
+  node generate-excel.js create --output .solarwire/my-project/test-cases.xlsx
+
+  # Step 2: Append batches (repeat as needed)
+  node generate-excel.js append-batch --file .solarwire/my-project/test-cases.xlsx --data '[{"id":"TC-001","module":"登录页面","name":"测试用例名称","type":"功能测试","precondition":"前置条件","steps":"测试步骤","testData":"测试数据","expected":"预期结果","priority":"P0","related":"","boundary":"","exception":"","remark":""}]'
+
+  # Step 3: Finalize
+  node generate-excel.js finalize --file .solarwire/my-project/test-cases.xlsx
+`);
+}
+
+async function main() {
+  const { command, params } = parseArgs();
+  
+  switch (command) {
+    case 'create':
+      await commandCreate(params);
+      break;
+    case 'append-batch':
+      await commandAppendBatch(params);
+      break;
+    case 'finalize':
+      await commandFinalize(params);
+      break;
+    default:
+      printUsage();
+      process.exit(command ? 1 : 0);
+  }
 }
 
 main().catch(err => {

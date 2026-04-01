@@ -1,6 +1,6 @@
 {
   "name": "solarwire-prd-skill",
-  "version": "1.6.0",
+  "version": "1.0.0",
   "description": "SolarWire PRD Generator Skill - Generate complete PRD documents with wireframes and SVG exports",
   "main": "generate-svg.js",
   "bin": {
