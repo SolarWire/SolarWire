@@ -1116,6 +1116,11 @@ Always describe status values with their visual representation:
 
 **Format:** `i18n: Language1=Text1, Language2=Text2, Language3=Text3`
 
+**⚠️ IMPORTANT: No double quotes inside double quotes**
+- Use single quotes `'` for text values inside i18n
+- Correct: `i18n: English=Login, 中文='登录', 日本語='ログイン'`
+- Incorrect: `i18n: English=Login, 中文="登录", 日本語="ログイン"`
+
 ---
 
 **i18n Format for Multiple Text Elements (e.g., buttons in a group):**
