@@ -521,42 +521,42 @@ sequenceDiagram
 [] @(0,0) w=1440 h=900 bg=#FFFFFF
 
 // Page Content - Each element has detailed note description
-["Logo"] @(50,50) w=120 h=60 note="Logo
+["Logo"] @(50,50) w=120 h=60 note="""Logo
 1. Click action
-   - Return to homepage"
+   - Return to homepage"""
 
 "User Login" @(100,150) size=24 bold
 
 "Username" @(100,220)
-["Enter phone or email"] @(100,245) w=300 h=44 bg=#FFFFFF b=#E5E7EB note="Username input
+["Enter phone or email"] @(100,245) w=300 h=44 bg=#FFFFFF b=#E5E7EB note="""Username input
 1. Input rules
    - Supports phone number or email
    - Automatically trims leading/trailing spaces
    - Max length: 50 characters
 2. Validation
    - Format: 11-digit phone number or email format
-   - Error message: 'Please enter a valid phone number or email'"
+   - Error message: 'Please enter a valid phone number or email'"""
 
 "Password" @(100,310)
-["Enter password"] @(100,335) w=300 h=44 bg=#FFFFFF b=#E5E7EB note="Password input
+["Enter password"] @(100,335) w=300 h=44 bg=#FFFFFF b=#E5E7EB note="""Password input
 1. Input rules
    - Password displayed as dots
    - Min length: 6 characters, Max: 32 characters
    - Must contain letters and numbers
 2. Interaction
-   - Show/hide toggle icon on right"
+   - Show/hide toggle icon on right"""
 
-[""] @(100,400) w=16 h=16 note="Remember me checkbox
+[""] @(100,400) w=16 h=16 note="""Remember me checkbox
 1. Behavior
    - When checked: Stay logged in for 7 days
-   - Unchecked by default"
+   - Unchecked by default"""
 "Remember Me" @(124,402)
 
-"Forgot Password?" @(320,400) c=#3B82F6 note="Forgot password link
+"Forgot Password?" @(320,400) c=#3B82F6 note="""Forgot password link
 1. Click action
-   - Navigate to password recovery page"
+   - Navigate to password recovery page"""
 
-["Login"] @(100,450) w=300 h=48 bg=#3B82F6 c=#FFFFFF size=16 note="Login button
+["Login"] @(100,450) w=300 h=48 bg=#3B82F6 c=#FFFFFF size=16 note="""Login button
 1. Click action
    - Validate username and password
 2. Success handling
@@ -566,19 +566,19 @@ sequenceDiagram
    - Display modal: 'Invalid username or password'
    - Clear password field
 4. Disabled conditions
-   - Disabled when username or password is empty"
+   - Disabled when username or password is empty"""
 
 "Or login with" @(160,530) c=#9CA3AF
 
-[?"WeChat Work"] @(120,560) w=40 h=40 note="WeChat Work login
+[?"WeChat Work"] @(120,560) w=40 h=40 note="""WeChat Work login
 1. Click action
-   - WeChat Work QR code login"
-[?"DingTalk"] @(180,560) w=40 h=40 note="DingTalk login
+   - WeChat Work QR code login"""
+[?"DingTalk"] @(180,560) w=40 h=40 note="""DingTalk login
 1. Click action
-   - DingTalk QR code login"
-[?"WeChat"] @(240,560) w=40 h=40 note="WeChat login
+   - DingTalk QR code login"""
+[?"WeChat"] @(240,560) w=40 h=40 note="""WeChat login
 1. Click action
-   - WeChat authorization login"
+   - WeChat authorization login"""
 ```
 
 ---
@@ -622,11 +622,17 @@ sequenceDiagram
 2. Write attributes directly without brackets: w=100 h=40 (not [w=100 h=40])
 3. Text content MUST use double quotes: "Login" (not Login)
 4. Attribute order: Content → Coordinates → Size → Other attributes → note
+5. **NOTE ATTRIBUTE MUST USE TRIPLE QUOTES `"""`: note="""Note content""" (never use single or double quotes)
 ```
+
+**⚠️ CRITICAL: Always use triple quotes `"""` for notes**
+- Triple quotes allow any characters inside, including newlines and double quotes
+- No need to escape anything inside triple quotes
+- DO NOT use single quotes `'` or double quotes `"` for notes
 
 **Correct Example:**
 ```solarwire
-["Login"] @(100,50) w=100 h=40 bg=#3B82F6 c=#FFFFFF note="Submit login form"
+["Login"] @(100,50) w=100 h=40 bg=#3B82F6 c=#FFFFFF note="""Submit login form"""
 "Username" @(100,100)
 (("Avatar")) @(100,150) w=40  // Circle with text - MUST use double quotes
 ```
@@ -838,7 +844,7 @@ Third level: -- or -
 
 **Example:**
 ```solarwire
-["Enter password"] @(100,100) w=280 h=40 note="Password input
+["Enter password"] @(100,100) w=280 h=40 note="""Password input
 1. Input rules
    - Password displayed as dots
    - Minimum 6 characters, maximum 32 characters
@@ -848,7 +854,7 @@ Third level: -- or -
    - Validate format on blur
    - Display error on format failure: 'Invalid password format'
 3. Special notes
-   - Lock account for 15 minutes after 5 consecutive errors"
+   - Lock account for 15 minutes after 5 consecutive errors"""
 ```
 
 ---
@@ -1056,14 +1062,14 @@ Describe directly in note, no separate wireframe needed.
 Always describe status values with their visual representation:
 
 ```solarwire
-"跟进中" @(100,50) note="Lead status
+"跟进中" @(100,50) note="""Lead status
 1. Display rules
    - Status values with visual style:
      - 待分配: Gray tag (#D1D5DB background)
      - 跟进中: Blue tag (#3B82F6 background)
      - 已转化: Green tag (#22C55E background)
      - 无效: Red tag (#EF4444 background)
-   - All tags: White text, rounded corners, 4px padding"
+   - All tags: White text, rounded corners, 4px padding"""
 ```
 
 ---
@@ -1108,10 +1114,10 @@ Always describe status values with their visual representation:
 **i18n Format for Single Text Element:**
 
 ```solarwire
-["Login"] @(100,50) w=100 h=40 note="Login button
+["Login"] @(100,50) w=100 h=40 note="""Login button
 1. Click action
    - Validate username and password
-2. i18n: English=Login, 中文=登录, 日本語=ログイン"
+2. i18n: English=Login, 中文=登录, 日本語=ログイン"""
 ```
 
 **Format:** `i18n: Language1=Text1, Language2=Text2, Language3=Text3`
@@ -1126,15 +1132,15 @@ Always describe status values with their visual representation:
 **i18n Format for Multiple Text Elements (e.g., buttons in a group):**
 
 ```solarwire
-["Cancel"] @(100,50) w=80 h=36 note="Cancel button
+["Cancel"] @(100,50) w=80 h=36 note="""Cancel button
 1. Click action
    - Close dialog without saving
-2. i18n: English=Cancel, 中文=取消, 日本語=キャンセル"
+2. i18n: English=Cancel, 中文=取消, 日本語=キャンセル"""
 
-["Confirm"] @(200,50) w=80 h=36 note="Confirm button
+["Confirm"] @(200,50) w=80 h=36 note="""Confirm button
 1. Click action
    - Save changes and close dialog
-2. i18n: English=Confirm, 中文=确认, 日本語=確認"
+2. i18n: English=Confirm, 中文=确认, 日本語=確認"""
 ```
 
 ---
@@ -1144,7 +1150,7 @@ Always describe status values with their visual representation:
 Use compact format with language names declared once:
 
 ```solarwire
-## @(100,50) w=600 border=1 note="User list table
+## @(100,50) w=600 border=1 note="""User list table
 1. Data source
    - User list data from User Management module
 2. Fields (i18n: English/中文/日本語)
@@ -1157,7 +1163,7 @@ Use compact format with language names declared once:
 3. Buttons (i18n: English/中文/日本語)
    - View [View/查看/表示]
    - Edit [Edit/编辑/編集]
-   - Delete [Delete/删除/削除]"
+   - Delete [Delete/删除/削除]"""
 ```
 
 **Format for table fields:**
@@ -1170,12 +1176,12 @@ Use compact format with language names declared once:
 **i18n Format for Dropdown Options:**
 
 ```solarwire
-["Select status"] @(100,50) w=200 h=36 note="Status dropdown
+["Select status"] @(100,50) w=200 h=36 note="""Status dropdown
 1. Options (i18n: English/中文/日本語)
    - All [All/全部/すべて]
    - Active [Active/正常/有効]
    - Disabled [Disabled/禁用/無効]
-2. Default: All"
+2. Default: All"""
 ```
 
 ---
@@ -1183,14 +1189,14 @@ Use compact format with language names declared once:
 **i18n Format for Error/Success Messages:**
 
 ```solarwire
-["Submit"] @(100,50) w=100 h=40 note="Submit button
+["Submit"] @(100,50) w=100 h=40 note="""Submit button
 1. Click action
    - Validate and submit form data
 2. Success message
    - i18n: English=Submitted successfully, 中文=提交成功, 日本語=送信成功
 3. Error messages
    - Network error: i18n: English=Network error, please try again, 中文=网络错误，请重试, 日本語=ネットワークエラー、再試行してください
-   - Validation error: i18n: English=Please check your input, 中文=请检查您的输入, 日本語=入力内容を確認してください"
+   - Validation error: i18n: English=Please check your input, 中文=请检查您的输入, 日本語=入力内容を確認してください"""
 ```
 
 ---
@@ -1199,15 +1205,15 @@ Use compact format with language names declared once:
 
 **❌ Bad Note (Visual details + element type label):**
 ```
-["Login"] @(100,50) w=100 h=40 note="[Primary Button]
+["Login"] @(100,50) w=100 h=40 note="""[Primary Button]
 - Blue background, white text
 - Border radius 8px
-- API: POST /api/auth/login"
+- API: POST /api/auth/login"""
 ```
 
 **✅ Good Note (Functional behavior):**
 ```solarwire
-["Login"] @(100,50) w=100 h=40 note="Login button
+["Login"] @(100,50) w=100 h=40 note="""Login button
 1. Click action
    - Validate username and password
 2. Success handling
@@ -1216,7 +1222,7 @@ Use compact format with language names declared once:
 3. Failure handling
    - Display error: 'Invalid credentials'
 4. Disabled conditions
-   - Disabled when username or password is empty"
+   - Disabled when username or password is empty"""
 ```
 
 **✅ No Note Needed (Visual element):**
@@ -1280,13 +1286,13 @@ Each page/tab/modal needs to generate two SVG files:
 **Tables use strict indentation:**
 
 ```solarwire
-## @(x,y) w=width border=1 note="Data table
+## @(x,y) w=width border=1 note="""Data table
 1. Data source
    - Data from relevant module
 2. Field descriptions
    - Column 1: Description
    - Column 2: Description
-   - Column 3: Description"
+   - Column 3: Description"""
   # bg=#F9FAFB                  // Header row (indented 2 spaces)
     "Column 1"                  // Cell (indented 4 spaces)
     "Column 2"
@@ -1358,13 +1364,13 @@ Each page/tab/modal needs to generate two SVG files:
 
 **Example:**
 ```solarwire
-## @(100,50) w=500 border=1 note="User list table
+## @(100,50) w=500 border=1 note="""User list table
 1. Data source
    - User list data from User Management module
 2. Field descriptions
    - ID: Unique user identifier
    - Name: User display name
-   - Actions: Edit and delete operations"
+   - Actions: Edit and delete operations"""
   # bg=#F9FAFB c=#111827 bold      // Header row
     ["ID"]
     ["Name"]

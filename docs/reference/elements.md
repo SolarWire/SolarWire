@@ -58,6 +58,11 @@ Rectangles are the most common element, used for buttons, containers, and boxes.
 | `note` | Functional description | - |
 | `opacity` | Element opacity | 1 |
 
+**⚠️ IMPORTANT: Always use triple quotes `"""` for notes**
+- Triple quotes allow any characters inside, including newlines and double quotes
+- No need to escape anything inside triple quotes
+- DO NOT use single quotes `'` or double quotes `"` for notes
+
 ---
 
 ## Rounded Rectangle `()`

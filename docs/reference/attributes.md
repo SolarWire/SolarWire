@@ -256,12 +256,22 @@ Sets the element opacity (0-1).
 
 Adds functional description to elements.
 
+**⚠️ IMPORTANT: Always use triple quotes `"""` for notes**
+- Triple quotes allow any characters inside, including newlines and double quotes
+- No need to escape anything inside triple quotes
+- DO NOT use single quotes `'` or double quotes `"` for notes
+
 ```solarwire
-["Login"] @(100,50) w=100 h=40 note="[Primary Button]
-- Validates username and password
-- Success: Redirect to dashboard
-- Failure: Show error message
-- Disabled when: username or password is empty"
+["Login"] @(100,50) w=100 h=40 note="""Login button
+1. Click action
+   - Validate username and password
+2. Success handling
+   - Save login state
+   - Redirect to homepage
+3. Failure handling
+   - Display error: 'Invalid credentials'
+4. Disabled conditions
+   - Disabled when username or password is empty"""
 ```
 
 **Best Practices:**
