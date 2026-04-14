@@ -12,21 +12,21 @@
 [] @(40,100) w=400 h=320 bg=#ffffff b=#e2e8f0 r=12
 "Buttons" @(60,130) size=16 bold c=#1e293b
 
-["Primary"] @(60,170) w=100 h=42 bg=#6366f1 c=#ffffff r=8 note="Primary button
+["Primary"] @(60,170) w=100 h=42 bg=#6366f1 c=#ffffff r=8 note="""Primary button
 1. Main action
    - Submit forms
    - Confirm actions
 2. Visual style
    - Filled background
-   - White text"
+   - White text"""
 
-["Secondary"] @(180,170) w=100 h=42 bg=#ffffff b=#e2e8f0 c=#1e293b r=8 note="Secondary button
+["Secondary"] @(180,170) w=100 h=42 bg=#ffffff b=#e2e8f0 c=#1e293b r=8 note="""Secondary button
 1. Alternative action
    - Cancel operations
    - Navigate back
 2. Visual style
    - Border only
-   - Dark text"
+   - Dark text"""
 
 ["Success"] @(300,170) w=80 h=42 bg=#22c55e c=#ffffff r=8
 
@@ -46,13 +46,13 @@
 "Form Elements" @(480,130) size=16 bold c=#1e293b
 
 "Email Address" @(480,170) size=12 c=#475569
-["john@example.com"] @(480,190) w=360 h=44 bg=#ffffff b=#e2e8f0 c=#94a3b8 r=8 note="Email input
+["john@example.com"] @(480,190) w=360 h=44 bg=#ffffff b=#e2e8f0 c=#94a3b8 r=8 note="""Email input
 1. Validation
    - Email format check
    - Required field
 2. Features
    - Auto-complete
-   - Clear button"
+   - Clear button"""
 
 "Password" @(480,260) size=12 c=#475569
 ["••••••••"] @(480,280) w=360 h=44 bg=#ffffff b=#e2e8f0 c=#1e293b r=8
@@ -63,23 +63,23 @@
 [] @(880,100) w=480 h=320 bg=#ffffff b=#e2e8f0 r=12
 "Cards & Avatars" @(900,130) size=16 bold c=#1e293b
 
-[] @(900,160) w=440 h=100 bg=#f1f5f9 r=12 note="Profile card
+[] @(900,160) w=440 h=100 bg=#f1f5f9 r=12 note="""Profile card
 1. Display info
    - User avatar
    - Name and email
    - Role badge
 2. Actions
    - Edit profile
-   - View details"
+   - View details"""
 
-(("JD")) @(920,180) w=60 h=60 bg=#6366f1 c=#ffffff r=8 note="Avatar
+(""JD"") @(920,180) w=60 h=60 bg=#6366f1 c=#ffffff r=8 note="""Avatar
 1. Content
    - User initials
    - Or profile image
 2. Size options
    - Small: 32px
    - Medium: 48px
-   - Large: 64px"
+   - Large: 64px"""
 
 "John Doe" @(992,185) size=16 bold c=#1e293b
 "Product Designer" @(992,210) size=13 c=#64748b

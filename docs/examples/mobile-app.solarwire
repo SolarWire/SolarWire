@@ -16,7 +16,7 @@
 "Featured" @(20,128) c=#0f172a size=16 bold
 "See all" @(330,128) c=#A8B1FF size=13 align=r
 
-[] @(20,152) w=335 h=180 bg=#A8B1FF r=16 note="Featured card"
+[] @(20,152) w=335 h=180 bg=#A8B1FF r=16 note="""Featured card"""
 "🎨 Design Inspiration" @(40,260) c=#fff size=18 bold
 "Explore creative UI ideas" @(40,288) c=#f1f5f9 size=13
 

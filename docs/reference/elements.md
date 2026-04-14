@@ -255,7 +255,7 @@ Tables display data in rows and columns.
 ### Examples
 
 ```solarwire
-## @(100,50) w=500 border=1 note="[Table] User list"
+## @(100,50) w=500 border=1 note="""[Table] User list"""
   # bg=#eee bold
     "ID"
     "Name"
@@ -354,9 +354,9 @@ Table rows are indented under table elements.
 Always add `note` for interactive elements:
 
 ```solarwire
-["Submit"] @(100,50) w=100 h=40 note="[Primary Button]
+["Submit"] @(100,50) w=100 h=40 note="""[Primary Button]
 - Validates form on click
 - Success: Redirect to dashboard
 - Failure: Show error message
-- Disabled when form is invalid"
+- Disabled when form is invalid"""
 ```

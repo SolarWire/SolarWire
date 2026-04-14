@@ -353,7 +353,7 @@ Row-level attributes serve as defaults for all cells in that row:
 ["Light"] @(250,380) w=80 h=40 bg=#333 c=white opacity=0.2
 
 // Table with attributes
-## @(50,450) w=500 border=1 note="[Table] User data"
+## @(50,450) w=500 border=1 note="""[Table] User data"""
   # bg=#eee bold
     "ID"
     "Name"

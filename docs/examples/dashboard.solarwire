@@ -32,28 +32,28 @@
 "John Doe" @(72,732) c=white size=13 bold
 "Admin" @(72,750) c=#64748b size=11
 
-[] @(260,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="Revenue statistics card"
+[] @(260,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="""Revenue statistics card"""
 "Total Revenue" @(280,52) c=#64748b size=12
 "$128,450" @(280,88) size=32 bold c=#1e293b
 "+12.5%" @(440,100) size=13 c=#22c55e align=r
 [] @(280,120) w=160 h=6 bg=#e2e8f0 r=3
 [] @(280,120) w=120 h=6 bg=#22c55e r=3
 
-[] @(500,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="Users statistics card"
+[] @(500,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="""Users statistics card"""
 "Active Users" @(520,52) c=#64748b size=12
 "3,240" @(520,88) size=32 bold c=#1e293b
 "+8.2%" @(680,100) size=13 c=#22c55e align=r
 [] @(520,120) w=160 h=6 bg=#e2e8f0 r=3
 [] @(520,120) w=100 h=6 bg=#6366f1 r=3
 
-[] @(740,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="Projects statistics card"
+[] @(740,24) w=220 h=140 bg=#fff r=12 b=#e2e8f0 note="""Projects statistics card"""
 "Total Projects" @(760,52) c=#64748b size=12
 "156" @(760,88) size=32 bold c=#1e293b
 "+3.1%" @(920,100) size=13 c=#ef4444 align=r
 [] @(760,120) w=160 h=6 bg=#e2e8f0 r=3
 [] @(760,120) w=80 h=6 bg=#f59e0b r=3
 
-[] @(980,24) w=200 h=140 bg=#fff r=12 b=#e2e8f0 note="Conversion rate"
+[] @(980,24) w=200 h=140 bg=#fff r=12 b=#e2e8f0 note="""Conversion rate"""
 "Conversion" @(1000,52) c=#64748b size=12
 "24.8%" @(1000,88) size=32 bold c=#1e293b
 "+5.4%" @(1140,100) size=13 c=#22c55e align=r

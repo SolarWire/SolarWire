@@ -30,35 +30,35 @@ Complete login form with all best practices demonstrated.
 
 // Form Fields
 "Email" @(50,180)
-["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd note="[Input Field]
+["Enter your email"] @(50,205) w=300 h=44 bg=#fff b=#ddd note="""[Input Field]
 - Supports phone number or email login
 - Automatically trims leading/trailing spaces
 - Format validation: 11-digit phone or email format
 - Error message: 'Please enter a valid email'
-- Max length: 50 characters"
+- Max length: 50 characters"""
 
 "Password" @(50,280)
-["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd note="[Password Field]
+["Enter password"] @(50,305) w=300 h=44 bg=#fff b=#ddd note="""[Password Field]
 - Password displayed as dots
 - Show/hide toggle icon on the right
 - Min length: 6 characters, Max: 32 characters
 - Must contain letters and numbers
-- Error: 'Password must be 6-32 characters'"
+- Error: 'Password must be 6-32 characters'"""
 
 // Remember Me
-["Remember Me"] @(50,370) w=16 h=16 note="[Checkbox]
+["Remember Me"] @(50,370) w=16 h=16 note="""[Checkbox]
 - When checked, stay logged in for 7 days
-- Unchecked: Session expires on browser close"
+- Unchecked: Session expires on browser close"""
 
 "Remember me" @(74,372)
 
 // Actions
-["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16 bold note="[Primary Button]
+["Sign In"] @(50,420) w=300 h=48 bg=#3498db c=white size=16 bold note="""[Primary Button]
 - Validates email and password on click
 - Success: Redirect to dashboard, save login state
 - Failure: Display 'Invalid credentials' error toast
 - Disabled when: email or password is empty
-- Debounce: Button disabled for 3 seconds after click"
+- Debounce: Button disabled for 3 seconds after click"""
 
 // Divider
 -- @(50,500)->(350,500) b=#eee
@@ -66,9 +66,9 @@ Complete login form with all best practices demonstrated.
 // Social Login
 "Or continue with" @(145,520) c=#999
 
-[?"WeChat"] @(120,560) w=40 h=40 note="[Third-party Login] WeChat QR code login"
-[?"Google"] @(180,560) w=40 h=40 note="[Third-party Login] Google OAuth login"
-[?"Apple"] @(240,560) w=40 h=40 note="[Third-party Login] Apple ID login"
+[?"WeChat"] @(120,560) w=40 h=40 note="""[Third-party Login] WeChat QR code login"""
+[?"Google"] @(180,560) w=40 h=40 note="""[Third-party Login] Google OAuth login"""
+[?"Apple"] @(240,560) w=40 h=40 note="""[Third-party Login] Apple ID login"""
 
 // Footer
 "Don't have an account?" @(100,640) c=#666

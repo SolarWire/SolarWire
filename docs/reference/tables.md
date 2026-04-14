@@ -204,10 +204,10 @@ Cells can contain different element types:
 Add functional descriptions using `note`:
 
 ```solarwire
-## @(100,50) w=600 border=1 note="[Table] User management
+## @(100,50) w=600 border=1 note="""[Table] User management
 - Data source: User API
 - Default sort: Name ascending
-- Pagination: 20 items per page"
+- Pagination: 20 items per page"""
   # bg=#fafafa bold
     "ID"
     "Name"
@@ -291,10 +291,10 @@ Use `note` on the table element (`##`), not on rows (`#`).
 ### User Management Table
 
 ```solarwire
-## @(50,100) w=900 border=1 note="[Table] User list with actions
+## @(50,100) w=900 border=1 note="""[Table] User list with actions
 - Data source: /api/users
 - Default 20 items per page
-- Sortable columns: Name, Email, Created"
+- Sortable columns: Name, Email, Created"""
   # bg=#fafafa bold
     "ID"
     "User"
@@ -328,9 +328,9 @@ Use `note` on the table element (`##`), not on rows (`#`).
 ### Product Catalog Table
 
 ```solarwire
-## @(50,100) w=800 border=1 note="[Table] Product catalog
+## @(50,100) w=800 border=1 note="""[Table] Product catalog
 - Image thumbnails: 60x60px
-- Click row to view details"
+- Click row to view details"""
   # bg=#eee bold
     "Image"
     "Product Name"
@@ -397,14 +397,14 @@ Use `note` on the table element (`##`), not on rows (`#`).
 
 ```solarwire
 // Good
-## @(100,50) w=500 border=1 note="[Table] User list"
+## @(100,50) w=500 border=1 note="""[Table] User list"""
   # bg=#eee
     "Name"
     "Email"
 
 // Bad: note on row will cause error
 ## @(100,50) w=500 border=1
-  # bg=#eee note="Header row"  // ❌ Error!
+  # bg=#eee note="""Header row"""  // ❌ Error!
     "Name"
     "Email"
 ```
@@ -431,8 +431,8 @@ Use `note` on the table element (`##`), not on rows (`#`).
 
 ```solarwire
 // Good: Descriptive content
-["Edit"] @(0,0) w=60 h=32 note="Edit user details"
-["Delete"] @(0,0) w=60 h=32 note="Delete user (with confirmation)"
+["Edit"] @(0,0) w=60 h=32 note="""Edit user details"""
+["Delete"] @(0,0) w=60 h=32 note="""Delete user (with confirmation)"""
 
 // Bad: Generic content
 ["..."]

@@ -12,16 +12,16 @@
 "Please sign in to continue" @(125,160) c=#666 size=12
 
 "Email Address" @(50,205) size=12 bold c=#475569
-["you@example.com"] @(50,225) w=300 h=48 bg=#fff b=#e2e8f0 c=#94a3b8 r=8 note="Email input field with placeholder"
+["you@example.com"] @(50,225) w=300 h=48 bg=#fff b=#e2e8f0 c=#94a3b8 r=8 note="""Email input field with placeholder"""
 
 "Password" @(50,295) size=12 bold c=#475569
-["••••••••"] @(50,315) w=300 h=48 bg=#fff b=#e2e8f0 c=#1e293b r=8 note="Password input field"
+["••••••••"] @(50,315) w=300 h=48 bg=#fff b=#e2e8f0 c=#1e293b r=8 note="""Password input field"""
 
 [""] @(50,375) w=20 h=20 bg=#A8B1FF c=#ffffff r=4
 "Remember me" @(78,378) size=13 c=#475569
 "Forgot password?" @(260,378) c=#A8B1FF size=12 align=r
 
-["Sign In"] @(50,420) w=300 h=52 bg=#A8B1FF c=white size=16 bold r=8 note="Primary action button"
+["Sign In"] @(50,420) w=300 h=52 bg=#A8B1FF c=white size=16 bold r=8 note="""Primary action button"""
 
 [] @(50,490) w=300 h=1 bg=#e2e8f0
 
