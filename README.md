@@ -1,5 +1,8 @@
 # SolarWire
 
+!!THIS PROJECT IS NO LONGER MAINTIANED, MOVED TO https://github.com/SolarWire/SolarWire-APPs
+---
+
 **SolarWire** is a lightweight, Markdown-style DSL for rapidly creating UI wireframes. It's designed with two goals in mind: **human readability** and **AI friendliness**, all while keeping everything in plain text for version control.
 
 - ✨ **Minimal syntax** – Express common UI elements with just a few characters.
